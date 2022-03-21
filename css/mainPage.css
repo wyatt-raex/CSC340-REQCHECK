@@ -90,6 +90,13 @@ h3 {
   size: 50;
 }
 
+#navBar button {
+	display: inline;
+  overflow: hidden;
+  float: right;
+  margin-top: 5px;
+}
+
 /* left side */
 #leftSide {
 	width: 45%;
