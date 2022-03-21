@@ -31,11 +31,119 @@
     <div class="container">
       <p>
         <nav id="leftSide">
-
+			
+			<!-- Save Button -->
+			<button onclick="saveOption()"> Save </button>
+			<!-- Load Button, not yet working -->
+			<button onclick="alert('Not Yet!')"> Load </button>
+			<br>
+			<!-- Name Build -->
+			<input type="PC Build Name" value="Pc Build Name">
+			<br><br>
+			<!-- Dropdown Options -->
+			<form>
+			<label for="cpu">CPU:</label>
+			<br>
+			<select name="cpu" id="cpu">
+			<option value="Intel i7-1250u">Intel i7-1250u</option>
+			<option value="AMD Ryzen 9 5900X">AMD Ryzen 9 5900X</option>
+			<option value="Intel i3 1210u">Intel i3 1210u</option>
+			</select>
+			<br>
+			<label for="gpu">GPU:</label>
+			<br>
+			<select name="gpu" id="gpu">
+			<option value="RTX 3060">RTX 3060</option>
+			<option value="GTX 2090">GTX 2090</option>
+			<option value="GTX 1060 Ti">GTX 1060 Ti</option>
+			</select>
+			<br>
+			<label for="RAM">RAM:</label>
+			<br>
+			<select name="ram" id="ram">
+			<option value="8GB">8GB</option>
+			<option value="16GB">16GB</option>
+			<option value="32GB">32GB</option>
+			</select>
+			<br>
+			<label for="storage">Storage:</label>
+			<br>
+			<select name="storage" id="storage">
+			<option value="1TB">1TB</option>
+			<option value="500GB">500GB</option>
+			<option value="2TB">2TB</option>
+			</select>
+			<br>
+			</form>
+			
+			<!-- Save Options -->
+			<button onclick="saveOption()"> Save </button>
+			
+			<!-- Display option, shows values read properly -->
+			<p> GPU:
+				<span class="output"></span>
+			</p>
+			
+			<!-- JS to display function -->
+			<script type="text/javascript">
+				function saveOption() {
+				selectElement = document.querySelector('#gpu');
+				output = selectElement.value;
+				document.querySelector('.output').textContent = output;
+				}
+			</script>
+			
         </nav>
 
         <nav id="rightSide">
+			
+			<!-- Switch between build tabs -->
+			<div class="tab">
+				<button class="tablinks" onclick="openType(event, 'PREBUILTS')">PREBUILTS</button>
+				<button class="tablinks" onclick="openType(event, 'MYBUILDS')">MY BUILDS</button>
+			</div>
 
+			<!-- Prebuilt Tab content -->
+			<div id="PREBUILTS" class="tabcontent">
+				<hr>
+				<!-- Build 1 -->
+				<h3><a href="">Build 1</a></h3>
+				<ul>
+				  <li>CPU: AMD Ryzen 5 5600X</li>
+				  <li>GPU: RTX 2060</li>
+				  <li>RAM: 16GB</li>
+				  <li>Storage: 1TB</li>
+			</div>
+			
+			<!-- Personal Build Tab content -->
+			<div id="MYBUILDS" class="tabcontent">
+				<hr>
+				<!-- Personal Build -->
+				<h3><a href="">MyBuild</a></h3>
+				<ul>
+				  <li>CPU: Intel i3 1210u</li>
+				  <li>GPU: GTX 1060 Ti</li>
+				  <li>RAM: 8GB</li>
+				  <li>Storage: 500GB</li>
+			</div>
+			
+			<!-- JS switch between tabs -->
+			<script>
+			function openType(evt, buildType) {
+			  var i, tabcontent, tablinks;
+			  tabcontent = document.getElementsByClassName("tabcontent");
+			  for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			  }
+			  tablinks = document.getElementsByClassName("tablinks");
+			  for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			  }
+			  document.getElementById(buildType).style.display = "block";
+			  evt.currentTarget.className += " active";
+			}
+			</script>
+			
         </nav>
       </p>
     </div>
