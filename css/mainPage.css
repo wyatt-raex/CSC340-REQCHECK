@@ -1,7 +1,7 @@
 /* Main */
 body
 {
-	background-color: #666666;
+	background-color: #838383;
 	color:555;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	font-size: 16px;
@@ -13,30 +13,39 @@ a {
 	color: #FFFFFF;
 }
 
-.container
-{
-	width: 80%;
+hr {
+	border: 1px solid #000000;
+}
+
+h2 {
+	text-align: center;
+	text-decoration: underline;
+}
+
+h3 {
+	margin: 0px;
+}
+
+.container {
+	width: 70%;
 	margin: auto;
 	overflow: hidden;
 }
 
 /* Header */
-#mainHeader
-{
+#mainHeader {
 	background-color: #434343;
 	text-align: center;
 	color:#ffffff;
 }
 
-#mainHeader a
-{
+#mainHeader a {
 	text-decoration: none;
 	color:#fffff;
 }
 
 /* NavBar */
-#navBar
-{
+#navBar {
 	background-color: #434343;
 	color: #fff;
 	text-align: center;
@@ -44,16 +53,14 @@ a {
 	height: auto;
 }
 
-#navBar ul
-{
+#navBar ul {
 	padding: 5px 10px;
 	list-style: none;
 	border: none;
 	text-align: left;
 }
 
-#navBar li
-{
+#navBar li {
   display: inline;
   text-align: center;
   padding-left: 15px;
@@ -63,13 +70,11 @@ a {
   margin: 0px;
 }
 
-#navBar li:hover
-{
+#navBar li:hover {
 	background-color: #828282;
 }
 
-#navBar a
-{
+#navBar a {
 	color: #fff;
 	text-decoration: none;
   text-align: center;
@@ -77,8 +82,7 @@ a {
 	padding-right: 15px;
 }
 
-#navBar input
-{
+#navBar input {
   display: inline;
   overflow: hidden;
   float: right;
@@ -86,9 +90,43 @@ a {
   size: 50;
 }
 
+/* left side */
+#leftSide {
+	width: 45%;
+	float: left;
+}
+
+/* Right side */
+#rightSide {
+	width: 45%;
+	float: right;
+}
+
+/* Top Games */
+#topGames a{
+	color: #000000;
+}
+
+#topGames li {
+	color: #000000;
+}
+
+/* PC Builds */
+#builds ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+#builds li {
+	color: #000000;
+}
+
+#builds a {
+	color: #000000;
+}
+
 /* Footer */
-#mainFooter
-{
+#mainFooter {
 	background-color: #434343;
 	color: #fff;
 	text-align: center;
@@ -97,7 +135,7 @@ a {
 	margin-top:30px;
 }
 
-#mainFooter a{
+#mainFooter a {
 	display: inline;
 	color: #fff;
   font-size: 16px;
