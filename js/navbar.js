@@ -1,10 +1,11 @@
 //Add Buttons for respective Dashboards
-let adminButton = document.getElementById("adminButton");
+const adminButton = document.getElementById("adminButton");
 /* Add button
 if (admin) adminButton.innerHTML = "ADMIN DASHBOARD";
 else adminButton.remove();
 */
 adminButton.remove();
+
 let devButton = document.getElementById("devButton");
 /* Add button
 if (dev) devButton.innerHTML = "DEVELOPER DASHBOARD";
