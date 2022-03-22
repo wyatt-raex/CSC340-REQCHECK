@@ -21,8 +21,8 @@
           <li><a href="../index.html";>HOME</a></li>
     			<li><a href="hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
     			<li><a href="faq.html">FAQ</a></li>
-          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";></a></li>
-          <li id="devButton"><a href="dev.html";  onclick="gotoDev";></a></li>
+          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";>ADMIN DASHBOARD</a></li>
+          <li id="devButton"><a href="dev.html";  onclick="gotoDev()";>DEVELOPER DASHBOARD</a></li>
           <li><a href="login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
           <button id="searchButton"; onclick="search()">Enter</button>
           <input id="searchBar"; type="text"; size = 30; placeholder="Search...">
@@ -35,68 +35,51 @@
       <p>
         <nav id="leftSide">
 
-			<!-- Save Button -->
-			<button onclick="saveOption()"> Save </button>
-			<!-- Load Button, not yet working -->
-			<button onclick="alert('Not Yet!')"> Load </button>
-			<br>
-			<!-- Name Build -->
-			<input type="PC Build Name" value="Pc Build Name">
-			<br><br>
-			<!-- Dropdown Options -->
-			<form>
-			<label for="cpu">CPU:</label>
-			<br>
-			<select name="cpu" id="cpu">
-			<option value="Intel i7-1250u">Intel i7-1250u</option>
-			<option value="AMD Ryzen 9 5900X">AMD Ryzen 9 5900X</option>
-			<option value="Intel i3 1210u">Intel i3 1210u</option>
-			</select>
-			<br>
-			<label for="gpu">GPU:</label>
-			<br>
-			<select name="gpu" id="gpu">
-			<option value="RTX 3060">RTX 3060</option>
-			<option value="GTX 2090">GTX 2090</option>
-			<option value="GTX 1060 Ti">GTX 1060 Ti</option>
-			</select>
-			<br>
-			<label for="RAM">RAM:</label>
-			<br>
-			<select name="ram" id="ram">
-			<option value="8GB">8GB</option>
-			<option value="16GB">16GB</option>
-			<option value="32GB">32GB</option>
-			</select>
-			<br>
-			<label for="storage">Storage:</label>
-			<br>
-			<select name="storage" id="storage">
-			<option value="1TB">1TB</option>
-			<option value="500GB">500GB</option>
-			<option value="2TB">2TB</option>
-			</select>
-			<br>
-			</form>
+  			<!-- Save Button -->
+  			<button onclick="saveOption()"> Save </button>
+  			<!-- Load Button, not yet working -->
+  			<button onclick="alert('Not Yet!')"> Load </button>
+  			<br>
+  			<!-- Name Build -->
+  			<input style="font-size: 20px"; type="PC Build Name" value="PC Build Name" id="name" placeholder="Build Name">
+  			<br>
+  			<!-- Dropdown Options -->
+  			<form>
+    			<label for="cpu">CPU:</label>
+    			<br>
+    			<select name="cpu" id="cpu">
+      			<option value="Intel i5-12600K">Intel i5-12600K</option>
+      			<option value="AMD Ryzen 5 5600X">AMD Ryzen 5 5600X</option>
+    			</select>
+    			<br>
+    			   <label for="gpu">GPU:</label>
+    			<br>
+    			<select name="gpu" id="gpu">
+      			<option value="RTX 3090">RTX 3090</option>
+      			<option value="RTX 2060">RTX 2060</option>
+    			</select>
+    			<br>
+    			   <label for="RAM">RAM:</label>
+    			<br>
+      			<select name="ram" id="ram">
+      			<option value="8GB">8GB</option>
+      			<option value="16GB">16GB</option>
+      			<option value="32GB">32GB</option>
+    			</select>
+    			<br>
+    			   <label for="storage">Storage:</label>
+    			<br>
+    			<select name="storage" id="storage">
+            <option value="500GB">500GB</option>
+      			<option value="1TB">1TB</option>
+      			<option value="2TB">2TB</option>
+    			</select>
+    			<br>
+  			</form>
 
 			<!-- Save Options -->
-			<button onclick="saveOption()"> Save </button>
-
-			<!-- Display option, shows values read properly -->
-			<p> GPU:
-				<span class="output"></span>
-			</p>
-
-			<!-- JS to display function -->
-			<script type="text/javascript">
-				function saveOption() {
-				selectElement = document.querySelector('#gpu');
-				output = selectElement.value;
-				document.querySelector('.output').textContent = output;
-				}
-			</script>
-
-        </nav>
+			<button onclick="saveOption()">Save</button>
+    </nav>
 
         <nav id="rightSide">
 
@@ -107,45 +90,34 @@
 			</div>
 
 			<!-- Prebuilt Tab content -->
-			<div id="PREBUILTS" class="tabcontent">
-				<hr>
-				<!-- Build 1 -->
-				<h3><a href="">Build 1</a></h3>
-				<ul>
-				  <li>CPU: AMD Ryzen 5 5600X</li>
-				  <li>GPU: RTX 2060</li>
-				  <li>RAM: 16GB</li>
-				  <li>Storage: 1TB</li>
-			</div>
+      <nav id="builds">
+  			<div id="PREBUILTS" class="tabcontent">
+  				<hr>
+  				<!-- Build 1 -->
+  				<h3><a href="">Build 1</a></h3>
+  				<ul>
+  				  <li>CPU: AMD Ryzen 5 5600X</li>
+  				  <li>GPU: RTX 2060</li>
+  				  <li>RAM: 16GB</li>
+  				  <li>Storage: 1TB</li>
+  			</div>
+      </nav>
 
 			<!-- Personal Build Tab content -->
 			<div id="MYBUILDS" class="tabcontent">
 				<hr>
 				<!-- Personal Build -->
-				<h3><a href="">MyBuild</a></h3>
-				<ul>
-				  <li>CPU: Intel i3 1210u</li>
-				  <li>GPU: GTX 1060 Ti</li>
-				  <li>RAM: 8GB</li>
-				  <li>Storage: 500GB</li>
-			</div>
+        <nav id="builds">
+          <h3><a href=""; id="myNAME">MyBuild</a></h3>
+  				<ul>
+  				  <li id="myCPU">CPU: Intel i3 1210u</li>
+  				  <li id="myGPU">GPU: GTX 1060 Ti</li>
+  				  <li id="myRAM">RAM: 8GB</li>
+  				  <li id="mySTORAGE">Storage: 500GB</li>
+          </ul>
+        </nav>
 
-			<!-- JS switch between tabs -->
-			<script>
-			function openType(evt, buildType) {
-			  var i, tabcontent, tablinks;
-			  tabcontent = document.getElementsByClassName("tabcontent");
-			  for (i = 0; i < tabcontent.length; i++) {
-				tabcontent[i].style.display = "none";
-			  }
-			  tablinks = document.getElementsByClassName("tablinks");
-			  for (i = 0; i < tablinks.length; i++) {
-				tablinks[i].className = tablinks[i].className.replace(" active", "");
-			  }
-			  document.getElementById(buildType).style.display = "block";
-			  evt.currentTarget.className += " active";
-			}
-			</script>
+			</div>
 
         </nav>
       </p>

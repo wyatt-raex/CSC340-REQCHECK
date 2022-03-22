@@ -4,6 +4,7 @@ const passwordLogin = document.getElementById("passwordLogin");
 const submitLogin = document.getElementById("submitLogin");
 const emailSignUp = document.getElementById("emailSignUp");
 const passwordSignUp = document.getElementById("passwordSignUp");
+const verifySignUp = document.getElementById("passwordVerifySignUp");
 const submitSignUp = document.getElementById("submitSignUp");
 
 //Check for onclick
@@ -13,7 +14,27 @@ function loginClick(){
   //Check login info
   const email = emailLogin.value;
   const pass = passwordLogin.value;
-  if (email === "test@test.com" && pass === "1234"){
+
+  //Verify
+  let emailArray = ["admin@reqcheck.com", "user@reqcheck.com", "gamedev@reqcheck.com"];
+  let passArray = [1234, 1234, 1234];
+  let emailConfirm = false;
+  let passConfirm = false;
+  for (let i = 0; i < emailArray.length; i++)
+  {
+    if (emailArray[i] == email)
+    {
+      emailConfirm = true;
+    }
+
+    if (passArray[i] == pass)
+    {
+      passConfirm = true;
+      if (emailConfirm) break;
+    }
+  }
+
+  if (passConfirm){
     alert("Login Successful!");
     location.assign('../index.html');
   }
@@ -24,9 +45,18 @@ function loginClick(){
 function signUpClick(){
   const email = emailSignUp.value;
   const pass = passwordSignUp.value;
-  if (email != "" && pass != ""){
-    alert("Sign-Up Successful!");
-    location.assign('../index.html');
+  const passVerfiy = passwordVerifySignUp.value;
+
+  //Sign up
+  if (email == "") alert("Please enter a valid email.");
+  else if (pass == "") alert("Please enter a password.");
+  else if (passVerfiy == "") alert("Please re-enter your password.");
+  else {
+    if (pass == passVerfiy)
+    {
+      alert("Sign-Up Successful!");
+      location.assign('../index.html');
+    }
+    else alert("Passwords do not match. Please try again.");
   }
-  else alert("Please populate all fields and try again.");
 }

@@ -1,21 +1,13 @@
 //Add Buttons for respective Dashboards
 const adminButton = document.getElementById("adminButton");
-/* Add button
-if (admin) adminButton.innerHTML = "ADMIN DASHBOARD";
-else adminButton.remove();
-*/
-adminButton.remove();
+//adminButton.remove();
 
-let devButton = document.getElementById("devButton");
-/* Add button
-if (dev) devButton.innerHTML = "DEVELOPER DASHBOARD";
-else devButton.remove();
-*/
-devButton.remove();
+const devButton = document.getElementById("devButton");
+//devButton.remove();
 
 //Goto Admin Dashbaord
 function gotoAdmin(){
-
+  //document.assign('admin.html');
 }
 
 //Goto Developer Dashboard

@@ -21,8 +21,8 @@
           <li><a href="../index.html";>HOME</a></li>
     			<li><a href="hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
     			<li><a href="faq.html">FAQ</a></li>
-          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";></a></li>
-          <li id="devButton"><a href="dev.html";  onclick="gotoDev";></a></li>
+          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";>ADMIN DASHBOARD</a></li>
+          <li id="devButton"><a href="dev.html";  onclick="gotoDev()";>DEVELOPER DASHBOARD</a></li>
           <li><a href="login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
           <button id="searchButton"; onclick="search()">Enter</button>
           <input id="searchBar"; type="text"; size = 30; placeholder="Search...">
@@ -38,9 +38,7 @@
           <nav id="loginPage">
             <h2>Login</h2>
             <input type="text"; id="emailLogin"; placeholder="Email">
-            <br>
             <input type="password"; id="passwordLogin"; placeholder="Password">
-            <br>
             <input type="submit"; onclick="loginClick()"; id="login"; value="Login">
           </nav>
         </nav>
@@ -49,9 +47,8 @@
           <nav id="loginPage">
             <h2>Sign-Up</h2>
             <input type="text"; id="emailSignUp"; placeholder="Email">
-            <br>
             <input type="password"; id="passwordSignUp"; placeholder="Password">
-            <br>
+            <input type="password"; id="passwordVerifySignUp"; placeholder="Verify Password">
             <input type="submit"; onclick="signUpClick()"; id="submitSignUp"; value="Sign-Up">
           </nav>
         </nav>

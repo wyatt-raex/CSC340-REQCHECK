@@ -24,11 +24,11 @@
     <nav id="navBar">
     	<div class="container">
     		<ul>
-          <li><a href="../index.html";>HOME</a></li>
+					<li><a href="../index.html";>HOME</a></li>
     			<li><a href="hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
     			<li><a href="faq.html">FAQ</a></li>
-          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";></a></li>
-          <li id="devButton"><a href="dev.html";  onclick="gotoDev";></a></li>
+          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";>ADMIN DASHBOARD</a></li>
+          <li id="devButton"><a href="dev.html";  onclick="gotoDev()";>DEVELOPER DASHBOARD</a></li>
           <li><a href="login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
           <button id="searchButton"; onclick="search()">Enter</button>
           <input id="searchBar"; type="text"; size = 30; placeholder="Search...">
@@ -39,117 +39,160 @@
     <!-- Content -->
     <div class="container">
       <p>
+				<!-- Switch between build tabs -->
+					<div class="tab">
+						<button class="tablinks" onclick="openType(event, 'USERS')">USERS</button>
+						<button class="tablinks" onclick="openType(event, 'GAMES')">GAMES</button>
+						<button class="tablinks" onclick="openType(event, 'HARDWARE')">HARDWARE</button>
+						<button onclick="alert('Not Yet!')" style="float: right"> CONFIRM CHANGES </button>
+					</div>
+
+					<!-- Users Tab content -->
+					<div id="USERS" class="tabcontent">
+						<hr>
+						<!-- Users -->
+						<h3>Users</h3>
+						<table style="width:99%">
+						<!-- Table Headers -->
+						<tr>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Role</th>
+						</tr>
+						<!-- User Values -->
+						<tr>
+							<td contenteditable="true">Michael Mungaray</td>
+							<td contenteditable="true">admin@reqcheck.com</td>
+							<td contenteditable="false">
+								<select>
+									<option>User</option>
+									<option>Game Developer</option>
+									<option selected>Admin</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">Wyatt Hackney</td>
+							<td contenteditable="true">user@reqcheck.com</td>
+							<td contenteditable="false">
+								<select>
+									<option selected>User</option>
+									<option>Game Developer</option>
+									<option>Admin</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">Andy Villasmil</td>
+							<td contenteditable="true">gamedev@reqcheck.com</td>
+							<td contenteditable="false">
+								<select>
+									<option>User</option>
+									<option selected>Game Developer</option>
+									<option>Admin</option>
+								</select>
+							</td>
+						</tr>
+						</table>
+					</div>
+
+					<!-- Games Tab content -->
+					<div id="GAMES" class="tabcontent">
+						<hr>
+						<!-- Games -->
+						<h3>Games</h3>
+						<table style="width:99%">
+						<!-- Table Headers -->
+						<tr>
+							<th>Game Title</th>
+							<th>Genre</th>
+							<th>Description</th>
+						</tr>
+						<!-- Game Values -->
+						<tr>
+							<td contenteditable="true">Elden Ring</td>
+							<td contenteditable="true">RPG/Action</td>
+							<td contenteditable="true">From the people who brought you several impossible games, here's another!</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">Minecraft</td>
+							<td contenteditable="true">Sandbox/Survival</td>
+							<td contenteditable="true">Enjoy calm gaming until that one note hits at night. Also updates every two years when we feel like it.</td>
+						</tr>
+						</table>
+					</div>
+
+					<!-- Games Tab content -->
+					<div id="HARDWARE" class="tabcontent">
+						<hr>
+						<!-- Hardware -->
+						<h3>Hardware</h3>
+						<table style="width:99%">
+						<!-- Table Headers -->
+						<tr>
+							<th>Hardware Name</th>
+							<th>Type</th>
+							<th>Comparator Value</th>
+						</tr>
+						<!-- Hardware Values -->
+						<tr>
+							<td contenteditable="true">Nvidia RTX 3090</td>
+							<td contenteditable="false">
+								<select>
+									<option>CPU</option>
+									<option selected>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">50</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">Nvidia RTX 2060</td>
+							<td contenteditable="false">
+								<select>
+									<option>CPU</option>
+									<option selected>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">25</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">Intel Core i5-12600K</td>
+							<td contenteditable="false">
+								<select>
+									<option selected>CPU</option>
+									<option>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">20</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">AMD Ryzen 5 5600X</td>
+							<td contenteditable="false">
+								<select>
+									<option selected>CPU</option>
+									<option>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">18</td>
+						</tr>
+						</table>
+					</div>
+
         <nav id="leftSide">
-		
-		<!-- Switch between build tabs -->
-			<div class="tab">
-				<button class="tablinks" onclick="openType(event, 'USERS')">USERS</button>
-				<button class="tablinks" onclick="openType(event, 'GAMES')">GAMES</button>
-				<button class="tablinks" onclick="openType(event, 'HARDWARE')">HARDWARE</button>
-			</div>
-			
-			<!-- Users Tab content -->
-			<div id="USERS" class="tabcontent">
-				<hr>
-				<!-- Users -->
-				<h3>Users</h3>
-				<table style="width:100%">
-				<!-- Table Headers -->
-				<tr>
-					<th>User Name</th>
-					<th>Login ID</th>
-					<th>Password</th>
-				</tr>
-				<!-- User Values -->
-				<tr>
-					<td contenteditable="true">Andres Villasmil</td>
-					<td contenteditable="true">AndVill</td>
-					<td contenteditable="true">CssIsFun</td>
-				</tr>
-				<tr>
-					<td contenteditable="true">Wyatt Hackney</td>
-					<td contenteditable="true">WyaHack</td>
-					<td contenteditable="true">ItMayWork</td>
-				</tr>
-				</table>
-			</div>
 
-			<!-- Games Tab content -->
-			<div id="GAMES" class="tabcontent">
-				<hr>
-				<!-- Games -->
-				<h3>Games</h3>
-				<table style="width:100%">
-				<!-- Table Headers -->
-				<tr>
-					<th>Game Title</th>
-					<th>Genre</th>
-					<th>Description</th>
-				</tr>
-				<!-- Game Values -->
-				<tr>
-					<td contenteditable="true">Elden Ring</td>
-					<td contenteditable="true">RPG/Action</td>
-					<td contenteditable="true">From the people who brought you several impossible games, here's another!</td>
-				</tr>
-				<tr>
-					<td contenteditable="true">Minecraft</td>
-					<td contenteditable="true">Sandbox/Survival</td>
-					<td contenteditable="true">Enjoy calm gaming until that one note hits at night. Also updates every two years when we feel like it.</td>
-				</tr>
-				</table>
-			</div>
-			
-			<!-- Games Tab content -->
-			<div id="HARDWARE" class="tabcontent">
-				<hr>
-				<!-- Hardware -->
-				<h3>Hardware</h3>
-				<table style="width:100%">
-				<!-- Table Headers -->
-				<tr>
-					<th>Hardware Name</th>
-					<th>Type</th>
-					<th>Comparator Value</th>
-				</tr>
-				<!-- Hardware Values -->
-				<tr>
-					<td contenteditable="true">Nvidia RTX 3090</td>
-					<td contenteditable="true">GPU</td>
-					<td contenteditable="true">9</td>
-				</tr>
-				<tr>
-					<td contenteditable="true">Intel Core i3-1210u</td>
-					<td contenteditable="true">CPU</td>
-					<td contenteditable="true">4</td>
-				</tr>
-				</table>
-			</div>
-
-			<!-- JS switch between tabs -->
-			<script>
-			function openType(evt, editType) {
-			  var i, tabcontent, tablinks;
-			  tabcontent = document.getElementsByClassName("tabcontent");
-			  for (i = 0; i < tabcontent.length; i++) {
-				tabcontent[i].style.display = "none";
-			  }
-			  tablinks = document.getElementsByClassName("tablinks");
-			  for (i = 0; i < tablinks.length; i++) {
-				tablinks[i].className = tablinks[i].className.replace(" active", "");
-			  }
-			  document.getElementById(editType).style.display = "block";
-			  evt.currentTarget.className += " active";
-			}
-			</script>
 
         </nav>
 
         <nav id="rightSide">
-			
-			<!-- Load Button, not yet working -->
-			<button onclick="alert('Not Yet!')"> CONFIRM CHANGES </button>
-			
+
         </nav>
       </p>
     </div>
@@ -165,4 +208,5 @@
 
   <script type="text/javascript" src="../js/admin.js"></script>
   <script type="text/javascript" src="../js/navbar.js"></script>
+	<script type="text/javascript">load(null, 'USERS');</script>
 </html>

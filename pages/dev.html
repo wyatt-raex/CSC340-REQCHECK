@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+	<!-- Table Style -->
+	<style>
+	table, th, td {
+		border:1px solid black;
+	}
+	</style>
   <head>
     <meta charset="utf-8">
-    <title>ReqCheck - Game Developer Dashboard</title>
+    <title>ReqCheck - Admin Dashboard</title>
     <link rel="stylesheet" type="text/css" href="../css/mainPage.css">
   </head>
   <body>
@@ -18,11 +24,11 @@
     <nav id="navBar">
     	<div class="container">
     		<ul>
-          <li><a href="../index.html";>HOME</a></li>
+					<li><a href="../index.html";>HOME</a></li>
     			<li><a href="hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
     			<li><a href="faq.html">FAQ</a></li>
-          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";></a></li>
-          <li id="devButton"><a href="dev.html";  onclick="gotoDev";></a></li>
+          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";>ADMIN DASHBOARD</a></li>
+          <li id="devButton"><a href="dev.html";  onclick="gotoDev()";>DEVELOPER DASHBOARD</a></li>
           <li><a href="login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
           <button id="searchButton"; onclick="search()">Enter</button>
           <input id="searchBar"; type="text"; size = 30; placeholder="Search...">
@@ -33,12 +39,198 @@
     <!-- Content -->
     <div class="container">
       <p>
-        <nav id="leftSide">
 
+        <!-- Hardware Interactions -->
+        <nav id="leftSide">
+          <!-- Switch between build tabs -->
+            <div class="tab">
+              <select id="hardwareSelect"; onchange="openHardware(event)";>
+    						<option class="hardwareLinks">Intel Core i5 12600K</option>
+    						<option class="hardwareLinks">AMD Ryzen 5 5600X</option>
+								<option class="hardwareLinks">Nvidia RTX 3090</option>
+    						<option class="hardwareLinks">Nvidia RTX 2060</option>
+              </select>
+            </div>
+
+  					<!-- Users Tab content -->
+						<!-- Intel Core i5 12600K -->
+  					<div id="Intel Core i5 12600K" class="hardwareContent">
+  						<hr>
+  						<!-- Users -->
+  						<h3>Intel Core i5 12600K</h3>
+							<table style="width: 100%">
+  						<!-- Table Headers -->
+  						<tr>
+  							<th>Date</th>
+  							<th># of Requirement Checks</th>
+  						</tr>
+  						<!-- User Values -->
+  						<tr>
+  							<td contenteditable="true">3/22/22</td>
+  							<td contenteditable="true">45</td>
+  						</tr>
+  						<tr>
+  							<td contenteditable="true">3/21/22</td>
+  							<td contenteditable="true">25</td>
+  						</tr>
+  						<tr>
+								<td contenteditable="true">3/20/22</td>
+  							<td contenteditable="true">76</td>
+  						</tr>
+  						</table>
+  					</div>
+
+						<!-- AMD Ryzen 5 5600X -->
+  					<div id="AMD Ryzen 5 5600X" class="hardwareContent">
+  						<hr>
+  						<!-- Users -->
+  						<h3>AMD Ryzen 5 5600X</h3>
+							<table style="width: 100%">
+  						<!-- Table Headers -->
+  						<tr>
+  							<th>Date</th>
+  							<th># of Requirement Checks</th>
+  						</tr>
+  						<!-- User Values -->
+  						<tr>
+  							<td contenteditable="true">3/22/22</td>
+  							<td contenteditable="true">34</td>
+  						</tr>
+  						<tr>
+  							<td contenteditable="true">3/21/22</td>
+  							<td contenteditable="true">86</td>
+  						</tr>
+  						<tr>
+								<td contenteditable="true">3/20/22</td>
+  							<td contenteditable="true">967</td>
+  						</tr>
+  						</table>
+  					</div>
+
+						<!-- Nvidia RTX 3090 -->
+  					<div id="Nvidia RTX 3090" class="hardwareContent">
+  						<hr>
+  						<!-- Users -->
+  						<h3>Nvidia RTX 3090</h3>
+							<table style="width: 100%">
+  						<!-- Table Headers -->
+  						<tr>
+  							<th>Date</th>
+  							<th># of Requirement Checks</th>
+  						</tr>
+  						<!-- User Values -->
+  						<tr>
+  							<td contenteditable="true">3/22/22</td>
+  							<td contenteditable="true">0</td>
+  						</tr>
+  						<tr>
+  							<td contenteditable="true">3/21/22</td>
+  							<td contenteditable="true">0</td>
+  						</tr>
+  						<tr>
+								<td contenteditable="true">3/20/22</td>
+  							<td contenteditable="true">0</td>
+  						</tr>
+  						</table>
+  					</div>
+
+						<!-- Nvidia RTX 2060 -->
+  					<div id="Nvidia RTX 2060" class="hardwareContent">
+  						<hr>
+  						<!-- Users -->
+  						<h3>Nvidia RTX 2060</h3>
+							<table style="width: 100%">
+  						<!-- Table Headers -->
+  						<tr>
+  							<th>Date</th>
+  							<th># of Requirement Checks</th>
+  						</tr>
+  						<!-- User Values -->
+  						<tr>
+  							<td contenteditable="true">3/22/22</td>
+  							<td contenteditable="true">364</td>
+  						</tr>
+  						<tr>
+  							<td contenteditable="true">3/21/22</td>
+  							<td contenteditable="true">362</td>
+  						</tr>
+  						<tr>
+								<td contenteditable="true">3/20/22</td>
+  							<td contenteditable="true">152</td>
+  						</tr>
+  						</table>
+  					</div>
 
         </nav>
 
+        <!-- Game Interaction -->
         <nav id="rightSide">
+  					<!-- Users Tab content -->
+						<select id="gameSelect"; onchange="openGame(event)";>
+							<option class="gameLinks"; value="Minecraft">Minecraft</option>
+							<option class="gameLinks"; value="Elden Ring">Elden Ring</option>
+						</select>
+						<!-- Minecraft -->
+  					<div id="Minecraft" class="gameContent">
+  						<hr>
+  						<!-- Users -->
+  						<h3>Minecraft</h3>
+							<table style="width: 100%">
+  						<!-- Table Headers -->
+  						<tr>
+  							<th>Date</th>
+  							<th># of Impressions</th>
+  							<th># of Requirement Checks</th>
+  						</tr>
+  						<!-- User Values -->
+  						<tr>
+  							<td contenteditable="true">3/22/22</td>
+  							<td contenteditable="true">5</td>
+  							<td contenteditable="false">2</td>
+  						</tr>
+  						<tr>
+  							<td contenteditable="true">3/21/22</td>
+  							<td contenteditable="true">10</td>
+  							<td contenteditable="false">4</td>
+  						</tr>
+  						<tr>
+								<td contenteditable="true">3/20/22</td>
+  							<td contenteditable="true">8</td>
+  							<td contenteditable="false">0</td>
+  						</tr>
+  						</table>
+  					</div>
+
+						<!-- Elden Ring -->
+  					<div id="Elden Ring" class="gameContent">
+  						<hr>
+  						<!-- Users -->
+  						<h3>Elden Ring</h3>
+							<table style="width: 100%">
+  						<!-- Table Headers -->
+  						<tr>
+  							<th>Date</th>
+  							<th># of Impressions</th>
+  							<th># of Requirement Checks</th>
+  						</tr>
+  						<!-- User Values -->
+  						<tr>
+  							<td contenteditable="true">3/22/22</td>
+  							<td contenteditable="true">200</td>
+  							<td contenteditable="false">143</td>
+  						</tr>
+  						<tr>
+  							<td contenteditable="true">3/21/22</td>
+  							<td contenteditable="true">264</td>
+  							<td contenteditable="false">146</td>
+  						</tr>
+  						<tr>
+								<td contenteditable="true">3/20/22</td>
+  							<td contenteditable="true">504</td>
+  							<td contenteditable="false">376</td>
+  						</tr>
+  						</table>
+  					</div>
 
         </nav>
       </p>
@@ -55,4 +247,5 @@
 
   <script type="text/javascript" src="../js/dev.js"></script>
   <script type="text/javascript" src="../js/navbar.js"></script>
+	<script type="text/javascript">load(null);</script>
 </html>
