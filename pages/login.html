@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <title>ReqCheck - Login</title>
     <link rel="stylesheet" type="text/css" href="../css/mainPage.css">
-    <script type="text/javascript" src="../js/login.js"></script>
-    <script type="text/javascript" src="../js/navbar.js"></script>
   </head>
   <body>
 
@@ -35,13 +33,27 @@
     <!-- Content -->
     <div class="container">
       <p>
+        <!-- Login -->
         <nav id="leftSide">
-
-
+          <nav id="loginPage">
+            <h2>Login</h2>
+            <input type="text"; id="emailLogin"; placeholder="Email">
+            <br>
+            <input type="password"; id="passwordLogin"; placeholder="Password">
+            <br>
+            <input type="submit"; onclick="loginClick()"; id="login"; value="Login">
+          </nav>
         </nav>
 
         <nav id="rightSide">
-
+          <nav id="loginPage">
+            <h2>Sign-Up</h2>
+            <input type="text"; id="emailSignUp"; placeholder="Email">
+            <br>
+            <input type="password"; id="passwordSignUp"; placeholder="Password">
+            <br>
+            <input type="submit"; onclick="signUpClick()"; id="submitSignUp"; value="Sign-Up">
+          </nav>
         </nav>
       </p>
     </div>
@@ -52,6 +64,10 @@
     			<a href="hardware.html"; onclick="gotoHardware()">HARDWARE</a>
     			<a href="faq.html">FAQ</a>
     </footer>
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="../js/login.js"></script>
+    <script type="text/javascript" src="../js/navbar.js"></script>
 
   </body>
 </html>
