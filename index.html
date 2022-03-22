@@ -19,14 +19,13 @@
     	<div class="container">
     		<ul>
     			<li><a href="index.html";>HOME</a></li>
-    			<li><a href=""; onclick="gotoHardware()">HARDWARE</a></li>
+    			<li><a href="pages/hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
     			<li><a href="pages/faq.html">FAQ</a></li>
-          <li id="adminButton"><a href="";  onclick="gotoAdmin()";></a></li>
-          <li id="devButton"><a href="";  onclick="gotoDev";></a></li>
-          <li><a href=""; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
+          <li id="adminButton"><a href="pages/admin.html";  onclick="gotoAdmin()";></a></li>
+          <li id="devButton"><a href="pages/dev.html";  onclick="gotoDev()";></a></li>
+          <li><a href="pages/login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
           <button id="searchButton"; onclick="search()">Enter</button>
           <input id="searchBar"; type="text"; size = 30; placeholder="Search...">
-
     		</ul>
     	</div>
     </nav>
@@ -92,12 +91,12 @@
 
     <!-- NavBar -->
     <footer id="mainFooter">
-    			<a target="index.html" href="">HOME</a>
-    			<a href=""; onclick="gotoHardware()">HARDWARE</a>
+    			<a href="index.html">HOME</a>
+    			<a href="pages/hardware.html"; onclick="gotoHardware()">HARDWARE</a>
     			<a href="pages/faq.html">FAQ</a>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- Header/Footer JavaScript -->
     <script>
       //Add Buttons for respective Dashboards
       let adminButton = document.getElementById("adminButton");
@@ -136,8 +135,6 @@
       function search(){
         let searchBar = document.getElementById("searchBar");
         let searchButton = document.getElementById("searchButton");
-
-
       }
     </script>
 
