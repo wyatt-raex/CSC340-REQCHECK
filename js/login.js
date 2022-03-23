@@ -36,7 +36,10 @@ function loginClick(){
 
   if (passConfirm){
     alert("Login Successful!");
-    location.assign('../index.html');
+    if (email == "user@reqcheck.com") location.assign('../index.html');
+    else if (email == "admin@reqcheck.com") location.assign('admin.html');
+    else if (email == "gamedev@reqcheck.com") location.assign('dev.html');
+
   }
   else alert("Login Failed, please try again.");
 

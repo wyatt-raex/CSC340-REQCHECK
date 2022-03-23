@@ -24,6 +24,7 @@ h2 {
 
 h3 {
 	margin: 0px;
+	text-decoration: underline;
 }
 
 label {
@@ -67,7 +68,6 @@ select {
 }
 
 table {
-	margin: 5px;
   padding: 4px;
   border-radius: 5px;
   color: white;
