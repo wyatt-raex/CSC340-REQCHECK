@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>ReqCheck - Minecraft</title>
+    <link rel="stylesheet" type="text/css" href="../css/mainPage.css">
+  </head>
+  <body>
+
+    <!-- Header -->
+    <header id="mainHeader">
+    	<div class="container">
+    		<a href="index.html"><h1>ReqCheck</h1></a>
+    	</div>
+    </header>
+
+    <!-- NavBar -->
+    <nav id="navBar">
+    	<div class="container">
+    		<ul>
+    			<li><a href="../index.html";>HOME</a></li>
+    			<li><a href="./hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
+    			<li><a href="./faq.html">FAQ</a></li>
+          <li id="adminButton"><a href="./admin.html";  onclick="gotoAdmin()";>ADMIN DASHBOARD</a></li>
+          <li id="devButton"><a href="./dev.html";  onclick="gotoDev()";>DEVELOPER DASHBOARD</a></li>
+          <li><a href="./login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
+          <button id="searchButton"; onclick="search()">Enter</button>
+          <input id="searchBar"; type="text"; size = 30; placeholder="Search...">
+    		</ul>
+    	</div>
+    </nav>
+
+    <!-- Content -->
+
+    <div class="container">
+      <p>
+        <nav id="leftSide">
+          <nav id="builds">
+            <h2>Minecraft</h2>
+            <hr>
+            <img src="../res/minecraft-logo.jpeg" alt="The Minecraft Logo" width="300">
+
+            <h3>Summary</h3>
+            <p><strong>The World Is Yours For The Making</strong></p>
+            <p>Prepare for an adventure of limitless possibilities as you build,
+                mine, battle mobs, and explore the ever-changing Minecraft landscape.
+            </p>
+          </nav>
+
+        </nav>
+
+        <nav id="rightSide">
+            <h2>Requirements</h2>
+            <hr>
+            <nav id="topGames">
+                
+                <h4>Minimum Requirements</h4>
+
+                <ul>
+                    <li>CPU: Intel Core i3-3210 3.2 GHz/ AMD A8-7600 APU 3.1 GHz or equivalent</li>
+                    <li>GPU: Nvidia GeForce 400 Series or AMD Radeon HD 7000 series with OpenGL 4.4</li>
+                    <li>RAM: 4GB</li>
+                    <li>STORAGE: At least 1GB for game core, maps and other files</li>
+                </ul>
+
+                <h4>Reccomended Requirements</h4>
+
+                <ul>
+                    <li>CPU: Intel Core i5-4690 3.5GHz / AMD A10-7800 APU 3.5 GHz or equivalent</li>
+                    <li>GPU: GeForce 700 Series or AMD Radeon Rx 200 Series (excluding integrated chipsets) with OpenGL 4.5</li>
+                    <li>RAM: 8GB</li>
+                    <li>STORAGE: 4GB (SSD is recommended)</li>
+                </ul>
+                
+                <form>
+                    <label for="build">Select a build:</label>
+                    <br>
+                    <select name="build" id="build">
+                        <option value="Failure Build">Failure Build</option>
+                        <option value="Minimum Pass Build">Min. Pass Build</option>
+                        <option value="Passing Build">Passing Build</option>
+                    </select>
+                </form>
+
+                <button onclick="compareOption()">Compare</button>
+            </nav>
+        </nav>
+
+      </p>
+    </div>
+
+    <!-- NavBar -->
+    <footer id="mainFooter">
+    			<a href="index.html">HOME</a>
+    			<a href="pages/hardware.html"; onclick="gotoHardware()">HARDWARE</a>
+    			<a href="pages/faq.html">FAQ</a>
+    </footer>
+  </body>
+
+  <script type="text/javascript" src="../js/minecraft.js"></script>
+  <script type="text/javascript" src="../js/navbar.js"></script>
+</html>
