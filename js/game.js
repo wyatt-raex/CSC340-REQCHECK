@@ -4,10 +4,7 @@ window.onload = function(){
 
 //Get ID
 function getID() {
-  let query = window.location.search;
-  const urlParams = new URLSearchParams(query);
-  let id = urlParams.get('app_id');
-  return id;
+  return sessionStorage.getItem('appID');
 }
 
 //Get JSON
@@ -15,28 +12,32 @@ function getJSON(){
   //Vars
   let xhr = new XMLHttpRequest();
   let id = getID();
-  //let url = 'https://store.steampowered.com/api/appdetails/?appids='+id;
-  let url = 'http://api.steampowered.com/ISteamApps/GetAppList/v0002/?format=json';
-  alert(url);
+  let url = 'https://protected-gorge-12356.herokuapp.com/https://store.steampowered.com/api/appdetails/?appids='+id;
+  //alert(url);
 
+  //Get JSON
   $.getJSON(url, function(data)
   {
-    alert(data);
-  });
+    //Get Data
+    const name = data[id].data.name;
+    const image = data[id].data.header_image;
+    const description = data[id].data.about_the_game;
+    const windowsMinimum = data[id].data.pc_requirements.minimum;
+    const windowsRecommended = data[id].data.pc_requirements.recommended;
+    const macMinimum = data[id].data.mac_requirements.minimum;
+    const macRecommended = data[id].data.mac_requirements.recommended;
+    const linuxMinimum = data[id].data.linux_requirements.minimum;
+    const linuxRecommended = data[id].data.linux_requirements.recommended;
+    
+    console.dir(data[id].data.linux_requirements);
 
-  //Request
-  /*
-  fetch(url, {method: 'GET', mode: 'cors'})
-    .then (function(response) {
-      return response.json();
-    })
-    .then (function(data) {
-      appendData(data);
-    })
-    .catch (function(error) {
-      console.log("Unable to fetch data, please try again.");
-    });
-    */
+    //Display JSON
+    document.getElementById("gameName").innerHTML = name;
+    document.getElementById("gameImage").src = image;
+    document.getElementById("gameDescription").innerHTML = description;
+    document.getElementById("gameRequirements").innerHTML = windowsMinimum + "<br>" + windowsRecommended;
+
+  });
 }
 
 //Compare

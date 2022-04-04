@@ -25,6 +25,11 @@ function gotoHardware(){
 
 }
 
+//Goto Game Page
+function gotoGame(id){
+  sessionStorage.setItem('appID', id);
+}
+
 function search(){
     let searchBar = document.getElementById("searchBar");
     let searchButton = document.getElementById("searchButton");
