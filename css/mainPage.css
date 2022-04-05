@@ -130,7 +130,7 @@ table {
 #navBar a {
 	color: #fff;
 	text-decoration: none;
-  text-align: center;
+  	text-align: center;
 	font-size: 18px;
 	padding-right: 15px;
 }
@@ -140,11 +140,11 @@ table {
   overflow: hidden;
   float: right;
   margin-top: 5px;
-  size: 50;
+  size: 50px;
 }
 
 #navBar button {
-	display: inline;
+ display: inline;
   overflow: hidden;
   float: right;
   margin-top: 5px;
@@ -158,15 +158,42 @@ table {
   background-color: white;
 }
 
-#searchButton {
-	font-size: 13px;
-	margin-top: 5px;
-	padding-left: 10px;
-	padding-right: 10px;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  background-color: #3a3a3a;
+#matchList {
+	color: white;
+	background-color: white;
+	float: left;
+	position: absolute;
+	max-height: 300px;
+	width: 20%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	display: inline;
+	margin-top: 28px;
+	margin-left: 80px;
+}
+
+#matchList ul {
+	
+	
+}
+
+#matchList li {
+	float: left;
+	color: white;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	display: inline;
+}
+
+#matchList a {
+	color: black;
+	float: left;
+}
+
+#matchList li:hover {
+	color: black;
+	background-color: #343434;
 }
 
 /* left side */

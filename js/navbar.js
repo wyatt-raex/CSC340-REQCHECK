@@ -30,10 +30,57 @@ function gotoGame(id){
   sessionStorage.setItem('appID', id);
 }
 
-function search(){
-    let searchBar = document.getElementById("searchBar");
-    let searchButton = document.getElementById("searchButton");
 
+//Search (Code based on system by Traversy Media)
+const searchBar = document.getElementById("searchBar");
+const searchButton = document.getElementById("searchButton");
+const matchList = document.getElementById("matchList");
+matchList.innerHTML = '';
+//matchList.display = false;
+
+//Search Games
+const searchGames = async searchText => {
+  //Get Data
+  const res = await fetch('../data/gameList.json')
+  const games = await res.json();
+  const gameArray = games.apps;
+  //matchList.display = true;
+  
+  //console.log(games.apps[4].name);
+
+  //Get Matches
+  let matches = gameArray.filter(game => {
+    const regex = new RegExp(`^${searchText}`, 'gi');
+    return game.name.match(regex);
+  })
+
+  //Have at least 1 character to search
+  if (searchText.length == 0) {
+      matches= [];
+      matchList.innerHTML = '';
+  }
+  //console.log(matches);
+
+  //Display Results
+  if (matches.length > 0) {
+    const html = matches.map(
+      match => `
+        <li> <a href="./pages/game.html"; onclick = gotoGame(${match.appid})>${match.name}</a></li>`
+    ).join('');
+    console.log(html);
+
+    matchList.innerHTML = html;
+  }
+
+
+  
+}
+
+  searchBar.addEventListener('input', () => searchGames(searchBar.value));
+  //if (matchList.innerHTML == '') matchList.display = false;
+
+  /*
+function search(){
     //Get current page
     let page = window.location.href.split('/');
     page = page[page.length-1];
@@ -46,3 +93,4 @@ function search(){
     }
     else alert("Game not found. Please try again.")
 }
+*/

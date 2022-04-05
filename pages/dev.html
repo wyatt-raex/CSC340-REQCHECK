@@ -11,6 +11,7 @@
     <title>ReqCheck - Admin Dashboard</title>
     <link rel="stylesheet" type="text/css" href="../css/mainPage.css">
 	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   </head>
   <body>
 
@@ -25,15 +26,16 @@
     <nav id="navBar">
     	<div class="container">
     		<ul>
-					<li><a href="../index.html";>HOME</a></li>
-    			<li><a href="hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
-    			<li><a href="faq.html">FAQ</a></li>
-          <li id="adminButton"><a href="admin.html";  onclick="gotoAdmin()";>ADMIN DASHBOARD</a></li>
-          <li id="devButton"><a href="dev.html";  onclick="gotoDev()";>DEVELOPER DASHBOARD</a></li>
-          <li><a href="login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
-          <button id="searchButton"; onclick="search()">Enter</button>
-          <input id="searchBar"; type="text"; size = 30; placeholder="Search...">
-    		</ul>
+				<li><a href="index.html";>HOME</a></li>
+				<li><a href="pages/hardware.html"; onclick="gotoHardware()">HARDWARE</a></li>
+				<li><a href="pages/faq.html">FAQ</a></li>
+				<li id="adminButton"><a href="pages/admin.html";  onclick="gotoAdmin()";>ADMIN DASHBOARD</a></li>
+				<li id="devButton"><a href="pages/dev.html";  onclick="gotoDev()";>DEVELOPER DASHBOARD</a></li>
+				<!-- Search Bar -->
+				<li><a href="pages/login.html"; onclick="gotoLogin()">LOGIN/SIGN-UP</a></li>
+				<input id="searchBar"; type="text"; size = 50px; placeholder="Search...">
+				<ul id="matchList"></ul>
+			</ul>
     	</div>
     </nav>
 
