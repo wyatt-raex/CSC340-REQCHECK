@@ -4,6 +4,12 @@ window.onload = function(){
 
 //Get ID
 function getID() {
+  /*
+  let query = window.location.search;
+  let parm = new URLSearchParams(query);
+  alert(parm.get(appid))
+  return parm.get(appid);
+  */
   return sessionStorage.getItem('appID');
 }
 
@@ -32,6 +38,7 @@ function getJSON(){
     console.dir(data[id].data.linux_requirements);
 
     //Display JSON
+    document.getElementById("titleName").innerHTML = 'ReqCheck - ' + name;
     document.getElementById("gameName").innerHTML = name;
     document.getElementById("gameImage").src = image;
     document.getElementById("gameDescription").innerHTML = description;
