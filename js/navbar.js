@@ -61,11 +61,15 @@ const searchGames = async searchText => {
   }
   //console.log(matches);
 
+  //Get Path
+  let gameUrl = 'game.html';
+  if (window.location.pathname == '/index.html')  gameUrl = './pages/game.html';
+
   //Display Results
   if (matches.length > 0) {
     const html = matches.map(
       match => `
-        <li> <a href="./pages/game.html"; onclick = gotoGame(${match.appid})>${match.name}</a></li>`
+        <li> <a href="${gameUrl}"; onclick = gotoGame(${match.appid})>${match.name}</a></li>`
     ).join('');
     console.log(html);
 
