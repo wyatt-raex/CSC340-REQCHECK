@@ -33,13 +33,12 @@ function gotoGame(id){
 
 //Search (Code based on system by Traversy Media)
 const searchBar = document.getElementById("searchBar");
-const searchButton = document.getElementById("searchButton");
 const matchList = document.getElementById("matchList");
 matchList.innerHTML = '';
 //matchList.display = false;
 
 //Search Games
-const searchGames = async searchText => {
+const searchGames = async function(searchText) {
   //Get Data
   const res = await fetch('../data/gameList.json')
   const games = await res.json();
@@ -53,6 +52,7 @@ const searchGames = async searchText => {
     const regex = new RegExp(`^${searchText}`, 'gi');
     return game.name.match(regex);
   })
+  console.log(searchText)
 
   //Have at least 1 character to search
   if (searchText.length == 0) {
@@ -69,15 +69,12 @@ const searchGames = async searchText => {
   if (matches.length > 0) {
     const html = matches.map(
       match => `
-        <li> <a href="${gameUrl}"; onclick = gotoGame(${match.appid})>${match.name}</a></li>`
+        <a href="${gameUrl}"; onclick = gotoGame(${match.appid})>${match.name}<br></a>`
     ).join('');
     console.log(html);
 
     matchList.innerHTML = html;
-  }
-
-
-  
+  } 
 }
 
   searchBar.addEventListener('input', () => searchGames(searchBar.value));

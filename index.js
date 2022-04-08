@@ -1,6 +1,8 @@
 const http = require('http');
+const https = require('https');
 const path = require('path');
 const fs = require('fs');
+const url = require('url');
 
 //Server
 const server = http.createServer((req, res) => {
@@ -55,3 +57,32 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log('Server running on port ' + PORT));
+
+//SteamAPI
+const requestListener = http.createServer((req, res) => {
+    console.log("Incoming Request");
+    
+    //Get JSON
+    //console.log(req.url);
+    const par = url.parse(req.url, true);
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
+    https.get('https://store.steampowered.com/api/appdetails/?appids=' + par.query.appID + '&l=english', (resp) => {
+        let body = "";
+        resp.on("data", (chunk) => {
+            body += chunk;
+        });
+
+        resp.on("end", () => {
+            try {
+                let json = JSON.parse(body);
+                res.end(JSON.stringify(json));
+            } catch (error) {
+                console.error(error.message);
+            };
+        });
+
+        }).on("error", (error) => {
+            console.error(error.message);
+    });
+});
+requestListener.listen(3000, function() {console.log("Listening at port 3000")});
