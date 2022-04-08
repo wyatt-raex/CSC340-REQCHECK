@@ -25,12 +25,6 @@ function gotoHardware(){
 
 }
 
-//Goto Game Page
-function gotoGame(id){
-  sessionStorage.setItem('appID', id);
-}
-
-
 //Search (Code based on system by Traversy Media)
 const searchBar = document.getElementById("searchBar");
 const matchList = document.getElementById("matchList");
@@ -64,12 +58,13 @@ const searchGames = async function(searchText) {
   //Get Path
   let gameUrl = 'game.html';
   if (window.location.pathname == '/index.html')  gameUrl = './pages/game.html';
+  gameUrl += "?appID=";
 
   //Display Results
   if (matches.length > 0) {
     const html = matches.map(
       match => `
-        <a href="${gameUrl}"; onclick = gotoGame(${match.appid})>${match.name}<br></a>`
+        <a href="${gameUrl}${match.appid}">${match.name}<br></a>`
     ).join('');
     console.log(html);
 

@@ -7,9 +7,10 @@ const url = require('url');
 //Server
 const server = http.createServer((req, res) => {
     //Get Data  
-    let filePath = path.join(__dirname, '/', req.url == '/' ? 'index.html' : req.url); //File Path
+    const par = url.parse(req.url, true);
+    let filePath = path.join(__dirname, '/', req.url == '/' ? 'index.html' : par.pathname); //File Path
     let extName = path.extname(filePath); //Get extenstion
-    let contentType = 'text/html'; //Intial Content Type
+    let contentType = 'text/html'; //Intial Content Type   
 
     //Check File Extenstion and Set
     switch (extName)

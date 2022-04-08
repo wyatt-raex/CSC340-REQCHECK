@@ -13,7 +13,8 @@ window.onload = function(){
 
 //Get ID
 function getID() {
-  return sessionStorage.getItem('appID');
+  const urlParm = new URLSearchParams(window.location.search);
+  return urlParm.get('appID');
 }
 
 //Get JSON
