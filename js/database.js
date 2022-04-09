@@ -262,4 +262,8 @@ async function addGame(client, appID, gameName, gameDesc, gameImage, windows, wi
 
 }
 
-module.exports = {database};
+module.exports = {database, listDatabses, createLogin, deleteLogin, 
+                    updateUserRole, updateUserPassword, updateUserEmail,
+                    addDeveloperGames, removeDeveloperGames, 
+                    updateHardwareValue, addHardware, deleteHardware,
+                    addGameList, formatRequirement, addGame};
