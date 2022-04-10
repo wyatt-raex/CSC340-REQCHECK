@@ -1,6 +1,9 @@
+const db = require('./database.js');
+
 //Load
 function load(evt, editType){
-  openType(evt, editType)
+  populateTable();
+  openType(evt, editType);
 }
 
 //Switch between tabs
@@ -19,4 +22,18 @@ function openType(evt, editType) {
 
   document.getElementById(editType).style.display = "block";
   if (evt != null) evt.currentTarget.className += " active";
+}
+
+function populateTable() {
+  let testElement = document.createElement("tr");
+  testElement.innerHTML = `<td contenteditable="true"> Steven Bailey</td>
+                          <td contenteditable="true"> test@reqcheck.com </td>
+                          <td contenteditable="false">
+                            <select>
+                              <option>User</option>
+                              <option>Game Developer</option>
+                              <option>Admin</option>
+                            </select>
+                          </td>`;
+  document.getElementById("user-table").appendChild(testElement);
 }
