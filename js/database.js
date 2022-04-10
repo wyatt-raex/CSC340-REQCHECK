@@ -23,7 +23,9 @@ async function database() {
         //await updateUserPassword(client, 'admin@reqcheck.com', '1233');
         //await updateUserEmail(client, 'admin@reqcheck.com', "admin1@reqcheck.com");
         //await removeDeveloperGames(client, 'gamedev@reqcheck.com', 645126);
-        await updateHardwareValue(client, "AMD Ryzen Threadripper PRO 5994WX", 108822);
+        //await updateHardwareValue(client, "processor", "AMD Ryzen Threadripper PRO 5995WX", 108822);
+        //await addHardware(client, "processor", "Test CPU", 14324);
+        await deleteHardware(client, "processor", "Test CPU");
     }
     catch (e) {
         console.log(e);
@@ -170,36 +172,48 @@ async function removeDeveloperGames(client, userEmail, appID){
 }
 
 //Update Comparator Value
-async function updateHardwareValue(client, hardwareName, newValue) {
-    const graphics = await client.db('hardware').collection('graphics').findOne({name: hardwareName});
-    if (graphics != undefined)
+async function updateHardwareValue(client, collection, hardwareName, newValue) {
+    const check = await client.db('hardware').collection(collection).findOne({name: hardwareName});
+    if (check != undefined)
     {
-        await client.db('hardware').collection('graphics').updateOne({name: hardwareName}, {$set: {value: newValue}});
-        console.log("Value of hardware " + hardwareName + " set to " + newValue)
+        await client.db('hardware').collection(collection).updateOne({name: hardwareName}, {$set: {value: newValue}});
+        console.log("Value of hardware " + hardwareName + " set to " + newValue);
         return true;
     }
     else {
-        const processor = await client.db('hardware').collection('processor').findOne({name: hardwareName});
-        if (processor != undefined) {
-            await client.db('hardware').collection('processor').updateOne({name: hardwareName}, {$set: {value: newValue}});
-            console.log("Value of hardware " + hardwareName + " set to " + newValue)
-            return true;
-        }
-        else {
-            console.log("No hardware with the name " + hardwareName + "was found.");
-            return false;
-        }
+        console.log("No hardware with the name " + hardwareName + " was found.");
+        return false;
     }
 }
 
 //Add New Hardware 
-async function addHardware(client, hardwareName, value) {
-
+async function addHardware(client, collection, hardwareName, value) {
+    const check = await client.db('hardware').collection(collection).findOne({name: hardwareName});
+    if (check == undefined) {
+        const data = {name: hardwareName, value: value}
+        await client.db('hardware').collection(collection).insertOne(data);
+        console.log("Hardware with the name " + hardwareName + " added to database with value " + value);
+        return true;
+    }
+    else {
+        console.log("Hardware with the name " + hardwareName + " already in database.");
+        return false;
+    }
+     
 }
 
 //Delete Hardware
-async function deleteHardware(client, hardwareName) {
-
+async function deleteHardware(client, collection, hardwareName) {
+    const check = await client.db('hardware').collection(collection).findOne({name: hardwareName});
+    if (check != undefined) {
+        await client.db('hardware').collection(collection).deleteOne({name: hardwareName});
+        console.log("Hardware with the name " + hardwareName + " was deleted from the database.");
+        return true;
+    } 
+    else {
+        console.log("No hardware with the name " + hardwareName + " was found.");
+        return false;
+    }
 }
 
 //Add Game to List
