@@ -1,4 +1,4 @@
-const db = require('./database.js');
+//const db = require('./database.js');
 
 //Load
 function load(evt, editType){
@@ -30,10 +30,13 @@ function populateTable() {
                           <td contenteditable="true"> test@reqcheck.com </td>
                           <td contenteditable="false">
                             <select>
-                              <option>User</option>
+                              <option selected>User</option>
                               <option>Game Developer</option>
                               <option>Admin</option>
                             </select>
                           </td>`;
-  document.getElementById("user-table").appendChild(testElement);
+  document.getElementById("table-user").appendChild(testElement);
+
+  //db.database();
+  //db.listDatabases();
 }
