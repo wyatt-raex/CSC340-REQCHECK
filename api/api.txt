@@ -30,7 +30,8 @@ Format:
     "email": "testEmail",
     "password": "1234",
     "role": "admin",
-    "games": []
+    "games": [],
+	"builds": []
 }
 
 PUT /api/db/login/email/:email/:newEmail (Ex. /api/db/login/email/admin@reqcheck.com/newAdmin@reqcheck.com)
@@ -44,6 +45,27 @@ PUT /api/db/login/password/:email/:newPassword (Ex. /api/db/login/email/admin@re
 PUT /api/db/login/role/:email/:newRole (Ex. /api/db/login/email/admin@reqcheck.com/admin)
 -Updates role of user.
 -Will send back 400 code if there is no user of that email.
+
+POST /api/db/login/build/:email
+-Updates build array for the user of specified email to body of POST
+-Returns 400 if no user of email found
+Format:
+[
+	{	
+	"name": "Build1",
+	"processor" "Intel Core i5 6500",
+	"memory": "8GB RAM",
+	"graphics": "RTX 2060",
+	"storage": "1TB",
+	},
+	{	
+	"name": "Build2",
+	"processor" "Intel Core i7 11700K",
+	"memory": "16GB RAM",
+	"graphics": "RTX 3070",
+	"storage": "2TB",
+	},
+]
 
 
 --Developers--
@@ -89,9 +111,10 @@ GET /api/db/games/local
 -Returns list of all local games in JSON format.
 -Return 400 if no local games
 
-POST /api/db/games/local/:appID (Ex. /api/db/games/local/rc1)
+POST /api/db/games/local/:appID (Ex. /api/db/games/local/01)
 -Adds local game to the local game list with data in POST body
 -Returns 400 if game id already exists
+-NOTE: Since steam appIDs never start with 0, our local ids can start with 01, 02 etc.
 Format (there is a method in the database.js called formatRequirement that can take all the info and return a JSON):
 {
 	appid: appID
@@ -130,3 +153,11 @@ Format (there is a method in the database.js called formatRequirement that can t
 		linux_requirements: {minimum: linuxMin, recommended: linuxRec}
 	}
 }
+
+PUT /api/db/games/:hardwareType/:hardwareName/:newValue (Ex. /api/db/games/processor/Intel Core i5/15);
+-Sets hardware impression value for game
+-Returns 400 if there is no game with that ID
+
+PUT /api/db/games/:appID/:newValue (Ex. /api/db/games/01/15);
+-Sets game impression value for game
+-Returns 400 if there is no game with that ID

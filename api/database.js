@@ -75,6 +75,17 @@ router.put('/login/role/:email/:newRole', async (req, res) => {
     }
 });
 
+//Update Builds
+router.post('/login/build/:email', async (req, res) => {
+    if (await updateUserBuilds(conn.getDb(), req.params.email, req.body) == false) {
+        return res.status(400).send("No user under that email found");
+    }
+    else {
+        res.send("Developer " + req.params.email + " games updated.");
+    }
+});
+
+
 ////* DEVEOPER *////
 //Update Dev Games
 router.post('/dev/:email', async (req, res) => {
@@ -143,7 +154,7 @@ router.get('/games/local', async (req, res) => {
 
 //Add local game
 router.post('/games/local/:appID', async (req, res) => {
-    if (await addLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
+    if (await addLocalGame(conn.getDb(), parseInt(req.params.appID), req.body) == false) {
         return res.status(400).send("Local game with same ID already in database");
     }
     else res.send(req.body);
@@ -151,7 +162,7 @@ router.post('/games/local/:appID', async (req, res) => {
 
 //Remove local game
 router.delete('/games/local/:appID', async (req, res) => {
-    if (await removeLocalGame(conn.getDb(), req.params.appID) == false) {
+    if (await removeLocalGame(conn.getDb(), parseInt(req.params.appID)) == false) {
         return res.status(400).send("No game with ID in database.");
     }
     else res.send("Game deleted");
@@ -159,10 +170,30 @@ router.delete('/games/local/:appID', async (req, res) => {
 
 //Update local game
 router.post('/games/local/update/:appID', async (req, res) => {
-    if (await updateLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
+    if (await updateLocalGame(conn.getDb(), parseInt(req.params.appID), req.body) == false) {
         return res.status(400).send("No local game with ID.");
     }
     else res.send(req.body);
+});
+
+//Add Hardware Impression to Game
+router.put('/games/:type/:appID/:hardwareName/:newValue', async (req, res) => {
+    if (await updateHardwareImpressions(conn.getDb(), req.params.type, parseInt(req.params.appID), req.params.hardwareName, req.params.newValue) == false) {
+        return res.status(400).send("No games under that appID found");
+    }
+    else {
+        res.send("Updated Impressions")
+    }
+});
+
+//Add Webiste Impression to Game
+router.put('/games/:appID/:newValue', async (req, res) => {
+    if (await updateGameImpressions(conn.getDb(), parseInt(req.params.appID), req.params.newValue) == false) {
+        return res.status(400).send("No games under that appID found");
+    }
+    else {
+        res.send("Updated Impressions")
+    }
 });
 
 //MongoDB Database Functions//
@@ -247,6 +278,21 @@ async function updateUserEmail(client, userEmail, newEmail) {
     if (check) {
         await client.db('loginData').collection('user').updateOne({email: userEmail}, {$set: {email: newEmail}});
         console.log("User " + userEmail + "email changed to " + newEmail);
+        return true;
+    }
+    else {
+        console.log("No user under " + userEmail + " found");
+        return false;
+    }
+}
+
+//Update Builds
+async function updateUserBuilds(client, userEmail, data) {
+    const check = await client.db('loginData').collection('user').findOne({email: userEmail});
+    if (check) {
+        await client.db('loginData').collection('user').updateOne({email: userEmail}, {$set: {builds: data}});
+        console.log(data);
+        console.log("User builds updated");
         return true;
     }
     else {
@@ -344,6 +390,46 @@ async function deleteHardware(client, collection, hardwareName) {
         console.log("No hardware with the name " + hardwareName + " was found.");
         return false;
     }
+}
+
+//Add Hardware Impressions
+async function updateHardwareImpressions(client, collection, appID, hardwareName, newValue) {
+    let col = 'localGameList';
+
+    //Get right list
+    if (await client.db('gameList').collection(col).findOne({appid: appID}) == undefined) {
+        if (await client.db('gameList').collection('steamGameList').findOne({appid: parseInt(appID)}) == undefined)
+        {
+            console.log("No game with the appID found.");
+            return false;
+        }
+        else col = 'steamGameList'
+    }
+
+    //Set Values
+    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$set: {[collection]: {[hardwareName]: newValue}}});
+    console.log("Value of hardware " + hardwareName + " set to " + newValue);
+    return true;
+}
+
+//Add Game Impressions
+async function updateGameImpressions(client, appID, newValue) {
+    let col = 'localGameList';
+
+    //Get right list
+    if (await client.db('gameList').collection(col).findOne({appid: appID}) == undefined) {
+        if (await client.db('gameList').collection('steamGameList').findOne({appid: parseInt(appID)}) == undefined)
+        {
+            console.log("No game with the appID found.");
+            return false;
+        }
+        else col = 'steamGameList'
+    }
+
+    //Set Values
+    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$set: {impressions: newValue}});
+    console.log("Value of gamme impressions set to " + newValue);
+    return true;
 }
 
 //Add Game to List
