@@ -46,7 +46,7 @@ const searchGames = async function(searchText) {
     const regex = new RegExp(`^${searchText}`, 'gi');
     return game.name.match(regex);
   })
-  console.log(searchText)
+  //console.log(searchText)
 
   //Have at least 1 character to search
   if (searchText.length == 0) {
@@ -66,13 +66,13 @@ const searchGames = async function(searchText) {
       match => `
         <a href="${gameUrl}${match.appid}">${match.name}<br></a>`
     ).join('');
-    console.log(html);
+    //console.log(html);
 
     matchList.innerHTML = html;
   } 
 }
 
-  searchBar.addEventListener('input', () => searchGames(searchBar.value));
+searchBar.addEventListener('input', () => searchGames(searchBar.value));
   //if (matchList.innerHTML == '') matchList.display = false;
 
   /*
