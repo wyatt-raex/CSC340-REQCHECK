@@ -34,7 +34,7 @@ matchList.innerHTML = '';
 //Search Games
 const searchGames = async function(searchText) {
   //Get Data
-  const res = await fetch('../data/gameList4-9-22.json')
+  const res = await fetch('../data/gameList4-9-22.json');
   const games = await res.json();
   const gameArray = games;
   //matchList.display = true;

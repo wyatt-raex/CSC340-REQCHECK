@@ -12,6 +12,7 @@ const app = express();
 //Server
 console.log(path.join(__dirname, 'css'));
 app.use(express.static(path.join(__dirname, 'pages')));
+app.use(express.static(path.join(__dirname, './data')));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log('Server running on port ' + PORT))
 
@@ -20,6 +21,11 @@ app.listen(PORT, () => console.log('Server running on port ' + PORT))
 app.use(express.json()) //Use Body Parser for JSON Post requests
 app.use(express.urlencoded({extended: false})); //Allows use of url encoded data
 app.use('/api/db', require('./api/database.js'))
+
+//Game List JSON//
+app.get('/data/gameList4-9-22.json', (req, res) => {
+    res.sendFile(path.join(__dirname, '/data', 'gameList4-9-22.json'));
+});
 
 //SteamAPI//
 app.get('/api/steam/:appID', async (req, res) => {
