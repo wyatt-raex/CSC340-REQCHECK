@@ -19,6 +19,19 @@ router.get('/login/:email', async (req, res) => {
     else res.json(result);
 });
 
+//Get all Users
+router.get('/login', async (req, res) => {
+    const result = await conn.getDb().db('loginData').collection('user').find({}).toArray(function(err, arr){
+        if (err) throw err;
+        console.log(arr);
+
+        if (arr == null) return res.status(400).send("No users found");
+        else res.json(arr);
+
+        return arr;
+    });
+});
+
 //Add New Login
 router.post('/login', async (req, res) => {
     if (await createLogin(conn.getDb(), req.body) == false) {

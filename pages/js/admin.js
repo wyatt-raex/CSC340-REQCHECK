@@ -1,8 +1,8 @@
-//const db = require('./database.js');
+const xmlReq = new XMLHttpRequest();
 
 //Load
 function load(evt, editType){
-  populateTable();
+  reqData();
   openType(evt, editType);
 }
 
@@ -24,6 +24,13 @@ function openType(evt, editType) {
   if (evt != null) evt.currentTarget.className += " active";
 }
 
+function reqData() {
+  //Upon data gotten from db, given to callback function reqListner()
+  xmlReq.addEventListener("load", reqListener);
+  xmlReq.open("GET", "http://localhost:5000/api/db/login");
+  xmlReq.send();
+}
+
 function populateTable() {
   let testElement = document.createElement("tr");
   testElement.innerHTML = `<td contenteditable="true"> Steven Bailey</td>
@@ -36,7 +43,9 @@ function populateTable() {
                             </select>
                           </td>`;
   document.getElementById("table-user").appendChild(testElement);
+}
 
-  //db.database();
-  //db.listDatabases();
+function reqListener() {
+  //Sends back a string, can parse it with json.parse()
+  console.log(xmlReq.responseText);
 }
