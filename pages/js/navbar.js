@@ -57,7 +57,7 @@ const searchGames = async function(searchText) {
 
   //Get Path
   let gameUrl = 'game.html';
-  if (window.location.pathname == '/index.html')  gameUrl = './pages/game.html';
+  if (window.location.pathname == '/index.html')  gameUrl = './game.html';
   gameUrl += "?appID=";
 
   //Display Results
