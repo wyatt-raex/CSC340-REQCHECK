@@ -2,7 +2,6 @@
 
 GET /api/steam/appID
 -Returns JSON of steam app data of the provided key.
--If send local ID, returns JSON of provided key.
 
 --General Database--
 
@@ -118,21 +117,18 @@ POST /api/db/games/local/:appID (Ex. /api/db/games/local/01)
 -NOTE: Since steam appIDs never start with 0, our local ids can start with 01, 02 etc.
 Format (there is a method in the database.js called formatRequirement that can take all the info and return a JSON):
 {
-	"appid": "appID",
-	"appID": 
+	appid: appID
+	appID: 
 	{
-		"data": 
-		{
-			"name": "gameName",
-			"appid": "appID",
-			"about_the_game": "gameDesc",
-			"header_image": "gameImage",
-			"platforms": {"windows": "windows", "mac": "mac", "linux": "linux"},
-			"pc_requirements": {"minimum": "windowsMin", "recommended": "windowsRec"},
-			"mac_requirements": {"minimum": "macMin", "recommended": "macRec"},
-			"linux_requirements": {"minimum": "linuxMin", "recommended": "linuxRec"}
-		}
-    }
+		name: gameName,
+		appid: appID,
+		about_the_game: gameDesc,
+		header_image: gameImage,
+		platforms: {windows: windows, mac: mac, linux: linux},
+		pc_requirements: {minimum: windowsMin, recommended: windowsRec},
+		mac_requirements: {minimum: macMin, recommended: macRec},
+		linux_requirements: {minimum: linuxMin, recommended: linuxRec}
+	}
 }
 
 DELETE /api/db/games/local/:appID (Ex. /api/db/games/local/rc1)

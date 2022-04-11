@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const url = require('url');
 const express = require('express');
+const conn = require('./api/conn.js');
 
 //const db = require('./api/database.js');
 const app = express();
@@ -21,27 +22,46 @@ app.use(express.urlencoded({extended: false})); //Allows use of url encoded data
 app.use('/api/db', require('./api/database.js'))
 
 //SteamAPI//
-app.get('/api/steam/:appID', (req, res) => {
-    //Get JSON
+app.get('/api/steam/:appID', async (req, res) => {
+    //Connect
+    conn.connectToServer();
     const appID = req.params.appID;
-    console.log("Incoming SteamAPI Request for ID: " + appID);
+    
+    //Check for non steam game first
+    const check = await conn.getDb().db('gameList').collection('localGameList').findOne({appid: appID});
+    console.log(appID);
+    if (check == null) { //Get steam game
+        //Get JSON
+        console.log("Incoming SteamAPI Request for ID: " + appID);
 
-    https.get(`https://store.steampowered.com/api/appdetails/?appids=${appID}&l=english`, (resp) => {
-        let body = "";
-        resp.on("data", (chunk) => {
-            body += chunk;
-        });
+        https.get(`https://store.steampowered.com/api/appdetails/?appids=${appID}&l=english`, (resp) => {
+            let body = "";
+            resp.on("data", (chunk) => {
+                body += chunk;
+            });
 
-        resp.on("end", () => {
-            try {
-                let json = JSON.parse(body);
-                res.end(JSON.stringify(json));
-            } catch (error) {
+            resp.on("end", () => {
+                try {
+                    let json = JSON.parse(body);
+                    res.end(JSON.stringify(json));
+                } catch (error) {
+                    console.error(error.message);
+                };
+            });
+
+            }).on("error", (error) => {
                 console.error(error.message);
-            };
         });
+    }
+    else {
+        //Get non steam game
+        console.log("Responded local game");
+        const result = await conn.getDb().db('gameList').collection('localGames').findOne({appid: appID});
+        console.log(result);
+        res.json(result);
+    }
 
-        }).on("error", (error) => {
-            console.error(error.message);
-    });
+    
 });
+
+//app.get('/api/steam/search/')

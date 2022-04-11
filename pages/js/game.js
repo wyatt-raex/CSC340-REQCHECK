@@ -22,12 +22,13 @@ function getJSON(){
   //Vars
   let xhr = new XMLHttpRequest();
   let id = getID();
-  let url = 'http://localhost:5000/api/'+getID();
+  let url = 'http://localhost:5000/api/steam/'+id;
   //alert(url);
 
   //Get JSON
   $.getJSON(url, function(data)
   {
+    console.log(data);
     //Get Data
     const name = data[id].data.name;
     const image = data[id].data.header_image;

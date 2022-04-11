@@ -154,7 +154,7 @@ router.get('/games/local', async (req, res) => {
 
 //Add local game
 router.post('/games/local/:appID', async (req, res) => {
-    if (await addLocalGame(conn.getDb(), parseInt(req.params.appID), req.body) == false) {
+    if (await addLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
         return res.status(400).send("Local game with same ID already in database");
     }
     else res.send(req.body);
@@ -162,7 +162,7 @@ router.post('/games/local/:appID', async (req, res) => {
 
 //Remove local game
 router.delete('/games/local/:appID', async (req, res) => {
-    if (await removeLocalGame(conn.getDb(), parseInt(req.params.appID)) == false) {
+    if (await removeLocalGame(conn.getDb(), req.params.appID) == false) {
         return res.status(400).send("No game with ID in database.");
     }
     else res.send("Game deleted");
@@ -170,7 +170,7 @@ router.delete('/games/local/:appID', async (req, res) => {
 
 //Update local game
 router.post('/games/local/update/:appID', async (req, res) => {
-    if (await updateLocalGame(conn.getDb(), parseInt(req.params.appID), req.body) == false) {
+    if (await updateLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
         return res.status(400).send("No local game with ID.");
     }
     else res.send(req.body);
@@ -178,7 +178,7 @@ router.post('/games/local/update/:appID', async (req, res) => {
 
 //Add Hardware Impression to Game
 router.put('/games/:type/:appID/:hardwareName/:newValue', async (req, res) => {
-    if (await updateHardwareImpressions(conn.getDb(), req.params.type, parseInt(req.params.appID), req.params.hardwareName, req.params.newValue) == false) {
+    if (await updateHardwareImpressions(conn.getDb(), req.params.type, req.params.appID, req.params.hardwareName, req.params.newValue) == false) {
         return res.status(400).send("No games under that appID found");
     }
     else {
@@ -188,7 +188,7 @@ router.put('/games/:type/:appID/:hardwareName/:newValue', async (req, res) => {
 
 //Add Webiste Impression to Game
 router.put('/games/:appID/:newValue', async (req, res) => {
-    if (await updateGameImpressions(conn.getDb(), parseInt(req.params.appID), req.params.newValue) == false) {
+    if (await updateGameImpressions(conn.getDb(), req.params.appID, req.params.newValue) == false) {
         return res.status(400).send("No games under that appID found");
     }
     else {
@@ -468,8 +468,8 @@ async function addLocalGame(client, appID, data) {
         }
     }
     */
-
-    if (await addGameList(client, data[appID].name, data[appID].appid) == true) {
+    
+    if (await addGameList(client, data[appID].data.name, data[appID].data.appid) == true) {
         await client.db('gameList').collection('localGames').insertOne(data);
         console.log("Added requirement page data for " + data[appID].name);
         return true;
