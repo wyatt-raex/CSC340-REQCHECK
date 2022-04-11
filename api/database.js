@@ -29,6 +29,15 @@ router.get('/login', async (req, res) => {
     });
 });
 
+//Get first 25 Users
+router.get('/login-limit', async (req, res) => {
+    const result = await conn.getDb().db('loginData').collection('user').find({}).limit(25).toArray(function(err, arr){
+        if (err) throw err;
+        if (arr == null) return res.status(400).send("No users found");
+        else res.json(arr);
+    });
+});
+
 //Add New Login
 router.post('/login', async (req, res) => {
     if (await createLogin(conn.getDb(), req.body) == false) {
@@ -107,6 +116,15 @@ router.get('/hardware/:type', async (req, res) => {
     });
 });
 
+//Get first 25 hardware
+router.get('/hardware/:type-limit', async (req, res) => {
+    const result = await conn.getDb().db('hardware').collection(req.params.type).find({}).limit(25).toArray(function(err, arr){
+        if (err) throw err;
+        if (arr == null) return res.status(400).send("No hardware found");
+        else res.json(arr);
+    });
+});
+
 //Add Hardware
 router.post('/hardware/:type', async (req, res) => {
     if (await addHardware(conn.getDb(), req.params.type, req.body) == false) {
@@ -143,9 +161,27 @@ router.get('/games/steam', async (req, res) => {
     });
 });
 
+//Get first 25 steam games
+router.get('/games/steam-limit', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('steamGameList').find({}).limit(25).toArray(function(err, arr){
+        if (err) throw err;
+        if (arr == null) return res.status(400).send("No steam games found");
+        else res.json(arr);
+    });
+});
+
 //Get list of all local games
 router.get('/games/local', async (req, res) => {
     const result = await conn.getDb().db('gameList').collection('localGameList').find({}).toArray(function(err, arr){
+        if (err) throw err;
+        if (arr == null) return res.status(400).send("No local games found");
+        else res.json(arr);
+    });
+});
+
+//Get first 25 local games
+router.get('/games/local-limit', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('localGameList').find({}).limit(25).toArray(function(err, arr){
         if (err) throw err;
         if (arr == null) return res.status(400).send("No local games found");
         else res.json(arr);

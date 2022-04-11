@@ -27,7 +27,7 @@ function openType(evt, editType) {
 function reqData() {
   //Upon data gotten from db, given to callback function reqListner()
   xmlReq.addEventListener("load", reqListener);
-  xmlReq.open("GET", "http://localhost:5000/api/db/login");
+  xmlReq.open("GET", "http://localhost:5000/api/db/login-limit");
   xmlReq.send();
 }
 
@@ -47,5 +47,5 @@ function populateTable() {
 
 function reqListener() {
   //Sends back a string, can parse it with json.parse()
-  console.log(xmlReq.responseText);
+  console.log(json.parse(xmlReq.responseText));
 }
