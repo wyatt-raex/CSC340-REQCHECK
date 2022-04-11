@@ -1,65 +1,108 @@
 const mongoClient = require('mongodb');
+const express = require('express');
+const router = express.Router();
+const conn = require('./conn.js');
+conn.connectToServer();
 
-//MongoDB Database//
-async function database() {
-    //Create Mongo Client
-    const uri = 'mongodb+srv://rcadmin:ReqCheck0@reqcheckcluster.fsgtm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-    const client = new mongoClient.MongoClient(uri);
+//API Functions
+//List Databases
+router.get('/', async (req, res) => {
+    const json = await listDatabases(conn.getDb());
+    res.json(json);
+});
 
-    //Attempt connection
-    try {
-        await client.connect()
-        //await listDatabases(client);
-        //await createLogin(client, 'admin@reqcheck.com', 1233, "admin");
-        //await createLogin(client, 'user@reqcheck.com', 1233, "user");
-        //await createLogin(client, 'gamedev@reqcheck.com', 1233, "dev");
-        //await addDeveloperGames(client, 'gamedev@reqcheck.com', 14);
-        //await updateUserRole(client, 'user@reqcheck.com', 'user');
-        //await addGameList(client, "Minecraft", 'rc0');
-        //let min = await formatRequirement(true, "Intel Core i2-3210 3.2 GHz/ AMD A8-7600 APU 3.1 GHz or equivalent", "4 GB", "Intel HD Graphics 4000 / AMD Radeon R5 series with OpenGL 4.4", "2 GB");
-        //let rec = await formatRequirement(false, "Intel Core i2-3210 3.2 GHz / AMD A8-7600 APU 3.1 GHz or better", "8 GB", "Nvidia GeForce 700 Series or AMD Radeon Rx 200 Series with OpenGL 4.5", "4 GB SSD");
-        //await addGame(client, "rc0", "Minecraft", "Prepare for an adventure of limitless possibilities as you build, mine, battle mobs, and explore the ever-changing Minecraft landscape.", "https://i.pinimg.com/originals/da/8f/b9/da8fb981a87a3052b7da6cccf0604fef.png", true, min, rec, true, "", "", true, "", "");
-        //await deleteLogin(client, 'gamedev@reqcheck.com');
-        //await updateUserPassword(client, 'admin@reqcheck.com', '1233');
-        //await updateUserEmail(client, 'admin@reqcheck.com', "admin1@reqcheck.com");
-        //await removeDeveloperGames(client, 'gamedev@reqcheck.com', 645126);
-        //await updateHardwareValue(client, "processor", "AMD Ryzen Threadripper PRO 5995WX", 108822);
-        //await addHardware(client, "processor", "Test CPU", 14324);
-        await deleteHardware(client, "processor", "Test CPU");
-    }
-    catch (e) {
-        console.log(e);
-    }
-    finally {
-        await client.close(); 
-    }
-}
+////* LOGIN *////
+//Get User Login
+router.get('/login/:email', async (req, res) => {
+    const result = await conn.getDb().db('loginData').collection('user').findOne({email: req.params.email});
+    if (result == undefined) return res.status(400).send("No user under that email found");
+    else res.json(result);
+});
 
+//Add New Login
+router.post('/login', async (req, res) => {
+    if (await createLogin(conn.getDb(), req.body) == false) {
+        return res.status(400).send("User with same email already in database.");
+    }
+    else res.send(req.body);
+});
+
+//Delete Login
+router.delete('/login/:email', async (req, res) => {
+    if (await deleteLogin(conn.getDb(), req.params.email) == false) {
+        return res.status(400).send("No user with that email in database.");
+    }
+    else res.send("User deleted");
+});
+
+//Update Email
+router.put('/login/email/:email/:newEmail', async (req, res) => {
+    if (await updateUserEmail(conn.getDb(), req.params.email, req.params.newEmail) == false) {
+        return res.status(400).send("No user under that email found");
+    }
+    else {
+        res.send("User " + req.params.email + " email changed to " + req.params.newEmail)
+    }
+});
+
+//Update Password
+router.put('/login/password/:email/:newPassword', async (req, res) => {
+    console.log('recieved');
+    if (await updateUserPassword(conn.getDb(), req.params.email, req.params.newPassword) == false) {
+        return res.status(400).send("No user under that email found");
+    }
+    else {
+        res.send("User " + req.params.email + " password changed.");
+    }
+});
+
+//Update Role
+router.put('/login/role/:email/:newRole', async (req, res) => {
+    console.log('recieved');
+    if (await updateUserRole(conn.getDb(), req.params.email, req.params.newRole) == false) {
+        return res.status(400).send("No user under that email found");
+    }
+    else {
+        res.send("User " + req.params.email + " role changed to " + req.params.newRole)
+    }
+});
+
+////* DEVEOPER *////
+//Update Dev Games
+router.post('/dev/:email', async (req, res) => {
+    if (await addDeveloperGames(conn.getDb(), req.params.email, req.body) == false) {
+        return res.status(400).send("No user under that email found");
+    }
+    else {
+        res.send("Developer " + req.params.email + " games updated.");
+    }
+});
+
+//MongoDB Database Functions//
 //List Databases
 async function listDatabases(client) {
     const databaseList = await client.db().admin().listDatabases();
-
-    console.log("Databases");
-    databaseList.databases.forEach(db => {
-        console.log(`- ${db.name}`);
-    })
+    return databaseList.databases;
 }
 
 //Create Login
-async function createLogin(client, email, password, role) {
+async function createLogin(client, data) {
     //Check for same email.
+    const email = data['email'];
     const check = await client.db('loginData').collection('user').findOne({email: email});
     if (check == undefined) {
         //Create Login
+        /*
         const newLogin = {
             email: email,
             password: password,
             role: role,
             games: []
         };
+        */
 
         //Add
-        await client.db('loginData').collection('user').insertOne(newLogin);
+        await client.db('loginData').collection('user').insertOne(data);
         console.log("New Login Added for user " + email);
         return true;
     }
@@ -88,7 +131,7 @@ async function updateUserRole(client, userEmail, newRole) {
     const check = await client.db('loginData').collection('user').findOne({email: userEmail});
     if (check) {
         await client.db('loginData').collection('user').updateOne({email: userEmail}, {$set: {role: newRole}});
-        console.log("User " + userEmail + "role changed from " + user.role + " to " + newRole);
+        console.log("User " + userEmail + " role changed from " + check.role + " to " + newRole);
         return true;
     }
     else {
@@ -126,12 +169,12 @@ async function updateUserEmail(client, userEmail, newEmail) {
 }
 
 //Add associated games to Game Developers
-async function addDeveloperGames(client, userEmail, appID){
+async function addDeveloperGames(client, userEmail, data){
     const user = await client.db('loginData').collection('user').findOne({email: userEmail});
     if (user) {
-        user.games.push(appID);
-        await client.db('loginData').collection('user').updateOne({email: userEmail}, {$set: {games: user.games}});
-        console.log("Game with ID " + appID + " added to developer with email " + userEmail);
+        //user.games.push(appID);
+        await client.db('loginData').collection('user').updateOne({email: userEmail}, {$set: {games: data}});
+        console.log("Games for developer " + userEmail + " has been updated.");
         return true;
     }
     else {
@@ -140,7 +183,7 @@ async function addDeveloperGames(client, userEmail, appID){
     }
 }
 
-//Remove an associated game from Game Developer 
+//Remove an associated game from Game Developer (not used)
 async function removeDeveloperGames(client, userEmail, appID){
     const user = await client.db('loginData').collection('user').findOne({email: userEmail}, {role: "dev"});
     if (user) {
@@ -276,8 +319,6 @@ async function addGame(client, appID, gameName, gameDesc, gameImage, windows, wi
 
 }
 
-module.exports = {database, listDatabases, createLogin, deleteLogin, 
-                    updateUserRole, updateUserPassword, updateUserEmail,
-                    addDeveloperGames, removeDeveloperGames, 
-                    updateHardwareValue, addHardware, deleteHardware,
-                    addGameList, formatRequirement, addGame};
+
+
+module.exports = router;

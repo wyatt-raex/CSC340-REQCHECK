@@ -22,7 +22,7 @@ function getJSON(){
   //Vars
   let xhr = new XMLHttpRequest();
   let id = getID();
-  let url = 'http://localhost:3000/?appID='+getID();
+  let url = 'http://localhost:5000/api/'+getID();
   //alert(url);
 
   //Get JSON
