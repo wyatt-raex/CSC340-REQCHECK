@@ -2,6 +2,7 @@ const mongoClient = require('mongodb');
 const express = require('express');
 const router = express.Router();
 const conn = require('./conn.js');
+const { addListener } = require('nodemon');
 conn.connectToServer();
 
 //API Functions
@@ -23,12 +24,8 @@ router.get('/login/:email', async (req, res) => {
 router.get('/login', async (req, res) => {
     const result = await conn.getDb().db('loginData').collection('user').find({}).toArray(function(err, arr){
         if (err) throw err;
-        console.log(arr);
-
         if (arr == null) return res.status(400).send("No users found");
         else res.json(arr);
-
-        return arr;
     });
 });
 
@@ -60,7 +57,6 @@ router.put('/login/email/:email/:newEmail', async (req, res) => {
 
 //Update Password
 router.put('/login/password/:email/:newPassword', async (req, res) => {
-    console.log('recieved');
     if (await updateUserPassword(conn.getDb(), req.params.email, req.params.newPassword) == false) {
         return res.status(400).send("No user under that email found");
     }
@@ -71,7 +67,6 @@ router.put('/login/password/:email/:newPassword', async (req, res) => {
 
 //Update Role
 router.put('/login/role/:email/:newRole', async (req, res) => {
-    console.log('recieved');
     if (await updateUserRole(conn.getDb(), req.params.email, req.params.newRole) == false) {
         return res.status(400).send("No user under that email found");
     }
@@ -89,6 +84,85 @@ router.post('/dev/:email', async (req, res) => {
     else {
         res.send("Developer " + req.params.email + " games updated.");
     }
+});
+
+////* HARDWARE *////
+//Get all hardware
+router.get('/hardware/:type', async (req, res) => {
+    const result = await conn.getDb().db('hardware').collection(req.params.type).find({}).toArray(function(err, arr){
+        if (err) throw err;
+        if (arr == null) return res.status(400).send("No hardware found");
+        else res.json(arr);
+    });
+});
+
+//Add Hardware
+router.post('/hardware/:type', async (req, res) => {
+    if (await addHardware(conn.getDb(), req.params.type, req.body) == false) {
+        return res.status(400).send("Hardware with the same name already in database.");
+    }
+    else res.send(req.body);
+});
+
+//Delete Processor
+router.delete('/hardware/:type/:name', async (req, res) => {
+    if (await deleteHardware(conn.getDb(), req.params.type, req.params.name) == false) {
+        return res.status(400).send("No hardware with name in database.");
+    }
+    else res.send("Hardware deleted");
+});
+
+//Update Hardware Value
+router.put('/hardware/:type/:name/:newValue', async (req, res) => {
+    if (await updateHardwareValue(conn.getDb(), req.params.type, req.params.name, req.params.newValue) == false) {
+        return res.status(400).send("No hardware under that name found");
+    }
+    else {
+        res.send("Hardware value updated.");
+    }
+});
+
+////* GAMES *////
+//Get list of all steam games
+router.get('/games/steam', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('steamGameList').find({}).toArray(function(err, arr){
+        if (err) throw err;
+        if (arr == null) return res.status(400).send("No steam games found");
+        else res.json(arr);
+    });
+});
+
+//Get list of all local games
+router.get('/games/local', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('localGameList').find({}).toArray(function(err, arr){
+        if (err) throw err;
+        if (arr == null) return res.status(400).send("No local games found");
+        else res.json(arr);
+    });
+});
+
+//Add local game
+router.post('/games/local/:appID', async (req, res) => {
+    if (await addLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
+        return res.status(400).send("Local game with same ID already in database");
+    }
+    else res.send(req.body);
+});
+
+//Remove local game
+router.delete('/games/local/:appID', async (req, res) => {
+    if (await removeLocalGame(conn.getDb(), req.params.appID) == false) {
+        return res.status(400).send("No game with ID in database.");
+    }
+    else res.send("Game deleted");
+});
+
+//Update local game
+router.post('/games/local/update/:appID', async (req, res) => {
+    if (await updateLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
+        return res.status(400).send("No local game with ID.");
+    }
+    else res.send(req.body);
 });
 
 //MongoDB Database Functions//
@@ -243,16 +317,16 @@ async function updateHardwareValue(client, collection, hardwareName, newValue) {
 }
 
 //Add New Hardware 
-async function addHardware(client, collection, hardwareName, value) {
-    const check = await client.db('hardware').collection(collection).findOne({name: hardwareName});
+async function addHardware(client, collection, data) {
+    const check = await client.db('hardware').collection(collection).findOne({name: data["name"]});
     if (check == undefined) {
-        const data = {name: hardwareName, value: value}
+        //const data = {name: hardwareName, value: value}
         await client.db('hardware').collection(collection).insertOne(data);
-        console.log("Hardware with the name " + hardwareName + " added to database with value " + value);
+        console.log("Hardware with the name " + data["name"] + " added to database with value " + data["value"]);
         return true;
     }
     else {
-        console.log("Hardware with the name " + hardwareName + " already in database.");
+        console.log("Hardware with the name " + data["name"] + " already in database.");
         return false;
     }
      
@@ -291,6 +365,62 @@ async function addGameList(client, gameName, appID) {
 
 }
 
+//Add Local Game (for id, use rc12...)
+async function addLocalGame(client, appID, data) {
+    /*
+    const data = {
+        appid: appID
+        [appID]: {
+            name: gameName,
+            appid: appID,
+            about_the_game: gameDesc,
+            header_image: gameImage,
+            platforms: {windows: windows, mac: mac, linux: linux},
+            pc_requirements: {minimum: windowsMin, recommended: windowsRec},
+            mac_requirements: {minimum: macMin, recommended: macRec},
+            linux_requirements: {minimum: linuxMin, recommended: linuxRec}
+        }
+    }
+    */
+
+    if (await addGameList(client, data[appID].name, data[appID].appid) == true) {
+        await client.db('gameList').collection('localGames').insertOne(data);
+        console.log("Added requirement page data for " + data[appID].name);
+        return true;
+    }
+    else return false;
+
+}
+
+//Remove local game
+async function removeLocalGame(client, appID) {
+    const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
+    if (check == undefined) {
+        console.log("No game with appID " + appID + "found.");
+        return false;
+    }
+    else {
+        await client.db('gameList').collection('localGameList').deleteOne({appid: appID});
+        await client.db('gameList').collection('localGames').deleteOne({appid: appID});
+        console.log("Game with the appID " + appID + " was deleted from the database.");
+    }
+}
+
+//Update Local game
+async function updateLocalGame(client, appID, data) {
+    const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
+    if (check == undefined) {
+        console.log("No game with appID " + appID + "found.");
+        return false;
+    }
+    else {
+        await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$set: {name: data[appID].name}});
+        await client.db('gameList').collection('localGames').updateOne({appid: appID}, {$set: data});
+        console.log("Updated requirement page data for " + data[appID].name);
+    }
+}
+
+
 //Make Requirements right format 
 async function formatRequirement(min, cpu, memory, gpu, storage, extra) {
     let requirement = '';
@@ -306,30 +436,6 @@ async function formatRequirement(min, cpu, memory, gpu, storage, extra) {
     requirement += `<li><strong>Storage:</strong> ${storage}<br></li>`;
     if (extra != undefined) requirement += `<li><strong>Additional Notes:</strong> ${extra}<br></li>`;
     return requirement;
-}
-
-//Add Local Game (for id, use rc122...)
-async function addGame(client, appID, gameName, gameDesc, gameImage, windows, windowsMin, windowsRec, mac, macMin, macRec, linux, linuxMin, linuxRec) {
-    const data = {
-        [appID]: {
-            name: gameName,
-            appid: appID,
-            about_the_game: gameDesc,
-            header_image: gameImage,
-            platforms: {windows: windows, mac: mac, linux: linux},
-            pc_requirements: {minimum: windowsMin, recommended: windowsRec},
-            mac_requirements: {minimum: macMin, recommended: macRec},
-            linux_requirements: {minimum: linuxMin, recommended: linuxRec}
-        }
-    }
-
-    if (await addGameList(client, gameName, appID) == true) {
-        await client.db('gameList').collection('localGames').insertOne(data);
-        console.log("Added requirement page data for " + gameName);
-        return true;
-    }
-    else return false;
-
 }
 
 
