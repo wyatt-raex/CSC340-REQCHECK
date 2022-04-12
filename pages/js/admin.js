@@ -56,15 +56,21 @@ function reqData(editType) {
 }
 
 function populateTable(db_res, editType) {
-  console.log(editType);
   switch (editType) {
     case 'USERS':
       db_res.forEach(i => {
-        let user_email = i.email;
-        let user_password = i.password;
-        let user_role = i.role;
+        // let user_id = i._id;
+        // let user_email = i.email;
+        // let user_password = i.password;
+        // let user_role = i.role;
+
+        let new_element = document.createElement("tr");
+        new_element.setAttribute("id", `${i._id}`);
+        new_element.innerHTML = `<td contenteditable="true">${i.email}</td>
+                                <td contenteditable="true">${i.password}</td>
+                                <td contenteditable="false">${i.role}</td>`;
+        document.getElementById("table-user").appendChild(new_element);
       });
-      console.log('user yay...');
       break;
     
     case 'GAMES':
