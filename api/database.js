@@ -135,6 +135,21 @@ router.get('/hardware/limit/:type', async (req, res) => {
     });
 });
 
+//Get One Hardware
+router.get('/hardware/:type/:name', async (req, res) => {
+    if (req.params.type == 'prebuilt') {
+        const result = await conn.getDb().db('hardware').collection('prebuilts').findOne({id: req.params.name});
+        if (result == undefined) return res.status(400).send("No prebuilt with ID");
+        else res.json(result);
+    }
+    else {
+        const result = await conn.getDb().db('hardware').collection(req.params.type).findOne({name: req.params.name});
+        if (result == undefined) return res.status(400).send("No hardware with name");
+        else res.json(result);
+    }
+    
+});
+
 //Add Hardware
 router.post('/hardware/:type', async (req, res) => {
     if (req.params.type == 'prebuilt') {
@@ -167,13 +182,6 @@ router.put('/hardware/:type/:name/:newValue', async (req, res) => {
     else {
         res.send("Hardware value updated.");
     }
-});
-
-//Get One Prebuilt
-router.get('/hardware/prebuilt/:id', async (req, res) => {
-    const result = await conn.getDb().db('hardware').collection('prebuilts').findOne({id: parseInt(req.params.id)});
-    if (result == undefined) return res.status(400).send("No prebuilt under that id found");
-    else res.json(result);
 });
 
 ////* GAMES *////

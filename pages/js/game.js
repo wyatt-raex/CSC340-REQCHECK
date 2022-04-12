@@ -20,12 +20,41 @@ function getID() {
 }
 
 //Get User Builds
-const xmlReq = new XMLHttpRequest();
+let xmlReq = new XMLHttpRequest();
 xmlReq.addEventListener("load", reqListener => {
   userBuilds = JSON.parse(xmlReq.responseText).builds;
 });
 xmlReq.open("GET", "http://localhost:5000/api/db/login/"+userEmail);
 xmlReq.send();
+
+//Get Prebuilts
+let prebuiltBuilds;
+const xmlReq2 = new XMLHttpRequest();
+xmlReq2.addEventListener("load", reqListener => {
+  prebuiltBuilds = JSON.parse(xmlReq2.responseText);
+});
+xmlReq2.open("GET", "http://localhost:5000/api/db/hardware/prebuilt");
+xmlReq2.send();
+
+//Get all hardware
+let processorJSON;
+const xmlReq3 = new XMLHttpRequest();
+xmlReq3.addEventListener("load", reqListener => {
+  processorJSON = JSON.parse(xmlReq3.responseText);
+});
+xmlReq3.open("GET", "http://localhost:5000/api/db/hardware/processor");
+xmlReq3.send();
+
+let graphicsJSON;
+const xmlReq4 = new XMLHttpRequest();
+xmlReq4.addEventListener("load", reqListener => {
+  graphicsJSON = JSON.parse(xmlReq4.responseText);
+});
+xmlReq4.open("GET", "http://localhost:5000/api/db/hardware/processor");
+xmlReq4.send();
+
+
+
 
 //Get JSON
 function getJSON(){
@@ -36,15 +65,13 @@ function getJSON(){
   //Get JSON
   $.getJSON(url, function(data)
   {
+    //Combined Builds
+    let combinedBuilds = userBuilds.concat(prebuiltBuilds);
+
     //Show user builds
-    userBuilds.forEach((element, index) => {
+    combinedBuilds.forEach((element, index) => {
       build.innerHTML += `<option value=${index}>${element.name}</option>`;
     });
-
-    //Default builds
-    build.innerHTML += `<option value="Failure Build">Failure Build</option>
-    <option value="Minimum Pass Build">Min. Pass Build</option>
-    <option value="Passing Build">Passing Build</option>`;
 
     //Get Data
     const name = data[id].data.name;
@@ -52,7 +79,7 @@ function getJSON(){
     const description = data[id].data.about_the_game;
 
     //Requirements
-    sessionStorage.setItem('windowsSupport', data[id].data.platforms.windows);
+    sessionStorage.setItem('windowsSupport', (data[id].data.platforms.windows));
     sessionStorage.setItem('windowsMinimum', data[id].data.pc_requirements.minimum);
     sessionStorage.setItem('windowsRecommended', data[id].data.pc_requirements.recommended);
     sessionStorage.setItem('macSupport', data[id].data.platforms.mac);
@@ -75,16 +102,15 @@ function getJSON(){
 function checkOS() {
   //Get Requirements
   const windowsSupport = sessionStorage.getItem('windowsSupport') === 'true';
-  const windowsMinimum = sessionStorage.getItem('windowsMinimum');
-  const windowsRecommended = sessionStorage.getItem('windowsRecommended');
+  const windowsMinimum = sessionStorage.getItem('windowsMinimum').replaceAll("-", " ")
+  const windowsRecommended = sessionStorage.getItem('windowsRecommended').replaceAll("-", " ");
   const macSupport = sessionStorage.getItem('macSupport') === 'true';
-  const macMinimum = sessionStorage.getItem('macMinimum');
-  const macRecommended = sessionStorage.getItem('macRecommended');
+  const macMinimum = sessionStorage.getItem('macMinimum').replaceAll("-", " ");
+  const macRecommended = sessionStorage.getItem('macRecommended').replaceAll("-", " ");
   const linuxSupport = sessionStorage.getItem('linuxSupport') === 'true';
-  const linuxMinimum = sessionStorage.getItem('linuxMinimum');
-  const linuxRecommended = sessionStorage.getItem('linuxRecommended');
-  //const userBuilds = getBuilds('testEmail');
-  //console.log(userBuilds);
+  const linuxMinimum = sessionStorage.getItem('linuxMinimum').replaceAll("-", " ");
+  const linuxRecommended = sessionStorage.getItem('linuxRecommended').replaceAll("-", " ");
+  const combinedBuilds = userBuilds.concat(prebuiltBuilds);
 
   //Display Requirement Based on Selected Build OS
   let osSupport = true;
@@ -92,20 +118,16 @@ function checkOS() {
   let recRequirement = '';
 
   //Select based on current system
-  let systemType;
-  if (userBuilds.length > 0) systemType = userBuilds[build.value].os;
-  if (build.value == 'Failure Build') systemType = 'windows';
-  if (build.value == 'Minimum Pass Build') systemType = 'windows';
-  if (build.value == 'Passing Build')  systemType = 'windows';
+  systemType = combinedBuilds[build.value].os;
 
   //Display Specs
-  if (userBuilds.length > 0) {
+  if (combinedBuilds.length > 0) {
     document.getElementById("buildSpecs").innerHTML = `
-    <li><strong>Processor: ${userBuilds[build.value].processor}</strong></li>
-    <li><strong>Memory: ${userBuilds[build.value].memory}</strong></li>
-    <li><strong>Graphics: ${userBuilds[build.value].graphics}</strong></li>
-    <li><strong>Storage: ${userBuilds[build.value].storage}</strong></li>
-    <li><strong>OS: ${(userBuilds[build.value].os).charAt(0).toUpperCase() + (userBuilds[build.value].os).slice(1)}</strong></li>`;
+    <li><strong>Processor: ${combinedBuilds[build.value].processor}</strong></li>
+    <li><strong>Memory: ${combinedBuilds[build.value].memory}</strong></li>
+    <li><strong>Graphics: ${combinedBuilds[build.value].graphics}</strong></li>
+    <li><strong>Storage: ${combinedBuilds[build.value].storage}</strong></li>
+    <li><strong>OS: ${(combinedBuilds[build.value].os).charAt(0).toUpperCase() + (combinedBuilds[build.value].os).slice(1)}</strong></li>`;
   }
 
   switch (systemType)
@@ -188,7 +210,7 @@ function compareOption() {
           sLength = ("<STRONG>PROCESSOR:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[0] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(minimum[0]);
+          //console.log(minimum[0]);
         }
 
         //Memory
@@ -197,7 +219,7 @@ function compareOption() {
           sLength = ("<STRONG>MEMORY:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[1] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(minimum[1]);
+          //console.log(minimum[1]);
         }
 
         //Graphics
@@ -206,7 +228,7 @@ function compareOption() {
           sLength = ("<STRONG>GRAPHICS:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[2] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(minimum[2]);
+          //console.log(minimum[2]);
         }
 
         //Storage
@@ -215,7 +237,7 @@ function compareOption() {
           sLength = ("<STRONG>STORAGE:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[3] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(minimum[3]);
+          //console.log(minimum[3]);
         }
 
         //Set display
@@ -272,7 +294,7 @@ function compareOption() {
 
   //Get Hardware
   const hardwareValues = getHardwareValues();
-  console.log("THis" + recommended[0]);
+  //console.log("THis" + recommended[0]);
   const minValues = getRequirementValues(minimum);
   //const recValues = getRequirementValues(recommended);
   const recValues = [15, 8, 20, 64];
@@ -339,15 +361,29 @@ function compareOption() {
 //Get array of values for current hardware
 function getHardwareValues() {
   let values = [0, 0, 0, 0];
+  let combinedBuilds = userBuilds.concat(prebuiltBuilds);
+  const currentBuilt = combinedBuilds[build.value];
+
+  //Fetch Data (CPU & GPU)
+  console.log(graphicsJSON);
+  console.log(graphicsJSON.find(data => {return data.name == currentBuilt.graphics}));
+  //$.getJSON("http://localhost:5000/api/db/hardware/processor/"+currentBuilt.processor, function(data) { console.log(data.value); } );
+  //$.getJSON("http://localhost:5000/api/db/hardware/graphics/"+currentBuilt.graphics, function(data) { values[2] = data.value; } );
+  console.log(values[0]);
+  console.log(values[2]);
+  //RAM and Storage
+
 
   //User Build
-  if (userBuilds.length > 0)
+  /*
+  if (combinedBuilds.length > 0)
   {
-    values[0] = userBuilds[build.value].processor;
-    values[1] = userBuilds[build.value].memory;
-    values[2] = userBuilds[build.value].gpu;
-    values[3] = userBuilds[build.value].storage;
+    values[0] = combinedBuilds[build.value].processor;
+    values[1] = combinedBuilds[build.value].memory;
+    values[2] = combinedBuilds[build.value].gpu;
+    values[3] = combinedBuilds[build.value].storage;
   }
+  */
   /*
   values[0] = 10; //CPU
   values[1] = 8; //Memory
