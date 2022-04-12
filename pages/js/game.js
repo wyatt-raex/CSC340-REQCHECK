@@ -50,7 +50,7 @@ const xmlReq4 = new XMLHttpRequest();
 xmlReq4.addEventListener("load", reqListener => {
   graphicsJSON = JSON.parse(xmlReq4.responseText);
 });
-xmlReq4.open("GET", "http://localhost:5000/api/db/hardware/processor");
+xmlReq4.open("GET", "http://localhost:5000/api/db/hardware/graphics");
 xmlReq4.send();
 
 
@@ -102,14 +102,14 @@ function getJSON(){
 function checkOS() {
   //Get Requirements
   const windowsSupport = sessionStorage.getItem('windowsSupport') === 'true';
-  const windowsMinimum = sessionStorage.getItem('windowsMinimum').replaceAll("-", " ")
-  const windowsRecommended = sessionStorage.getItem('windowsRecommended').replaceAll("-", " ");
+  const windowsMinimum = sessionStorage.getItem('windowsMinimum').replace(/[^0-9a-z_<>/."&:]/gi, ' ');
+  const windowsRecommended = sessionStorage.getItem('windowsRecommended').replace(/[^0-9a-z_<>/."&:]/gi, ' ');
   const macSupport = sessionStorage.getItem('macSupport') === 'true';
-  const macMinimum = sessionStorage.getItem('macMinimum').replaceAll("-", " ");
-  const macRecommended = sessionStorage.getItem('macRecommended').replaceAll("-", " ");
+  const macMinimum = sessionStorage.getItem('macMinimum').replace(/[^0-9a-z_<>/."&:]/gi, ' ');
+  const macRecommended = sessionStorage.getItem('macRecommended').replace(/[^0-9a-z_<>/."&:]/gi, ' ');
   const linuxSupport = sessionStorage.getItem('linuxSupport') === 'true';
-  const linuxMinimum = sessionStorage.getItem('linuxMinimum').replaceAll("-", " ");
-  const linuxRecommended = sessionStorage.getItem('linuxRecommended').replaceAll("-", " ");
+  const linuxMinimum = sessionStorage.getItem('linuxMinimum').replace(/[^0-9a-z_<>/."&:]/gi, ' ');
+  const linuxRecommended = sessionStorage.getItem('linuxRecommended').replace(/[^0-9a-z_<>/.&":]/gi, ' ');
   const combinedBuilds = userBuilds.concat(prebuiltBuilds);
 
   //Display Requirement Based on Selected Build OS
@@ -362,51 +362,77 @@ function compareOption() {
 function getHardwareValues() {
   let values = [0, 0, 0, 0];
   let combinedBuilds = userBuilds.concat(prebuiltBuilds);
-  const currentBuilt = combinedBuilds[build.value];
+  const currentBuild = combinedBuilds[build.value];
 
   //Fetch Data (CPU & GPU)
-  console.log(graphicsJSON);
-  console.log(graphicsJSON.find(data => {return data.name == currentBuilt.graphics}));
-  //$.getJSON("http://localhost:5000/api/db/hardware/processor/"+currentBuilt.processor, function(data) { console.log(data.value); } );
-  //$.getJSON("http://localhost:5000/api/db/hardware/graphics/"+currentBuilt.graphics, function(data) { values[2] = data.value; } );
-  console.log(values[0]);
-  console.log(values[2]);
-  //RAM and Storage
+  for (let i = 0; i < Math.max(graphicsJSON.length, processorJSON.length); i++) {
+    let graphicsDone = false;
+    let processorDone = false;
 
+    //Processor
+    if (processorJSON.length > i) {
+      if (processorJSON[i].name == currentBuild.processor) {
+        values[0] = processorJSON[i].value;
+        processorDone = true;
+      }
+    }
+    else processorDone = true;
 
-  //User Build
-  /*
-  if (combinedBuilds.length > 0)
-  {
-    values[0] = combinedBuilds[build.value].processor;
-    values[1] = combinedBuilds[build.value].memory;
-    values[2] = combinedBuilds[build.value].gpu;
-    values[3] = combinedBuilds[build.value].storage;
+    //Graphics
+    if (graphicsJSON.length > i) {
+      if (graphicsJSON[i].name == currentBuild.graphics) {
+        values[2] = graphicsJSON[i].value;
+        graphicsDone = true;
+      }
+    }
+    else graphicsDone = true;
+
+    //Break 
+    if (graphicsDone == true && processorDone == true) break;
   }
-  */
-  /*
-  values[0] = 10; //CPU
-  values[1] = 8; //Memory
-  values[2] = 10; //GPU
-  values[3] = 500; //Storage
-  */
 
-  //Temp solution
-  /* 
-  if (build.value == 'Failure Build') values = [5, 4, 5, 64];
-  if (build.value == 'Minimum Pass Build') values = [10, 4, 15, 64];
-  if (build.value == 'Passing Build')  values = [25, 16, 30, 1000];
-  */
+  //RAM & Storage
+  //Get RAM Unit
+  let unit = 1;
+  let amount = 0;
 
+  //RAM
+  if (currentBuild.memory.indexOf("MB") != -1) unit = .1;
+  amount = currentBuild.memory.match(/\d+/)[0];
+  values[1] = amount*unit;
+
+  //Storage
+  if (currentBuild.storage.indexOf("MB") != -1) unit = .1;
+  if (currentBuild.storage.indexOf("TB") != -1) unit = 1000;
+  amount = currentBuild.storage.match(/\d+/)[0];
+  values[3] = amount*unit;
   return values;
 }
 
 //Get array of values for game hardware
 function getRequirementValues(array) {
   let values = [-1, -1, -1, -1];
+  array[0] = array[0].replaceAll("  ", " ");
+  let matches = processorJSON.filter(element => {
+    //Remove Intel/AMD (For better chance of matches)
+    let name = element.name;
+    if (name.indexOf("Intel ") != -1) name = name.replaceAll("Intel ", "");
+    if (name.indexOf("AMD ") != -1) name = name.replaceAll("AMD ", "");
+    //console.log(name);
+
+    //Create regular expression
+    const regex = new RegExp(`${name}`, 'gi');
+
+    //Check for matches
+    return array[0].match(regex);
+  })
+  console.log(matches);
+
+  //Hard code a few (Intel Core ix) and then have a baseline things
 
   values = [10, 4, 15, 64];
   //Loop through each component database and do indexOf comparsions for the string.
+  /*
   for (let i = 0; i < 4; i++) {
     if (array[i] != '')
     {
@@ -414,5 +440,6 @@ function getRequirementValues(array) {
     }
     else values[i] = -1;
   }
+  */
   return values;
 }

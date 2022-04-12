@@ -2359,8 +2359,8 @@
     "name": "Intel Core i7 870S",
     "value": 2786
   },
-  "Intel Core 2 Extreme X9775": {
-    "name": "Intel Core 2 Extreme X9775",
+  "Intel Core2 Extreme X9775": {
+    "name": "Intel Core2 Extreme X9775",
     "value": 2780
   },
   "AMD A8 PRO 7600B APU": {
@@ -2423,8 +2423,8 @@
     "name": "AMD FirePro A320 APU",
     "value": 2634
   },
-  "Intel Core 2 Extreme X9770": {
-    "name": "Intel Core 2 Extreme X9770",
+  "Intel Core2 Extreme X9770": {
+    "name": "Intel Core2 Extreme X9770",
     "value": 2632
   },
   "Intel Pentium G4400": {
@@ -2503,8 +2503,8 @@
     "name": "Intel Core i5 661",
     "value": 2462
   },
-  "Intel Core 2 Extreme X9650": {
-    "name": "Intel Core 2 Extreme X9650",
+  "Intel Core2 Extreme X9650": {
+    "name": "Intel Core2 Extreme X9650",
     "value": 2455
   },
   "Intel Celeron G4900": {
@@ -2523,8 +2523,8 @@
     "name": "Intel Pentium G3470",
     "value": 2428
   },
-  "Intel Core 2 Quad Q9650": {
-    "name": "Intel Core 2 Quad Q9650",
+  "Intel Core2 Quad Q9650": {
+    "name": "Intel Core2 Quad Q9650",
     "value": 2409
   },
   "Intel Celeron G4920": {
@@ -2591,8 +2591,8 @@
     "name": "AMD Phenom II X4 B70",
     "value": 2303
   },
-  "Intel Core 2 Quad Q9550": {
-    "name": "Intel Core 2 Quad Q9550",
+  "Intel Core2 Quad Q9550": {
+    "name": "Intel Core2 Quad Q9550",
     "value": 2289
   },
   "Intel Core i3 3240": {
@@ -2607,12 +2607,12 @@
     "name": "Intel Celeron G3930",
     "value": 2268
   },
-  "Intel Core 2 Extreme Q6850": {
-    "name": "Intel Core 2 Extreme Q6850",
+  "Intel Core2 Extreme Q6850": {
+    "name": "Intel Core2 Extreme Q6850",
     "value": 2268
   },
-  "Intel Core 2 Extreme Q6800": {
-    "name": "Intel Core 2 Extreme Q6800",
+  "Intel Core2 Extreme Q6800": {
+    "name": "Intel Core2 Extreme Q6800",
     "value": 2267
   },
   "AMD Phenom II X4 945": {
@@ -2667,8 +2667,8 @@
     "name": "AMD Phenom II X4 960T",
     "value": 2196
   },
-  "Intel Core 2 Quad Q9500": {
-    "name": "Intel Core 2 Quad Q9500",
+  "Intel Core2 Quad Q9500": {
+    "name": "Intel Core2 Quad Q9500",
     "value": 2187
   },
   "AMD Athlon II X4 638": {
@@ -2711,8 +2711,8 @@
     "name": "Intel Celeron G3930T",
     "value": 2109
   },
-  "Intel Core 2 Quad Q9450": {
-    "name": "Intel Core 2 Quad Q9450",
+  "Intel Core2 Quad Q9450": {
+    "name": "Intel Core2 Quad Q9450",
     "value": 2109
   },
   "AMD Phenom II X4 B25": {
@@ -2771,12 +2771,12 @@
     "name": "Intel Core i5 2415M",
     "value": 2083
   },
-  "Intel Core 2 Quad Q9400": {
-    "name": "Intel Core 2 Quad Q9400",
+  "Intel Core2 Quad Q9400": {
+    "name": "Intel Core2 Quad Q9400",
     "value": 2062
   },
-  "Intel Core 2 Quad Q6700": {
-    "name": "Intel Core 2 Quad Q6700",
+  "Intel Core2 Quad Q6700": {
+    "name": "Intel Core2 Quad Q6700",
     "value": 2060
   },
   "AMD A6 3670 APU": {
@@ -2795,16 +2795,16 @@
     "name": "AMD A6 3650 APU",
     "value": 2037
   },
-  "Intel Core 2 Quad Q8400": {
-    "name": "Intel Core 2 Quad Q8400",
+  "Intel Core2 Quad Q8400": {
+    "name": "Intel Core2 Quad Q8400",
     "value": 2033
   },
   "Intel Core i3 2102": {
     "name": "Intel Core i3 2102",
     "value": 2029
   },
-  "Intel Core 2 Quad Q9505": {
-    "name": "Intel Core 2 Quad Q9505",
+  "Intel Core2 Quad Q9505": {
+    "name": "Intel Core2 Quad Q9505",
     "value": 2020
   },
   "Intel Core i5 655K": {
@@ -2815,8 +2815,8 @@
     "name": "Intel Pentium G3450T",
     "value": 2016
   },
-  "Intel Core 2 Extreme Q9200": {
-    "name": "Intel Core 2 Extreme Q9200",
+  "Intel Core2 Extreme Q9200": {
+    "name": "Intel Core2 Extreme Q9200",
     "value": 2011
   },
   "Intel Core i3 3240T": {
@@ -2847,8 +2847,8 @@
     "name": "AMD Athlon II X4 605e",
     "value": 1961
   },
-  "Intel Core 2 Quad Q9300": {
-    "name": "Intel Core 2 Quad Q9300",
+  "Intel Core2 Quad Q9300": {
+    "name": "Intel Core2 Quad Q9300",
     "value": 1959
   },
   "Intel Core i3 3220T": {
@@ -2959,8 +2959,8 @@
     "name": "AMD Phenom II X4 810",
     "value": 1849
   },
-  "Intel Core 2 Extreme Q9300": {
-    "name": "Intel Core 2 Extreme Q9300",
+  "Intel Core2 Extreme Q9300": {
+    "name": "Intel Core2 Extreme Q9300",
     "value": 1845
   },
   "AMD Phenom II X4 805": {
@@ -2999,8 +2999,8 @@
     "name": "Intel Core i3 2100",
     "value": 1816
   },
-  "Intel Core 2 Quad Q8300": {
-    "name": "Intel Core 2 Quad Q8300",
+  "Intel Core2 Quad Q8300": {
+    "name": "Intel Core2 Quad Q8300",
     "value": 1814
   },
   "AMD Phenom 9750": {
@@ -3015,8 +3015,8 @@
     "name": "AMD Athlon II X3 445",
     "value": 1799
   },
-  "Intel Core 2 Quad Q8200": {
-    "name": "Intel Core 2 Quad Q8200",
+  "Intel Core2 Quad Q8200": {
+    "name": "Intel Core2 Quad Q8200",
     "value": 1795
   },
   "AMD Athlon X4 530": {
@@ -3031,8 +3031,8 @@
     "name": "AMD Phenom II X4 910",
     "value": 1776
   },
-  "Intel Core 2 Quad Q6600": {
-    "name": "Intel Core 2 Quad Q6600",
+  "Intel Core2 Quad Q6600": {
+    "name": "Intel Core2 Quad Q6600",
     "value": 1776
   },
   "Intel Celeron G1840": {
@@ -3395,8 +3395,8 @@
     "name": "AMD Phenom 9150e",
     "value": 1340
   },
-  "Intel Core 2 Duo E8600": {
-    "name": "Intel Core 2 Duo E8600",
+  "Intel Core2 Duo E8600": {
+    "name": "Intel Core2 Duo E8600",
     "value": 1338
   },
   "Intel Celeron G1610T": {
@@ -3475,8 +3475,8 @@
     "name": "Intel Pentium J2900",
     "value": 1246
   },
-  "Intel Core 2 Duo E8500": {
-    "name": "Intel Core 2 Duo E8500",
+  "Intel Core2 Duo E8500": {
+    "name": "Intel Core2 Duo E8500",
     "value": 1239
   },
   "AMD Athlon II X2 270": {
@@ -3559,8 +3559,8 @@
     "name": "AMD Phenom II X2 550",
     "value": 1169
   },
-  "Intel Core 2 Duo E8400": {
-    "name": "Intel Core 2 Duo E8400",
+  "Intel Core2 Duo E8400": {
+    "name": "Intel Core2 Duo E8400",
     "value": 1168
   },
   "Intel Pentium E6800": {
@@ -3571,8 +3571,8 @@
     "name": "Intel Pentium G645T",
     "value": 1164
   },
-  "Intel Core 2 Duo E7600": {
-    "name": "Intel Core 2 Duo E7600",
+  "Intel Core2 Duo E7600": {
+    "name": "Intel Core2 Duo E7600",
     "value": 1161
   },
   "Intel Pentium E5800": {
@@ -3603,8 +3603,8 @@
     "name": "AMD Phenom 8850 Triple Core",
     "value": 1142
   },
-  "Intel Core 2 Duo E6850": {
-    "name": "Intel Core 2 Duo E6850",
+  "Intel Core2 Duo E6850": {
+    "name": "Intel Core2 Duo E6850",
     "value": 1140
   },
   "Intel Pentium G640T": {
@@ -3659,8 +3659,8 @@
     "name": "Intel Celeron G530",
     "value": 1096
   },
-  "Intel Core 2 Duo E7500": {
-    "name": "Intel Core 2 Duo E7500",
+  "Intel Core2 Duo E7500": {
+    "name": "Intel Core2 Duo E7500",
     "value": 1087
   },
   "Intel Celeron G1101": {
@@ -3695,8 +3695,8 @@
     "name": "Intel Pentium E6600",
     "value": 1072
   },
-  "Intel Core 2 Duo E8200": {
-    "name": "Intel Core 2 Duo E8200",
+  "Intel Core2 Duo E8200": {
+    "name": "Intel Core2 Duo E8200",
     "value": 1064
   },
   "Intel Pentium G6950": {
@@ -3727,8 +3727,8 @@
     "name": "AMD Athlon II X2 B22",
     "value": 1036
   },
-  "Intel Core 2 Duo E8300": {
-    "name": "Intel Core 2 Duo E8300",
+  "Intel Core2 Duo E8300": {
+    "name": "Intel Core2 Duo E8300",
     "value": 1034
   },
   "Intel Pentium G630T": {
@@ -3751,8 +3751,8 @@
     "name": "Intel Pentium J2850",
     "value": 1016
   },
-  "Intel Core 2 Duo E6700": {
-    "name": "Intel Core 2 Duo E6700",
+  "Intel Core2 Duo E6700": {
+    "name": "Intel Core2 Duo E6700",
     "value": 1012
   },
   "Intel Pentium E5700": {
@@ -3763,8 +3763,8 @@
     "name": "Intel Pentium E5500",
     "value": 1010
   },
-  "Intel Core 2 Duo E6750": {
-    "name": "Intel Core 2 Duo E6750",
+  "Intel Core2 Duo E6750": {
+    "name": "Intel Core2 Duo E6750",
     "value": 1008
   },
   "Intel Core i3 3229Y": {
@@ -3783,16 +3783,16 @@
     "name": "AMD Athlon II X2 240e",
     "value": 980
   },
-  "Intel Core 2 Duo E7400": {
-    "name": "Intel Core 2 Duo E7400",
+  "Intel Core2 Duo E7400": {
+    "name": "Intel Core2 Duo E7400",
     "value": 979
   },
   "AMD Phenom X3 8550": {
     "name": "AMD Phenom X3 8550",
     "value": 976
   },
-  "Intel Core 2 Duo E7300": {
-    "name": "Intel Core 2 Duo E7300",
+  "Intel Core2 Duo E7300": {
+    "name": "Intel Core2 Duo E7300",
     "value": 976
   },
   "AMD Athlon 64 FX 74": {
@@ -3811,8 +3811,8 @@
     "name": "AMD E2 3200 APU",
     "value": 967
   },
-  "Intel Core 2 Duo E7200": {
-    "name": "Intel Core 2 Duo E7200",
+  "Intel Core2 Duo E7200": {
+    "name": "Intel Core2 Duo E7200",
     "value": 962
   },
   "AMD Athlon II X2 215": {
@@ -3863,8 +3863,8 @@
     "name": "Intel Pentium E5300",
     "value": 901
   },
-  "Intel Core 2 Duo E6600": {
-    "name": "Intel Core 2 Duo E6600",
+  "Intel Core2 Duo E6600": {
+    "name": "Intel Core2 Duo E6600",
     "value": 899
   },
   "Intel Pentium G620T": {
@@ -3883,8 +3883,8 @@
     "name": "AMD Athlon 5200",
     "value": 869
   },
-  "Intel Core 2 Duo E6550": {
-    "name": "Intel Core 2 Duo E6550",
+  "Intel Core2 Duo E6550": {
+    "name": "Intel Core2 Duo E6550",
     "value": 868
   },
   "AMD Athlon II X2 4450e": {
@@ -3919,16 +3919,16 @@
     "name": "AMD Athlon 5000B",
     "value": 835
   },
-  "Intel Core 2 Duo E4600": {
-    "name": "Intel Core 2 Duo E4600",
+  "Intel Core2 Duo E4600": {
+    "name": "Intel Core2 Duo E4600",
     "value": 827
   },
   "AMD Athlon 5400B": {
     "name": "AMD Athlon 5400B",
     "value": 826
   },
-  "Intel Core 2 Extreme X6800": {
-    "name": "Intel Core 2 Extreme X6800",
+  "Intel Core2 Extreme X6800": {
+    "name": "Intel Core2 Extreme X6800",
     "value": 823
   },
   "AMD Athlon 64 X2 5200+": {
@@ -3939,16 +3939,16 @@
     "name": "Intel Celeron E3400",
     "value": 810
   },
-  "Intel Core 2 Duo E6540": {
-    "name": "Intel Core 2 Duo E6540",
+  "Intel Core2 Duo E6540": {
+    "name": "Intel Core2 Duo E6540",
     "value": 808
   },
   "AMD Athlon64 X2 4600+": {
     "name": "AMD Athlon64 X2 4600+",
     "value": 803
   },
-  "Intel Core 2 Duo E4700": {
-    "name": "Intel Core 2 Duo E4700",
+  "Intel Core2 Duo E4700": {
+    "name": "Intel Core2 Duo E4700",
     "value": 803
   },
   "AMD Athlon 64 X2 5800+": {
@@ -3967,8 +3967,8 @@
     "name": "AMD Athlon 7450",
     "value": 789
   },
-  "Intel Core 2 Duo E6400": {
-    "name": "Intel Core 2 Duo E6400",
+  "Intel Core2 Duo E6400": {
+    "name": "Intel Core2 Duo E6400",
     "value": 772
   },
   "Athlon 4850e": {
@@ -3995,8 +3995,8 @@
     "name": "Intel Pentium D 960",
     "value": 743
   },
-  "Intel Core 2 Duo E4500": {
-    "name": "Intel Core 2 Duo E4500",
+  "Intel Core2 Duo E4500": {
+    "name": "Intel Core2 Duo E4500",
     "value": 739
   },
   "AMD Athlon 5600B": {
@@ -4019,8 +4019,8 @@
     "name": "AMD Athlon 64 X2 4600+",
     "value": 716
   },
-  "Intel Core 2 Duo E6420": {
-    "name": "Intel Core 2 Duo E6420",
+  "Intel Core2 Duo E6420": {
+    "name": "Intel Core2 Duo E6420",
     "value": 714
   },
   "Intel Celeron E1600": {
@@ -4107,8 +4107,8 @@
     "name": "Intel Pentium E2160",
     "value": 640
   },
-  "Intel Core 2 Duo E4400": {
-    "name": "Intel Core 2 Duo E4400",
+  "Intel Core2 Duo E4400": {
+    "name": "Intel Core2 Duo E4400",
     "value": 632
   },
   "AMD Athlon 4050e": {
@@ -4123,8 +4123,8 @@
     "name": "AMD Athlon II X2 250u",
     "value": 604
   },
-  "Intel Core 2 Duo E6320": {
-    "name": "Intel Core 2 Duo E6320",
+  "Intel Core2 Duo E6320": {
+    "name": "Intel Core2 Duo E6320",
     "value": 597
   },
   "AMD Athlon 64 X2 3600+": {
@@ -4139,8 +4139,8 @@
     "name": "AMD Athlon 64 X2 BE 2300",
     "value": 594
   },
-  "Intel Core 2 Duo E6300": {
-    "name": "Intel Core 2 Duo E6300",
+  "Intel Core2 Duo E6300": {
+    "name": "Intel Core2 Duo E6300",
     "value": 592
   },
   "AMD Athlon X2 BE 2350": {
@@ -4171,8 +4171,8 @@
     "name": "AMD Sempron 2650 APU",
     "value": 561
   },
-  "Intel Core 2 Duo E4300": {
-    "name": "Intel Core 2 Duo E4300",
+  "Intel Core2 Duo E4300": {
+    "name": "Intel Core2 Duo E4300",
     "value": 561
   },
   "Intel Pentium E2140": {
