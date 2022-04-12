@@ -5,6 +5,8 @@ const build = document.querySelector('#build');
 const results = document.getElementById("buildResults");
 const minimumResults = document.getElementById("minResults");
 const recommendedResults = document.getElementById("recResults");
+const userEmail = 'testEmail' //Change to some sort of login thing later
+let userBuilds;
 
 window.onload = function(){
   results.style.display = "none";
@@ -17,18 +19,33 @@ function getID() {
   return urlParm.get('appID');
 }
 
+//Get User Builds
+const xmlReq = new XMLHttpRequest();
+xmlReq.addEventListener("load", reqListener => {
+  userBuilds = JSON.parse(xmlReq.responseText).builds;
+});
+xmlReq.open("GET", "http://localhost:5000/api/db/login/"+userEmail);
+xmlReq.send();
+
 //Get JSON
 function getJSON(){
   //Vars
-  let xhr = new XMLHttpRequest();
   let id = getID();
   let url = 'http://localhost:5000/api/steam/'+id;
-  //alert(url);
 
   //Get JSON
   $.getJSON(url, function(data)
   {
-    console.log(data);
+    //Show user builds
+    userBuilds.forEach((element, index) => {
+      build.innerHTML += `<option value=${index}>${element.name}</option>`;
+    });
+
+    //Default builds
+    build.innerHTML += `<option value="Failure Build">Failure Build</option>
+    <option value="Minimum Pass Build">Min. Pass Build</option>
+    <option value="Passing Build">Passing Build</option>`;
+
     //Get Data
     const name = data[id].data.name;
     const image = data[id].data.header_image;
@@ -66,6 +83,8 @@ function checkOS() {
   const linuxSupport = sessionStorage.getItem('linuxSupport') === 'true';
   const linuxMinimum = sessionStorage.getItem('linuxMinimum');
   const linuxRecommended = sessionStorage.getItem('linuxRecommended');
+  //const userBuilds = getBuilds('testEmail');
+  //console.log(userBuilds);
 
   //Display Requirement Based on Selected Build OS
   let osSupport = true;
@@ -73,11 +92,21 @@ function checkOS() {
   let recRequirement = '';
 
   //Select based on current system
-  let systemType = ''; //CHANGE THIS TO DOM GETTING CURRENT SELECTED BUILD OS
+  let systemType;
+  if (userBuilds.length > 0) systemType = userBuilds[build.value].os;
   if (build.value == 'Failure Build') systemType = 'windows';
   if (build.value == 'Minimum Pass Build') systemType = 'windows';
   if (build.value == 'Passing Build')  systemType = 'windows';
 
+  //Display Specs
+  if (userBuilds.length > 0) {
+    document.getElementById("buildSpecs").innerHTML = `
+    <li><strong>Processor: ${userBuilds[build.value].processor}</strong></li>
+    <li><strong>Memory: ${userBuilds[build.value].memory}</strong></li>
+    <li><strong>Graphics: ${userBuilds[build.value].graphics}</strong></li>
+    <li><strong>Storage: ${userBuilds[build.value].storage}</strong></li>
+    <li><strong>OS: ${(userBuilds[build.value].os).charAt(0).toUpperCase() + (userBuilds[build.value].os).slice(1)}</strong></li>`;
+  }
 
   switch (systemType)
   {
@@ -251,7 +280,7 @@ function compareOption() {
   let minText = "";
   let recText = "";
   const minTotal = [0, 0, 0, 0];
-  const recTotal = [0, 0, 0, 0]
+  const recTotal = [0, 0, 0, 0];
 
   //Compare
   if (requirement != noSupport)
@@ -310,15 +339,28 @@ function compareOption() {
 //Get array of values for current hardware
 function getHardwareValues() {
   let values = [0, 0, 0, 0];
+
+  //User Build
+  if (userBuilds.length > 0)
+  {
+    values[0] = userBuilds[build.value].processor;
+    values[1] = userBuilds[build.value].memory;
+    values[2] = userBuilds[build.value].gpu;
+    values[3] = userBuilds[build.value].storage;
+  }
+  /*
   values[0] = 10; //CPU
   values[1] = 8; //Memory
   values[2] = 10; //GPU
   values[3] = 500; //Storage
+  */
 
   //Temp solution
+  /* 
   if (build.value == 'Failure Build') values = [5, 4, 5, 64];
   if (build.value == 'Minimum Pass Build') values = [10, 4, 15, 64];
   if (build.value == 'Passing Build')  values = [25, 16, 30, 1000];
+  */
 
   return values;
 }

@@ -109,11 +109,21 @@ router.post('/dev/:email', async (req, res) => {
 ////* HARDWARE *////
 //Get all hardware
 router.get('/hardware/:type', async (req, res) => {
-    const result = await conn.getDb().db('hardware').collection(req.params.type).find({}).toArray(function(err, arr){
-        if (err) throw err;
-        if (arr == null) return res.status(400).send("No hardware found");
-        else res.json(arr);
-    });
+    if (req.params.type == 'prebuilt') {
+        const result = await conn.getDb().db('hardware').collection('prebuilts').find({}).toArray(function(err, arr){
+            if (err) throw err;
+            if (arr == null) return res.status(400).send("No prebuilts found");
+            else res.json(arr);
+        });
+    }
+    else {
+        const result = await conn.getDb().db('hardware').collection(req.params.type).find({}).toArray(function(err, arr){
+            if (err) throw err;
+            if (arr == null) return res.status(400).send("No hardware found");
+            else res.json(arr);
+        });
+    }
+    
 });
 
 //Get first 25 hardware
@@ -127,10 +137,18 @@ router.get('/hardware/limit/:type', async (req, res) => {
 
 //Add Hardware
 router.post('/hardware/:type', async (req, res) => {
-    if (await addHardware(conn.getDb(), req.params.type, req.body) == false) {
-        return res.status(400).send("Hardware with the same name already in database.");
+    if (req.params.type == 'prebuilt') {
+        if (await addPrebuilt(conn.getDb(), req.body) == false) {
+            return res.status(400).send("Prebuilt with same id already in database");
+        }
+        else res.send(req.body);
     }
-    else res.send(req.body);
+    else {
+        if (await addHardware(conn.getDb(), req.params.type, req.body) == false) {
+            return res.status(400).send("Hardware with the same name already in database.");
+        }
+        else res.send(req.body);
+    }
 });
 
 //Delete Processor
@@ -149,6 +167,13 @@ router.put('/hardware/:type/:name/:newValue', async (req, res) => {
     else {
         res.send("Hardware value updated.");
     }
+});
+
+//Get One Prebuilt
+router.get('/hardware/prebuilt/:id', async (req, res) => {
+    const result = await conn.getDb().db('hardware').collection('prebuilts').findOne({id: parseInt(req.params.id)});
+    if (result == undefined) return res.status(400).send("No prebuilt under that id found");
+    else res.json(result);
 });
 
 ////* GAMES *////
@@ -426,6 +451,22 @@ async function deleteHardware(client, collection, hardwareName) {
         console.log("No hardware with the name " + hardwareName + " was found.");
         return false;
     }
+}
+
+//Add Prebuilt
+async function addPrebuilt(client, data) {
+    const check = await client.db('hardware').collection('prebuilts').findOne({id: data["id"]});
+    if (check == undefined) {
+        //const data = {name: hardwareName, value: value}
+        await client.db('hardware').collection('prebuilts').insertOne(data);
+        console.log("Prebuilt added");
+        return true;
+    }
+    else {
+        console.log("Prebuilt with same ID already in database");
+        return false;
+    }
+     
 }
 
 //Add Hardware Impressions

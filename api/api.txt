@@ -100,6 +100,27 @@ PUT /api/db/hardware/:type/:name/:newValue (Ex. /api/db/hardware/processor/Intel
 -Updates the comparator value for hardware of specified type (processor or graphics) and name to newValue.
 -Returns 400 if there is no hardware of given name
 
+POST /api/db/hardware/prebuilt 
+-Adds prebuilt of data from POST body
+-Returns 400 if prebuilt of same name already exists
+Format:
+{
+    "id": 1,
+    "name": "The Fast Potato",
+    "processor": "Intel Core i3-10100",
+    "memory": "8GB RAM",
+    "graphics": "GeForce GTX 1050 Ti",
+    "storage": "500 GB",
+	"os": "windows"
+}
+
+GET /api/db/hardware/prebuilt 
+-Returns JSON of all prebuilts
+-Returns 400 if no prebuilts
+
+GET /api/db/hardware/prebuilt/:id
+-Returns JSON of prebuilt of speicifed ID
+-Returns 400 if no prebuilt of that id
 
 --Games--
 
