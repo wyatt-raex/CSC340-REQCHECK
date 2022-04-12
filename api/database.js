@@ -117,7 +117,7 @@ router.get('/hardware/:type', async (req, res) => {
 });
 
 //Get first 25 hardware
-router.get('/hardware/:type-limit', async (req, res) => {
+router.get('/hardware/limit/:type', async (req, res) => {
     const result = await conn.getDb().db('hardware').collection(req.params.type).find({}).limit(25).toArray(function(err, arr){
         if (err) throw err;
         if (arr == null) return res.status(400).send("No hardware found");

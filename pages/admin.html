@@ -48,7 +48,8 @@
 					<div class="tab">
 						<button class="tablinks" onclick="openType(event, 'USERS')">USERS</button>
 						<button class="tablinks" onclick="openType(event, 'GAMES')">GAMES</button>
-						<button class="tablinks" onclick="openType(event, 'HARDWARE')">HARDWARE</button>
+						<button class="tablinks" onclick="openType(event, 'PROCESSOR')">PROCESSORS</button>
+						<button class="tablinks" onclick="openType(event, 'GRAPHICS')">GRAPHICS</button>
 						<button onclick="alert('Not Yet!')" style="float: right"> CONFIRM CHANGES </button>
 					</div>
 
@@ -128,8 +129,8 @@
 						</table>
 					</div>
 
-					<!-- Games Tab content -->
-					<div id="HARDWARE" class="tabcontent">
+					<!-- Processor Tab content -->
+					<div id="PROCESSOR" class="tabcontent">
 						<hr>
 						<!-- Hardware -->
 						<h3>Hardware</h3>
@@ -192,6 +193,69 @@
 						</table>
 					</div>
 
+					<!-- Graphics Tab content -->
+					<div id="GRAPHICS" class="tabcontent">
+						<hr>
+						<!-- Hardware -->
+						<h3>Hardware</h3>
+						<table style="width:100%">
+						<!-- Table Headers -->
+						<tr>
+							<th>Hardware Name</th>
+							<th>Type</th>
+							<th>Comparator Value</th>
+						</tr>
+						<!-- Hardware Values -->
+						<tr>
+							<td contenteditable="true">Nvidia RTX 3090</td>
+							<td contenteditable="false">
+								<select>
+									<option>CPU</option>
+									<option selected>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">50</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">Nvidia RTX 2060</td>
+							<td contenteditable="false">
+								<select>
+									<option>CPU</option>
+									<option selected>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">25</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">Intel Core i5-12600K</td>
+							<td contenteditable="false">
+								<select>
+									<option selected>CPU</option>
+									<option>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">20</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">AMD Ryzen 5 5600X</td>
+							<td contenteditable="false">
+								<select>
+									<option selected>CPU</option>
+									<option>GPU</option>
+									<option>RAM</option>
+									<option>Storage</option>
+								</select>
+							</td>
+							<td contenteditable="true">18</td>
+						</tr>
+						</table>
+					</div>
         <nav id="leftSide">
 
 
