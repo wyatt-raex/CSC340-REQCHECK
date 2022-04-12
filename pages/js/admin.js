@@ -56,20 +56,51 @@ function reqData(editType) {
 }
 
 function populateTable(db_res, editType) {
+  let table = document.getElementById("table");
+  table.innerHTML = "";
+
   switch (editType) {
     case 'USERS':
       db_res.forEach(i => {
-        // let user_id = i._id;
-        // let user_email = i.email;
-        // let user_password = i.password;
-        // let user_role = i.role;
-
         let new_element = document.createElement("tr");
         new_element.setAttribute("id", `${i._id}`);
+
+        let html_usr_role = ``;
+        switch (i.role) {
+          case 'user':
+            html_usr_role = `<td contenteditable="false">
+                              <select>
+                                <option selected>User</option>
+                                <option>Game Developer</option>
+                                <option>Admin</option>
+                              </select>
+                            </td>`;
+            break;
+          
+          case 'dev':
+            html_usr_role = `<td contenteditable="false">
+                              <select>
+                                <option>User</option>
+                                <option selected>Game Developer</option>
+                                <option>Admin</option>
+                              </select>
+                            </td>`;
+            break;
+
+          case 'admin':
+            html_usr_role = `<td contenteditable="false">
+                              <select>
+                                <option>User</option>
+                                <option>Game Developer</option>
+                                <option selected>Admin</option>
+                              </select>
+                            </td>`;
+            break;
+        }
+
         new_element.innerHTML = `<td contenteditable="true">${i.email}</td>
-                                <td contenteditable="true">${i.password}</td>
-                                <td contenteditable="false">${i.role}</td>`;
-        document.getElementById("table-user").appendChild(new_element);
+                                <td contenteditable="true">${i.password}</td>` + html_usr_role;
+        document.getElementById("table").appendChild(new_element);
       });
       break;
     
