@@ -194,6 +194,36 @@ router.get('/games/steam', async (req, res) => {
     });
 });
 
+//Get lsiting of steam game via appID
+router.get('/games/steam/list/:appID', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('steamGameList').findOne({appid: parseInt(req.params.appID)});
+    console.log(result);
+    if (result != undefined) {
+        res.json(result);
+        console.log("Steam Listing found")
+    }
+    else {
+        res.status(400).send("No steam games found");
+        console.log("No steam listing under that ID found")
+        return false;
+    }
+});
+
+//Get lsiting of local game via appID
+router.get('/games/local/list/:appID', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('localGameList').findOne({appid: req.params.appID});
+    console.log(result);
+    if (result != undefined) {
+        res.json(result);
+        console.log("Local Listing found")
+    }
+    else {
+        res.status(400).send("No local games found");
+        console.log("No lcoal listing under that ID found")
+        return false;
+    }
+});
+
 //Get first 25 steam games
 router.get('/games/steam-limit', async (req, res) => {
     const result = await conn.getDb().db('gameList').collection('steamGameList').find({}).limit(25).toArray(function(err, arr){
@@ -524,42 +554,46 @@ async function addPrebuilt(client, data) {
 
 //Add Hardware Impressions
 async function updateHardwareImpressions(client, collection, appID, hardwareName, newValue) {
-    let col = 'localGameList';
     //Get right list
-    if (await client.db('gameList').collection(col).findOne({appid: appID}) == undefined) {
-        if (await client.db('gameList').collection('steamGameList').findOne({appid: parseInt(appID)}) == undefined)
-        {
+    if (await client.db('gameList').collection('localGameList').findOne({appid: appID}) != undefined) {
+        const str = collection+"."+hardwareName;
+        await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$inc: {[str]: 1}});
+        console.log("Value of hardware " + hardwareName + " set to " + newValue);
+        return true;
+    }
+    else {
+        if (await client.db('gameList').collection('steamGameList').findOne({appid: parseInt(appID)}) != undefined) {
+            const str = collection+"."+hardwareName;
+            await client.db('gameList').collection('steamGameList').updateOne({appid: parseInt(appID)}, {$inc: {[str]: 1}});
+            console.log("Value of hardware " + hardwareName + " set to " + newValue);
+            return true;
+        }
+        else {
             console.log("No game with the appID found.");
             return false;
         }
-        else col = 'steamGameList'
     }
-
-    //Set Values
-    const str = collection+"."+hardwareName;
-    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$inc: {[str]: 1}});
-    console.log("Value of hardware " + hardwareName + " set to " + newValue);
-    return true;
 }
 
 //Add Game Impressions
 async function updateGameImpressions(client, appID) {
-    let col = 'localGameList';
-
     //Get right list
-    if (await client.db('gameList').collection(col).findOne({appid: appID}) == undefined) {
-        if (await client.db('gameList').collection('steamGameList').findOne({appid: parseInt(appID)}) == undefined)
-        {
+    if (await client.db('gameList').collection('localGameList').findOne({appid: appID}) != undefined) {
+        await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$inc: {impressions: 1}});
+        console.log("Local Gmae Impression Incremented");
+        return true;
+    }
+    else {
+        if (await client.db('gameList').collection('steamGameList').findOne({appid: parseInt(appID)}) != undefined) {
+            await client.db('gameList').collection('steamGameList').updateOne({appid: parseInt(appID)}, {$inc: {impressions: 1}});
+            console.log("Game Impression Incremented");
+            return true;
+        }
+        else {
             console.log("No game with the appID found.");
             return false;
         }
-        else col = 'steamGameList'
     }
-
-    //Set Values
-    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$inc: {impressions: 1}});
-    console.log("Game Impression Incremented");
-    return true;
 }
 
 //Add Game to List
@@ -640,8 +674,9 @@ async function updateLocalGame(client, appID, data) {
 async function updateLocalTitle(client, appID, title) {
     const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
     if (check) {
+        let path = `${appID}.name`;
         await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$set: {name: title}});
-        await client.db('gameList').collection('localGame').updateOne({appid: appID}, {$set: {name: title}});
+        await client.db('gameList').collection('localGames').updateOne({appid: appID}, {$set: {[path]: title}});
         console.log(`Local Game: ${appID} name changed from ${check.name} to ${title}`);
         return true;
     }
@@ -655,9 +690,13 @@ async function updateLocalTitle(client, appID, title) {
 async function updateLocalAppID(client, appID, newID) {
     const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
     if (check) {
+        console.log(appID);
+        let path = `${appID}.appid`;
+        await client.db('gameList').collection('localGames').updateOne({appid: appID}, {$set: {[path]: newID, appid: newID}});
+        await client.db('gameList').collection('localGames').updateOne({appid: newID}, {$rename: {[appID]: newID}});
         await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$set: {appid: newID}});
-        await client.db('gameList').collection('localGame').updateOne({appid: appID}, {$set: {appid: newID}});
         console.log(`Local Game: ${check.appid} appid changed from ${check.appid} to ${newID}`);
+        //{ $rename: { "name.first": "name.fname" } } )
         return true;
     }
     else {

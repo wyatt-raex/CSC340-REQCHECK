@@ -1,14 +1,29 @@
 //Load
-async function load(evt) {
+function load() {
   if (localStorage.getItem("userRole") != "dev") {
     window.location.href = "404.html";
     window.location.replace("404.html");
   }
   else {
-    openGame(evt);
-    openHardware(evt);
+    getGames(localStorage.getItem("userEmail"));
   }
 }
+
+//Get games
+async function getGames(email) {
+  //Get data of user
+  fetch("http://localhost:5000/api/db/login/"+email)
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    //USE http://localhost:5000/api/db/games/local/list/01
+    //to loop through all associated games get all data in a json
+  
+  });
+  console.log(userData);
+
+}
+
+
 
 //Games
 function openGame(evt) {

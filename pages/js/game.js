@@ -263,7 +263,6 @@ async function compareOption() {
       if (hasRec != -1) { 
         //Processor
         sIndex = recString.indexOf("<STRONG>PROCESSOR:</STRONG>");
-        console.log("SIndesx" + sIndex)
         if (sIndex != -1) {
           sLength = ("<STRONG>PROCESSOR:</STRONG>").length;
           sIndex = sIndex+sLength+1;
