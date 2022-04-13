@@ -352,8 +352,46 @@ function updateDatabase() {
   }
 }
 
+function delete_document(elem) {
+  let document_info = elem.parentNode.children;
+  switch(cur_db_tab) {
+    case 'USERS':
+      // console.log(document_info[0].textContent);
+      // console.log(document_info[1].textContent);
+      // console.log(document_info[2].childNodes[1].value);
+      let document_email = document_info[0].textContent;
+
+      let delete_user = new XMLHttpRequest();
+      delete_user.open("DELETE", `http://localhost:5000/api/db/login/${document_email}`);
+      delete_user.send();
+      break;
+
+    case 'LOCAL':
+      let document_local_appid = document_info[1].textContent;
+
+      let delete_local_game = new XMLHttpRequest();
+      delete_local_game.open("DELETE", `http://localhost:5000/api/db/games/local/${document_local_appid}`);
+      delete_local_game.send();
+      break;
+  }
+}
+
+function create_document() {
+  switch (cur_db_tab) {
+    case 'USERS':
+      reset_table('USERS');
+      display_data('USERS', {_id: "", email: "", password: "", role: "user", games: [], builds: []});
+      break;
+
+    case 'LOCAL':
+      break;
+  }
+}
+
 //~~~~~~~~~~ HELPER METHODS ~~~~~~~~~~//
 function reset_table(table) {
+  let create_button = document.getElementById("create_button");
+
   switch (table) {
     case 'USERS':
       table = document.getElementById("table");
@@ -362,6 +400,8 @@ function reset_table(table) {
                             <th>Password</th>
                             <th>Role</th>
                           </tr>`;
+      
+      create_button.style.display = "inline";
       break;
     
     case 'STEAM':
@@ -370,6 +410,8 @@ function reset_table(table) {
                             <th>Game Title</th>
                             <th>App ID</th>
                           </tr>`;
+
+      create_button.style.display = "none";
       break;
 
     case 'LOCAL':
@@ -378,6 +420,8 @@ function reset_table(table) {
                             <th>Game Title</th>
                             <th>App ID</th>
                           </tr>`;
+
+      create_button.style.display = "inline";
       break;
 
     case 'PROCESSOR':
@@ -386,6 +430,8 @@ function reset_table(table) {
                             <th>Processor Name</th>
                             <th>Performance Value</th>
                           </tr>`;
+
+      create_button.style.display = "none";
       break;
 
     case 'GRAPHICS':
@@ -394,6 +440,8 @@ function reset_table(table) {
                             <th>Graphics Card Name</th>
                             <th>Performance Value</th>
                           </tr>`;
+
+      create_button.style.display = "none";
       break;
   }
 }
@@ -403,6 +451,8 @@ function reset_edit_doc_list() {
 }
 
 function display_data(table, data) {
+  console.log(data);
+
   let new_element = document.createElement("tr");
   new_element.setAttribute("id", `${data._id}`);
   new_element.setAttribute("class", "row_dbData");
@@ -445,7 +495,8 @@ function display_data(table, data) {
         }
 
         new_element.innerHTML = `<td contenteditable="true">${data.email}</td>
-                                <td contenteditable="true">${data.password}</td>` + html_usr_role;
+                                <td contenteditable="true">${data.password}</td>` + html_usr_role +
+                                `<button onclick="delete_document(this)">DELETE</button>`;
         document.getElementById("table").appendChild(new_element);
       break;
 
@@ -457,7 +508,8 @@ function display_data(table, data) {
 
     case 'LOCAL':
         new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
-                                <td contenteditable="true">${data.appid}</td>`;
+                                <td contenteditable="true">${data.appid}</td>
+                                <button onclick="delete_document(this)">DELETE</button>`;
         document.getElementById("table").appendChild(new_element);
       break;
 
