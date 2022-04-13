@@ -1,13 +1,7 @@
-//Add Buttons for respective Dashboards
-const adminButton = document.getElementById("adminButton");
-//adminButton.remove();
-
-const devButton = document.getElementById("devButton");
-//devButton.remove();
 
 //Goto Admin Dashbaord
 function gotoAdmin(){
-  //document.assign('admin.html');
+
 }
 
 //Goto Developer Dashboard
@@ -17,7 +11,7 @@ function gotoDev(){
 
 //Goto login page
 function gotoLogin(){
-
+  sessionStorage.setItem("logout", true);
 }
 
 //Goto Hardware Page
@@ -25,10 +19,30 @@ function gotoHardware(){
 
 }
 
+//Add Buttons for respective Dashboards
+const adminButton = document.getElementById("adminButton");
+const devButton = document.getElementById("devButton");
+
 //Search (Code based on system by Traversy Media)
 const searchBar = document.getElementById("searchBar");
 const matchList = document.getElementById("matchList");
 matchList.innerHTML = '';
+
+//Change Login based on login status
+const loginButton = document.getElementById("loginButton");
+if (localStorage.getItem("userEmail") == 'null') {
+  loginButton.innerHTML = "LOGIN/SIGN-UP";
+  adminButton.remove(); 
+  devButton.remove();
+} 
+else {
+  loginButton.innerHTML = "LOGOUT";
+  switch (localStorage.getItem("userRole")) {
+    case "user": adminButton.remove(); devButton.remove(); break;
+    case "dev": adminButton.remove(); break;
+    case "admin": devButton.remove(); break;
+  }
+} 
 
 //Get User Builds
 let steamJSON;

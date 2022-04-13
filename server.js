@@ -69,5 +69,3 @@ app.get('/api/steam/:appID', async (req, res) => {
 
     
 });
-
-//app.get('/api/steam/search/')

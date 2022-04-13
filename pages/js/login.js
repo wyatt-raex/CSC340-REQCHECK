@@ -2,13 +2,38 @@
 const emailLogin = document.getElementById("emailLogin");
 const passwordLogin = document.getElementById("passwordLogin");
 const submitLogin = document.getElementById("submitLogin");
-const emailSignUp = document.getElementById("emailSignUp");
+const emailSignUp = document.getElementById("signUpEmail");
 const passwordSignUp = document.getElementById("passwordSignUp");
 const verifySignUp = document.getElementById("passwordVerifySignUp");
 const submitSignUp = document.getElementById("submitSignUp");
+const userEmail = localStorage.getItem("userEmail");
+const userRole = localStorage.getItem("userRole");
+
+//Make sure you don't get sent here
+if (sessionStorage.getItem("logout") == 'true') {
+  localStorage.setItem("userEmail", null);
+  localStorage.setItem("userRole", null);
+  sessionStorage.setItem("logout", false);
+}
+else {
+  if (userEmail != null) {
+    if (userRole == "user") location.assign('index.html');
+    if (userRole == "admin") location.assign('admin.html');
+    if (userRole == "dev") location.assign('dev.html');
+  }
+}
+
+//Get Users
+let userJSON;
+let userReq = new XMLHttpRequest();
+userReq.addEventListener("load", reqListener => {
+  usersJSON = JSON.parse(userReq.responseText);
+});
+userReq.open("GET", "http://localhost:5000/api/db/login/");
+userReq.send();
 
 //Check for onclick
-function loginClick(){
+async function loginClick(){
   //submitLogin.preventDefault(); //Stops normal behavior
 
   //Check login info
@@ -16,36 +41,35 @@ function loginClick(){
   const pass = passwordLogin.value;
 
   //Verify
-  let emailArray = ["admin@reqcheck.com", "user@reqcheck.com", "gamedev@reqcheck.com"];
-  let passArray = [1234, 1234, 1234];
   let emailConfirm = false;
-  let passConfirm = false;
-  for (let i = 0; i < emailArray.length; i++)
-  {
-    if (emailArray[i] == email)
+  let passwordConfirm = false;
+  for (let i = 0; i < usersJSON.length; i++) {
+    if (email == usersJSON[i].email)
     {
       emailConfirm = true;
-    }
-
-    if (passArray[i] == pass)
-    {
-      passConfirm = true;
-      if (emailConfirm) break;
+      if (pass == usersJSON[i].password) {
+        //Send to proper page
+        passwordConfirm = true;
+        if (usersJSON[i].role == "user") location.assign('index.html');
+        if (usersJSON[i].role == "admin") location.assign('admin.html');
+        if (usersJSON[i].role == "dev") location.assign('dev.html');
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userRole", usersJSON[i].role)
+        break;
+      }
+      else {
+        break;
+      }
     }
   }
-
-  if (passConfirm){
-    alert("Login Successful!");
-    if (email == "user@reqcheck.com") location.assign('../index.html');
-    else if (email == "admin@reqcheck.com") location.assign('admin.html');
-    else if (email == "gamedev@reqcheck.com") location.assign('dev.html');
-
-  }
-  else alert("Login Failed, please try again.");
+  
+  //Messages
+  if (emailConfirm == false) alert("No user under this email, please try again or register an account.");
+  else if (passwordConfirm == false) alert("Incorrect password, please try again.");
 
 }
 
-function signUpClick(){
+async function signUpClick(){
   const email = emailSignUp.value;
   const pass = passwordSignUp.value;
   const passVerfiy = passwordVerifySignUp.value;
@@ -57,9 +81,31 @@ function signUpClick(){
   else {
     if (pass == passVerfiy)
     {
-      alert("Sign-Up Successful!");
-      location.assign('../index.html');
+      let emailCheck = true;
+      for (let i = 0; i < usersJSON.length; i++) {
+        if (usersJSON[i].email == email) {
+          emailCheck = false;
+          break;
+        }
+      }
+      
+      if (emailCheck == true) {
+        //Data
+        const data = 
+        {
+          email: email,
+          password: pass,
+          role: "user",
+          games: [],
+          builds: []
+        }
+        await fetch("http://localhost:5000/api/db/login", {method: 'POST', body: JSON.stringify(data), headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}})
+        .then(function(res){ return res.json(); })
+        .then(function(data){location.assign('index.html')});
+      }
+      else alert("Account under email already exists.");
     }
     else alert("Passwords do not match. Please try again.");
+      
   }
 }

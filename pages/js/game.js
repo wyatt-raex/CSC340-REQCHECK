@@ -5,7 +5,7 @@ const build = document.querySelector('#build');
 const results = document.getElementById("buildResults");
 const minimumResults = document.getElementById("minResults");
 const recommendedResults = document.getElementById("recResults");
-const userEmail = 'testEmail' //Change to some sort of login thing later
+const userEmail = localStorage.getItem("userEmail"); //Change to some sort of login thing later
 let userBuilds;
 
 window.onload = async function(){
@@ -21,12 +21,15 @@ function getID() {
 }
 
 //Get User Builds
-let xmlReq = new XMLHttpRequest();
-xmlReq.addEventListener("load", reqListener => {
-  userBuilds = JSON.parse(xmlReq.responseText).builds;
-});
-xmlReq.open("GET", "http://localhost:5000/api/db/login/"+userEmail);
-xmlReq.send();
+if (userEmail != 'null') {
+  let xmlReq = new XMLHttpRequest();
+  xmlReq.addEventListener("load", reqListener => {
+    userBuilds = JSON.parse(xmlReq.responseText).builds;
+  });
+  xmlReq.open("GET", "http://localhost:5000/api/db/login/"+userEmail);
+  xmlReq.send();
+}
+
 
 //Get Prebuilts
 let prebuiltBuilds;
@@ -67,7 +70,9 @@ async function getJSON(){
   $.getJSON(url, await function(data)
   {
     //Combined Builds
-    let combinedBuilds = userBuilds.concat(prebuiltBuilds);
+    let combinedBuilds;
+    if (userBuilds != undefined) combinedBuilds = userBuilds.concat(prebuiltBuilds);
+    else combinedBuilds = prebuiltBuilds;
 
     //Show user builds
     combinedBuilds.forEach((element, index) => {
@@ -111,7 +116,9 @@ function checkOS() {
   const linuxSupport = sessionStorage.getItem('linuxSupport') === 'true';
   const linuxMinimum = sessionStorage.getItem('linuxMinimum').replace(/[^0-9a-z_<>/."&:]/gi, ' ');
   const linuxRecommended = sessionStorage.getItem('linuxRecommended').replace(/[^0-9a-z_<>/.&":]/gi, ' ');
-  const combinedBuilds = userBuilds.concat(prebuiltBuilds);
+  let combinedBuilds;
+  if (userBuilds != undefined) combinedBuilds = userBuilds.concat(prebuiltBuilds);
+  else combinedBuilds = prebuiltBuilds;
 
   //Display Requirement Based on Selected Build OS
   let osSupport = true;
@@ -358,7 +365,9 @@ async function compareOption() {
 //Get array of values for current hardware
 async function getHardwareValues() {
   let values = [0, 0, 0, 0];
-  let combinedBuilds = userBuilds.concat(prebuiltBuilds);
+  let combinedBuilds;
+  if (userBuilds != undefined) combinedBuilds = userBuilds.concat(prebuiltBuilds);
+  else combinedBuilds = prebuiltBuilds;
   const currentBuild = combinedBuilds[build.value];
 
   //Set impressions

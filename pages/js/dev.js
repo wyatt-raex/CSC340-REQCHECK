@@ -1,7 +1,13 @@
 //Load
-function load(evt) {
-  openGame(evt);
-  openHardware(evt);
+async function load(evt) {
+  if (localStorage.getItem("userRole") != "dev") {
+    window.location.href = "404.html";
+    window.location.replace("404.html");
+  }
+  else {
+    openGame(evt);
+    openHardware(evt);
+  }
 }
 
 //Games
