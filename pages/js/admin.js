@@ -56,11 +56,21 @@ function reqData(editType) {
 }
 
 function populateTable(db_res, editType) {
-  let table = document.getElementById("table");
-  table.innerHTML = "";
+ // let tables = ['table-user', 'table-games', 'table-processor', 'table-graphics'];
+  let table = '';
 
   switch (editType) {
+
+    //USERS//
     case 'USERS':
+      //Reset the table so we don't get duplicate entries shown
+      table = document.getElementById("table-user");
+      table.innerHTML = `<tr>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Role</th>
+                          </tr>`;
+
       db_res.forEach(i => {
         let new_element = document.createElement("tr");
         new_element.setAttribute("id", `${i._id}`);
@@ -100,20 +110,65 @@ function populateTable(db_res, editType) {
 
         new_element.innerHTML = `<td contenteditable="true">${i.email}</td>
                                 <td contenteditable="true">${i.password}</td>` + html_usr_role;
-        document.getElementById("table").appendChild(new_element);
+        document.getElementById("table-user").appendChild(new_element);
+      });
+      break;
+    //GAMES//
+    case 'GAMES':
+      //Reset the table so we don't get duplicate entries shown
+      table = document.getElementById("table-games");
+      table.innerHTML = `<tr>
+                            <th>Game Title</th>
+                            <th>App ID</th>
+                          </tr>`;
+
+      db_res.forEach(i => {
+        let new_element = document.createElement("tr");
+        new_element.setAttribute("id", `${i._id}`);
+
+        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
+                                <td contenteditable="true">${i.appid}</td>`;
+        document.getElementById("table-games").appendChild(new_element);
       });
       break;
     
-    case 'GAMES':
-      console.log('game yay...');
-      break;
-    
+    //PROCESSOR//
     case 'PROCESSOR':
-      console.log('processor yay...');
+      //Reset the table so we don't get duplicate entries shown
+      table = document.getElementById("table-processor");
+      table.innerHTML = `<tr>
+                            <th>Processor Name</th>
+                            <th>Performance Value</th>
+                          </tr>`;
+
+      db_res.forEach(i => {
+        let new_element = document.createElement("tr");
+        new_element.setAttribute("id", `${i._id}`);
+
+        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
+                                <td contentediatble="true">${i.value}</td>`;
+
+        document.getElementById("table-processor").appendChild(new_element);
+      });
       break;
 
+    //GRAPHICS//
     case 'GRAPHICS':
-      console.log('graphics yay...');
+      table = document.getElementById("table-graphics");
+      table.innerHTML = `<tr>
+                            <th>Graphics Card Name</th>
+                            <th>Performance Value</th>
+                          </tr>`;
+
+      db_res.forEach(i => {
+        let new_element = document.createElement("tr");
+        new_element.setAttribute("id", `${i._id}`);
+
+        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
+                                <td contenteditable="true">${i.value}</td>`;
+
+        document.getElementById("table-graphics").appendChild(new_element);
+      });
       break;
   }
   
