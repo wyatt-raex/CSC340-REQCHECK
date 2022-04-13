@@ -1,5 +1,8 @@
 const xmlReq = new XMLHttpRequest();
-const searchReq = new XMLHttpRequest();
+const userReq = new XMLHttpRequest();
+const gameReq = new XMLHttpRequest();
+const cpuReq = new XMLHttpRequest();
+const gpuReq = new XMLHttpRequest();
 let cur_db_tab = 'USERS';
 
 //Load
@@ -104,13 +107,7 @@ function populateTable(db_res, editType) {
 
       //Display first 25 entires in database
       db_res.forEach(i => {
-        let new_element = document.createElement("tr");
-        new_element.setAttribute("id", `${i._id}`);
-
-        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
-                                <td contentediatble="true">${i.value}</td>`;
-
-        document.getElementById("table-processor").appendChild(new_element);
+        display_data('PROCESSOR', i);
       });
       break;
 
@@ -137,34 +134,50 @@ function searchDatabase(evt) {
     case 'USERS':
 
       //Find the user given the email, email is primary key
-      searchReq.addEventListener("load", searchListner => {
-        const db_results = JSON.parse(searchReq.responseText);
-        console.log('searchDatabase searchListner fired');
+      //Callback function searchListener() gets fired once the data is found and retrieved
+      //(so it will be executed after searchReq.send() gets executed below)
+      userReq.addEventListener("load", userListener => {
+        const db_results = JSON.parse(userReq.responseText);
+        console.log('searchDatabase() userListener fired');
 
         if (db_results != null) {
           console.log(db_results);
 
           //Also reset the table's current display
-          table = document.getElementById("table-user");
-          table.innerHTML = `<tr>
-                              <th>Email</th>
-                              <th>Password</th>
-                              <th>Role</th>
-                            </tr>`;
+          reset_table('USERS');
           
           //Since email is primary key, each user must have unique email so
           //We only need to display 1 row on the table
-
+          display_data('USERS', db_results);
         } 
       });
-      searchReq.open("GET", `http://localhost:5000/api/db/login/${search_input}`);
-      searchReq.send();
+      userReq.open("GET", `http://localhost:5000/api/db/login/${search_input}`);
+      userReq.send();
       break;
 
     case 'GAMES':
+      console.log(search_input);
+      gameReq.addEventListener("load", gameListener => {
+        console.log(gameReq.responseText);
+        const db_results = JSON.parse(gameReq.responseText);
+        console.log('searchDatabase() gameListener fired');
+
+        if (db_results != null) {
+          console.log(db_results);
+
+          //Reset games table
+          reset_table('GAMES');
+
+          //Display result
+          display_data('GAMES', db_results);
+        }
+      });
+      gameReq.open("GET", `http://localhost:5000/api/db/games/steam/${search_input}`);
+      gameReq.send();
       break;
 
     case 'PROCESSOR':
+
       break;
 
     case 'GRAPHICS':

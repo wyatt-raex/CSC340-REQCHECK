@@ -221,6 +221,29 @@ router.get('/games/local-limit', async (req, res) => {
     });
 });
 
+//Find one steam game via appID
+// router.get('/games/steam/:appID', async (req, res) => {
+//     const result = await conn.getDb().db('gameList').collection('steamGameList').findOne({appID: req.params.appID});
+//     if (result == undefined) return res.status(400).send(`No steam game found with appID ${req.params.appID}`);
+//     else res.json(result);
+// });
+
+//Find one steam game via name
+router.get('/games/steam/:name', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('steamGameList').findOne({name: req.params.name});
+    if (result == undefined) return res.status(400).send(`No steam game found with name ${req.params.name}`);
+    else res.json(result);
+});
+
+//Find one local game via appID
+
+//Find one local game via name
+router.get('/games/local/:name', async (req, res) => {
+    const result = await conn.getDb().db('gameList').collection('localGameList').findOne({name: req.params.name});
+    if (result == undefined) return res.status(400).send(`No local game found with name ${req.params.name}`);
+    else res.json(result);
+});
+
 //Add local game
 router.post('/games/local/:appID', async (req, res) => {
     if (await addLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
