@@ -1,4 +1,6 @@
 const xmlReq = new XMLHttpRequest();
+const searchReq = new XMLHttpRequest();
+let cur_db_tab = 'USERS';
 
 //Load
 function load(evt, editType){
@@ -22,6 +24,8 @@ function openType(evt, editType) {
   document.getElementById(editType).style.display = "block";
   if (evt != null) evt.currentTarget.className += " active";
 
+  cur_db_tab = editType;
+
   //Request the first 25 entries from the database for the respectively viewed data
   reqData(editType);
 }
@@ -32,7 +36,7 @@ function reqData(editType) {
 
     //Sends back a string, can parse it with json.parse()
     const db_results = JSON.parse(xmlReq.responseText);
-    console.log(db_results);
+    console.log('reqData reqListener fired');
 
     if (db_results != null) {
       populateTable(db_results, editType);
@@ -58,25 +62,163 @@ function reqData(editType) {
 function populateTable(db_res, editType) {
  // let tables = ['table-user', 'table-games', 'table-processor', 'table-graphics'];
   let table = '';
+  let search_txtbox = document.getElementById("input_searchDb");
 
   switch (editType) {
 
     //USERS//
     case 'USERS':
+      //Replace the placeholder text in search textbox with appropriate text
+      search_txtbox.setAttribute("placeholder", 'Search user via email...')
+
       //Reset the table so we don't get duplicate entries shown
+      reset_table('USERS');
+
+      //Display first 25 entires in database
+      db_res.forEach(i => {
+        display_data('USERS', i);
+      });
+      break;
+
+    //GAMES//
+    case 'GAMES':
+      //Replace the placeholder text in search textbox with appropriate text
+      search_txtbox.setAttribute("placeholder", 'Search game via title...')
+
+      //Reset the table so we don't get duplicate entries shown
+      reset_table('GAMES');
+
+      //Display first 25 entires in database
+      db_res.forEach(i => {
+        display_data('GAMES', i);
+      });
+      break;
+    
+    //PROCESSOR//
+    case 'PROCESSOR':
+      //Replace the placeholder text in search textbox with appropriate text
+      search_txtbox.setAttribute("placeholder", 'Search CPU via name...')
+
+      //Reset the table so we don't get duplicate entries shown
+      reset_table('PROCESSOR');
+
+      //Display first 25 entires in database
+      db_res.forEach(i => {
+        let new_element = document.createElement("tr");
+        new_element.setAttribute("id", `${i._id}`);
+
+        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
+                                <td contentediatble="true">${i.value}</td>`;
+
+        document.getElementById("table-processor").appendChild(new_element);
+      });
+      break;
+
+    //GRAPHICS//
+    case 'GRAPHICS':
+      //Replace the placeholder text in search textbox with appropriate text
+      search_txtbox.setAttribute("placeholder", 'Search GPU via name...')
+
+      //Reset the table so we don't get duplicate entires shown
+      reset_table('GRAPHICS');
+
+      //Display first 25 entires in database
+      db_res.forEach(i => {
+        display_data('GRAPHICS', i);
+      });
+      break;
+  }
+}
+
+function searchDatabase(evt) {
+  let search_input = document.getElementById("input_searchDb").value;
+
+  switch(cur_db_tab) {
+    case 'USERS':
+
+      //Find the user given the email, email is primary key
+      searchReq.addEventListener("load", searchListner => {
+        const db_results = JSON.parse(searchReq.responseText);
+        console.log('searchDatabase searchListner fired');
+
+        if (db_results != null) {
+          console.log(db_results);
+
+          //Also reset the table's current display
+          table = document.getElementById("table-user");
+          table.innerHTML = `<tr>
+                              <th>Email</th>
+                              <th>Password</th>
+                              <th>Role</th>
+                            </tr>`;
+          
+          //Since email is primary key, each user must have unique email so
+          //We only need to display 1 row on the table
+
+        } 
+      });
+      searchReq.open("GET", `http://localhost:5000/api/db/login/${search_input}`);
+      searchReq.send();
+      break;
+
+    case 'GAMES':
+      break;
+
+    case 'PROCESSOR':
+      break;
+
+    case 'GRAPHICS':
+      break;
+  }
+}
+
+function reset_table(table) {
+  switch (table) {
+    case 'USERS':
       table = document.getElementById("table-user");
       table.innerHTML = `<tr>
                             <th>Email</th>
                             <th>Password</th>
                             <th>Role</th>
                           </tr>`;
+      break;
+    
+    case 'GAMES':
+      table = document.getElementById("table-games");
+      table.innerHTML = `<tr>
+                            <th>Game Title</th>
+                            <th>App ID</th>
+                          </tr>`;
+      break;
 
-      db_res.forEach(i => {
-        let new_element = document.createElement("tr");
-        new_element.setAttribute("id", `${i._id}`);
+    case 'PROCESSOR':
+      table = document.getElementById("table-processor");
+      table.innerHTML = `<tr>
+                            <th>Processor Name</th>
+                            <th>Performance Value</th>
+                          </tr>`;
+      break;
 
+    case 'GRAPHICS':
+      table = document.getElementById("table-graphics");
+      table.innerHTML = `<tr>
+                            <th>Graphics Card Name</th>
+                            <th>Performance Value</th>
+                          </tr>`;
+      break;
+  }
+}
+
+function display_data(table, data) {
+  let new_element = document.createElement("tr");
+  new_element.setAttribute("id", `${data._id}`);
+
+  switch (table) {
+    case 'USERS':
+
+        //Need different role selected based on what the account's role is
         let html_usr_role = ``;
-        switch (i.role) {
+        switch (data.role) {
           case 'user':
             html_usr_role = `<td contenteditable="false">
                               <select>
@@ -108,81 +250,29 @@ function populateTable(db_res, editType) {
             break;
         }
 
-        new_element.innerHTML = `<td contenteditable="true">${i.email}</td>
-                                <td contenteditable="true">${i.password}</td>` + html_usr_role;
+        new_element.innerHTML = `<td contenteditable="true">${data.email}</td>
+                                <td contenteditable="true">${data.password}</td>` + html_usr_role;
         document.getElementById("table-user").appendChild(new_element);
-      });
       break;
-    //GAMES//
+
     case 'GAMES':
-      //Reset the table so we don't get duplicate entries shown
-      table = document.getElementById("table-games");
-      table.innerHTML = `<tr>
-                            <th>Game Title</th>
-                            <th>App ID</th>
-                          </tr>`;
-
-      db_res.forEach(i => {
-        let new_element = document.createElement("tr");
-        new_element.setAttribute("id", `${i._id}`);
-
-        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
-                                <td contenteditable="true">${i.appid}</td>`;
+        new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
+                                <td contenteditable="true">${data.appid}</td>`;
         document.getElementById("table-games").appendChild(new_element);
-      });
       break;
-    
-    //PROCESSOR//
+
     case 'PROCESSOR':
-      //Reset the table so we don't get duplicate entries shown
-      table = document.getElementById("table-processor");
-      table.innerHTML = `<tr>
-                            <th>Processor Name</th>
-                            <th>Performance Value</th>
-                          </tr>`;
-
-      db_res.forEach(i => {
-        let new_element = document.createElement("tr");
-        new_element.setAttribute("id", `${i._id}`);
-
-        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
-                                <td contentediatble="true">${i.value}</td>`;
+        new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
+                                <td contentediatble="true">${data.value}</td>`;
 
         document.getElementById("table-processor").appendChild(new_element);
-      });
       break;
 
-    //GRAPHICS//
     case 'GRAPHICS':
-      table = document.getElementById("table-graphics");
-      table.innerHTML = `<tr>
-                            <th>Graphics Card Name</th>
-                            <th>Performance Value</th>
-                          </tr>`;
-
-      db_res.forEach(i => {
-        let new_element = document.createElement("tr");
-        new_element.setAttribute("id", `${i._id}`);
-
-        new_element.innerHTML = `<td contenteditable="true">${i.name}</td>
-                                <td contenteditable="true">${i.value}</td>`;
+        new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
+                                <td contenteditable="true">${data.value}</td>`;
 
         document.getElementById("table-graphics").appendChild(new_element);
-      });
       break;
   }
-  
-
-  // console.log(db_res[0].email);
-  // let testElement = document.createElement("tr");
-  // testElement.innerHTML = `<td contenteditable="true"> Steven Bailey</td>
-  //                         <td contenteditable="true"> test@reqcheck.com </td>
-  //                         <td contenteditable="false">
-  //                           <select>
-  //                             <option selected>User</option>
-  //                             <option>Game Developer</option>
-  //                             <option>Admin</option>
-  //                           </select>
-  //                         </td>`;
-  // document.getElementById("table-user").appendChild(testElement);
 }
