@@ -320,12 +320,12 @@ function compareOption() {
 
       //Minimum
       if (hasMin != -1) {
-        if (minValues[i] == -1) minText += "<span style='color: orange'>N/A</span>";
+        if (minValues[i] == -1 || minValues[i] == 1.3 || minValues[i] == 1.5 || minValues[i] == 1.7) minText += "<span style='color: orange'>N/A</span><br>The minimum requirements do not have enough information to make an accurate estimate.";
         else
         {
-          if (hardwareValues[i] < minValues[i]) minText += "<span style='color: red'>FAIL</span>";
-          if (hardwareValues[i] == minValues[i]) minText += "<span style='color: yellow'>MEET</span>";
-          if (hardwareValues[i] > minValues[i]) minText += "<span style='color: green'>PASS</span>";
+          if (hardwareValues[i] < minValues[i]) minText += "<span style='color: red'>FAIL</span><br>Component does not meet minimum requirement.";
+          if (hardwareValues[i] == minValues[i]) minText += "<span style='color: yellow'>MEET</span><br>Component meets minimum requirement.";
+          if (hardwareValues[i] > minValues[i]) minText += "<span style='color: green'>PASS</span><br>Component exceeds minimum requirement.";
         }minTotal
         minTotal[i] = hardwareValues[i]-minValues[i];
       }
@@ -334,14 +334,15 @@ function compareOption() {
       //Reccomended
       if (hasRec != -1){
         //Compare
-        if (recValues[i] == -1) recText += "<span style='color: orange'>N/A</span>";
+        if (recValues[i] == -1 || recValues[i] == 1.3 || recValues[i] == 1.5 || recValues[i] == 1.7) recText += "<span style='color: orange'>N/A</span><br>The recommended requirements do not have enough information to make an accurate estimate.";
         else
         {
-          if (hardwareValues[i] < recValues[i]) recText += "<span style='color: red'>FAIL</span>";
-          if (hardwareValues[i] == recValues[i]) recText += "<span style='color: yellow'>MEET</span>";
-          if (hardwareValues[i] > recValues[i]) recText += "<span style='color: green'>PASS</span>";
+          if (hardwareValues[i] < recValues[i]) recText += "<span style='color: red'>FAIL</span><br>Component does not meet recommended requirement.";
+          if (hardwareValues[i] == recValues[i]) recText += "<span style='color: yellow'>MEET</span><br>Component meets recommended requirement.";
+          if (hardwareValues[i] > recValues[i]) recText += "<span style='color: green'>PASS</span><br>Component exceeds recommended requirement.";
         }
         recTotal[i] = hardwareValues[i]-recValues[i];
+        if (recValues[i] == -1) hardwareValues = -1.1;
       }
       else recommendedResults.style.display = "none";
       
@@ -351,8 +352,6 @@ function compareOption() {
       document.getElementById("recResults"+i).innerHTML = recText;
     }
   }
-
-  //Fetch Summary
 
 
 }
@@ -413,33 +412,73 @@ function getHardwareValues() {
 function getRequirementValues(array) {
   let values = [-1, -1, -1, -1];
   array[0] = array[0].replaceAll("  ", " ");
+  //console.log(array[0]);
+
+  //Processor
   let matches = processorJSON.filter(element => {
     //Remove Intel/AMD (For better chance of matches)
     let name = element.name;
     if (name.indexOf("Intel ") != -1) name = name.replaceAll("Intel ", "");
     if (name.indexOf("AMD ") != -1) name = name.replaceAll("AMD ", "");
-    //console.log(name);
-
+    name = name.toUpperCase();
+    
     //Create regular expression
     const regex = new RegExp(`${name}`, 'gi');
-
-    //Check for matches
     return array[0].match(regex);
   })
-  console.log(matches);
-
-  //Hard code a few (Intel Core ix) and then have a baseline things
-
-  values = [10, 4, 15, 64];
-  //Loop through each component database and do indexOf comparsions for the string.
-  /*
-  for (let i = 0; i < 4; i++) {
-    if (array[i] != '')
-    {
-      //Check value and set
+  //ADD A CHECK FOR INCORRECT ENTRIES (SUCH AS I7 750 VS WITH AN I7 7500)
+  //console.log(matches);
+  
+  //Get Smallest
+  if (matches.length > 0) {
+    let min = Number.MAX_VALUE;
+    for (let i = 0; i < matches.length; i++) {
+      if (matches[i].value < min) min = matches[i].value;
     }
-    else values[i] = -1;
+    values[0] = min;
+  } else {
+    //Check for ambiguous things
+    if (array[0].indexOf("CORE I3") != -1) values[0] = 1.3;
+    if (array[0].indexOf("CORE I5") != -1) values[0] = 1.5;
+    if (array[0].indexOf("CORE I7") != -1) values[0] = 1.7;
   }
-  */
+  console.log("CPU: " + values[0]);
+
+  //Graphics
+  matches = graphicsJSON.filter(element => {
+    let name = element.name.toUpperCase();
+    //Create regular expression
+    const regex = new RegExp(`${name}`, 'gi');
+    return array[2].match(regex);
+  });
+
+  //Get Smallest
+  if (matches.length > 0) {
+    min = Number.MAX_VALUE;
+    for (let i = 0; i < matches.length; i++) {
+      if (matches[i].value < min) min = matches[i].value;
+    }
+    values[2] = min;
+  }
+  console.log("GPU: " + values[2]);
+  
+  //RAM
+  let unit = 1;
+  let amount = 0;
+  if (array[1].indexOf("MB") != -1) unit = .1;
+  amount = array[1].match(/\d+/)[0];
+  values[1] = amount*unit;
+  console.log("RAM: " + values[1]);
+
+
+  //Storage
+  unit = 1;
+  amount = 0;
+  if (array[3].indexOf("MB") != -1) unit = .1;
+  if (array[3].indexOf("TB") != -1) unit = 1000;
+  amount = array[3].match(/\d+/)[0];
+  values[3] = amount*unit;
+  console.log("Storage: " + values[3]);
+
   return values;
 }
