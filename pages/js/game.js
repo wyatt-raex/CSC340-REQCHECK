@@ -296,8 +296,7 @@ function compareOption() {
   const hardwareValues = getHardwareValues();
   //console.log("THis" + recommended[0]);
   const minValues = getRequirementValues(minimum);
-  //const recValues = getRequirementValues(recommended);
-  const recValues = [15, 8, 20, 64];
+  const recValues = getRequirementValues(recommended);
   let text = "";
   let minText = "";
   let recText = "";
@@ -342,7 +341,6 @@ function compareOption() {
           if (hardwareValues[i] > recValues[i]) recText += "<span style='color: green'>PASS</span><br>Component exceeds recommended requirement.";
         }
         recTotal[i] = hardwareValues[i]-recValues[i];
-        if (recValues[i] == -1) hardwareValues = -1.1;
       }
       else recommendedResults.style.display = "none";
       
@@ -412,73 +410,97 @@ function getHardwareValues() {
 function getRequirementValues(array) {
   let values = [-1, -1, -1, -1];
   array[0] = array[0].replaceAll("  ", " ");
+  array[1] = array[1].replaceAll("  ", " ");
+  array[2] = array[2].replaceAll("  ", " ");
+  array[3] = array[3].replaceAll("  ", " ");
   //console.log(array[0]);
 
   //Processor
-  let matches = processorJSON.filter(element => {
-    //Remove Intel/AMD (For better chance of matches)
-    let name = element.name;
-    if (name.indexOf("Intel ") != -1) name = name.replaceAll("Intel ", "");
-    if (name.indexOf("AMD ") != -1) name = name.replaceAll("AMD ", "");
-    name = name.toUpperCase();
+  if (array[0] != "") {
+    let matches = processorJSON.filter(element => {
+      //Remove Intel/AMD (For better chance of matches)
+      let name = element.name;
+      if (name.indexOf("Intel ") != -1) name = name.replaceAll("Intel ", "");
+      if (name.indexOf("AMD ") != -1) name = name.replaceAll("AMD ", "");
+      name = name.toUpperCase();
+      
+      //Create regular expression
+      const regex = new RegExp(`${name}`, 'gi');
+      return array[0].match(regex);
+    })
+    //ADD A CHECK FOR INCORRECT ENTRIES (SUCH AS I7 750 VS WITH AN I7 7500)
+    //console.log(matches);
     
-    //Create regular expression
-    const regex = new RegExp(`${name}`, 'gi');
-    return array[0].match(regex);
-  })
-  //ADD A CHECK FOR INCORRECT ENTRIES (SUCH AS I7 750 VS WITH AN I7 7500)
-  //console.log(matches);
+    //Get Smallest
+    if (matches.length > 0) {
+      let min = Number.MAX_VALUE;
+      for (let i = 0; i < matches.length; i++) {
+        if (matches[i].value < min) min = matches[i].value;
+      }
+      values[0] = min;
+    } else {
+      //Check for ambiguous things
+      if (array[0].indexOf("CORE I3") != -1) values[0] = 1.3;
+      if (array[0].indexOf("CORE I5") != -1) values[0] = 1.5;
+      if (array[0].indexOf("CORE I7") != -1) values[0] = 1.7;
+    }
+    console.log("CPU: " + values[0]);
+  }
   
-  //Get Smallest
-  if (matches.length > 0) {
-    let min = Number.MAX_VALUE;
-    for (let i = 0; i < matches.length; i++) {
-      if (matches[i].value < min) min = matches[i].value;
-    }
-    values[0] = min;
-  } else {
-    //Check for ambiguous things
-    if (array[0].indexOf("CORE I3") != -1) values[0] = 1.3;
-    if (array[0].indexOf("CORE I5") != -1) values[0] = 1.5;
-    if (array[0].indexOf("CORE I7") != -1) values[0] = 1.7;
-  }
-  console.log("CPU: " + values[0]);
-
   //Graphics
-  matches = graphicsJSON.filter(element => {
-    let name = element.name.toUpperCase();
-    //Create regular expression
-    const regex = new RegExp(`${name}`, 'gi');
-    return array[2].match(regex);
-  });
+  if (array[1] != "") {
+    matches = graphicsJSON.filter(element => {
+      let name = element.name.toUpperCase();
+      if (name.indexOf("NVIDIA ") != -1) name = name.replaceAll("NVIDIA ", "");
+      if (name.indexOf("AMD ") != -1) name = name.replaceAll("AMD ", "");
+      
 
-  //Get Smallest
-  if (matches.length > 0) {
-    min = Number.MAX_VALUE;
-    for (let i = 0; i < matches.length; i++) {
-      if (matches[i].value < min) min = matches[i].value;
+      //Create regular expression
+      let regex = new RegExp(`${name}`, 'gi');
+
+      //Check first with geforce/radeon
+      if (array[2].match(regex) != null) return array[2].match(regex);
+      else {
+        if (name.indexOf("RADEON ") != -1) name = name.replaceAll("RADEON ", "");
+        if (name.indexOf("GEFORCE ") != -1) name = name.replaceAll("GEFORCE ", "");
+        regex = new RegExp(`${name}`, 'gi');
+        console.log(name);
+        return array[2].match(regex);
+      }
+      
+    });
+  
+    //Get Smallest
+    if (matches.length > 0) {
+      min = Number.MAX_VALUE;
+      for (let i = 0; i < matches.length; i++) {
+        if (matches[i].value < min) min = matches[i].value;
+      }
+      values[2] = min;
     }
-    values[2] = min;
+    console.log("GPU: " + values[2]);
   }
-  console.log("GPU: " + values[2]);
   
   //RAM
-  let unit = 1;
-  let amount = 0;
-  if (array[1].indexOf("MB") != -1) unit = .1;
-  amount = array[1].match(/\d+/)[0];
-  values[1] = amount*unit;
-  console.log("RAM: " + values[1]);
-
-
+  if (array[2] != "") {
+    let unit = 1;
+    let amount = 0;
+    if (array[1].indexOf("MB") != -1) unit = .1;
+    amount = array[1].match(/\d+/)[0];
+    values[1] = amount*unit;
+    console.log("RAM: " + values[1]);
+  }
+  
   //Storage
-  unit = 1;
-  amount = 0;
-  if (array[3].indexOf("MB") != -1) unit = .1;
-  if (array[3].indexOf("TB") != -1) unit = 1000;
-  amount = array[3].match(/\d+/)[0];
-  values[3] = amount*unit;
-  console.log("Storage: " + values[3]);
-
+  if (array[3] != "") {
+    unit = 1;
+    amount = 0;
+    if (array[3].indexOf("MB") != -1) unit = .1;
+    if (array[3].indexOf("TB") != -1) unit = 1000;
+    amount = array[3].match(/\d+/)[0];
+    values[3] = amount*unit;
+    console.log("Storage: " + values[3]);
+  }
+  
   return values;
 }
