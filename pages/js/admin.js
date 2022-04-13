@@ -329,9 +329,25 @@ function updateDatabase() {
       break;
 
     case 'PROCESSOR':
+      curr_edit_docs.forEach(i => {
+        curr_elem = document.getElementById(i._id).children;
+        // console.log(curr_elem);
+
+        let update_cpu_perf_val = new XMLHttpRequest();
+        update_cpu_perf_val.open("PUT", `http://localhost:5000/api/db/hardware/processor/${i.name}/${curr_elem[1].textContent}`, false);
+        update_cpu_perf_val.send();
+      });
       break;
 
     case 'GRAPHICS':
+      curr_edit_docs.forEach(i => {
+        curr_elem = document.getElementById(i._id).children;
+        // console.log(curr_elem);
+
+        let update_gpu_perf_val = new XMLHttpRequest();
+        update_gpu_perf_val.open("PUT", `http://localhost:5000/api/db/hardware/graphics/${i.name}/${curr_elem[1].textContent}`, false);
+        update_gpu_perf_val.send();
+      })
       break;
   }
 }
@@ -447,7 +463,7 @@ function display_data(table, data) {
 
     case 'PROCESSOR':
         new_element.innerHTML = `<td contenteditable="false">${data.name}</td>
-                                <td contentediatble="true">${data.value}</td>`;
+                                <td contenteditable="true">${data.value}</td>`;
 
         document.getElementById("table").appendChild(new_element);
       break;
