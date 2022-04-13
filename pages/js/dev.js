@@ -29,17 +29,8 @@ async function getGames(email) {
         .then(function(res){ return res.json(); })
         .then(function(data){ dataArray.push(data)});
       }
-    
-      
     });
-    
-    
-
-    //USE http://localhost:5000/api/db/games/local/list/01
-    //to loop through all associated games get all data in a json
-  
   });
-  //console.log(userData);
 }
 console.log(dataArray);
 
