@@ -318,10 +318,13 @@ function updateDatabase() {
         curr_elem = document.getElementById(i._id).children;
         // console.log(curr_elem);
 
-        console.log(JSON.stringify({appid: i.appid, name: i.name}));
         let update_local_title = new XMLHttpRequest();
-        update_local_title.open("POST", `http://localhost:5000/api/db/games/local/update/${i.appid}`);
-        update_local_title.send(JSON.stringify({appid: i.appid, name: i.name}));
+        update_local_title.open("PUT", `http://localhost:5000/api/db/games/local/update/title/${i.appid}/${curr_elem[0].textContent}`, false);
+        update_local_title.send();
+
+        let update_local_appid = new XMLHttpRequest();
+        update_local_appid.open("PUT", `http://localhost:5000/api/db/games/local/update/appid/${i.appid}/${curr_elem[1].textContent}`, false);
+        update_local_appid.send();
       });
       break;
 
@@ -443,14 +446,14 @@ function display_data(table, data) {
       break;
 
     case 'PROCESSOR':
-        new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
+        new_element.innerHTML = `<td contenteditable="false">${data.name}</td>
                                 <td contentediatble="true">${data.value}</td>`;
 
         document.getElementById("table").appendChild(new_element);
       break;
 
     case 'GRAPHICS':
-        new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
+        new_element.innerHTML = `<td contenteditable="false">${data.name}</td>
                                 <td contenteditable="true">${data.value}</td>`;
 
         document.getElementById("table").appendChild(new_element);

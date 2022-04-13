@@ -261,7 +261,7 @@ router.delete('/games/local/:appID', async (req, res) => {
 });
 
 //Update local game title
-router.put('/games/local/update/:appID/:newTitle', async (req, res) => {
+router.put('/games/local/update/title/:appID/:newTitle', async (req, res) => {
     if (await updateLocalTitle(conn.getDb(), req.params.appID, req.params.newTitle) == false) {
         return res.status(400).send(`No Local Game under appID: ${req.params.appID} found`);
     }
@@ -278,7 +278,7 @@ router.put('/games/local/update/:appID/:newTitle', async (req, res) => {
 // });
 
 //Update local game appID
-router.put('/games/local/update/:appID/:newAppID', async (req, res) => {
+router.put('/games/local/update/appid/:appID/:newAppID', async (req, res) => {
     if (await updateLocalAppID(conn.getDb(), req.params.appID, req.params.newAppID) == false) {
         return res.status(400).send(`No Local Game under appID: ${req.params.appID} found`);
     }
@@ -641,6 +641,7 @@ async function updateLocalTitle(client, appID, title) {
     const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
     if (check) {
         await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$set: {name: title}});
+        await client.db('gameList').collection('localGame').updateOne({appid: appID}, {$set: {name: title}});
         console.log(`Local Game: ${appID} name changed from ${check.name} to ${title}`);
         return true;
     }
@@ -655,6 +656,7 @@ async function updateLocalAppID(client, appID, newID) {
     const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
     if (check) {
         await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$set: {appid: newID}});
+        await client.db('gameList').collection('localGame').updateOne({appid: appID}, {$set: {appid: newID}});
         console.log(`Local Game: ${check.appid} appid changed from ${check.appid} to ${newID}`);
         return true;
     }
