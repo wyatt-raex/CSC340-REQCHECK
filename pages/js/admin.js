@@ -4,7 +4,9 @@ const steamReq = new XMLHttpRequest();
 const localReq = new XMLHttpRequest();
 const cpuReq = new XMLHttpRequest();
 const gpuReq = new XMLHttpRequest();
+
 let cur_db_tab = 'USERS';
+let curr_edit_docs = [];
 
 //Load
 function load(evt, editType){
@@ -38,7 +40,7 @@ function reqData(editType) {
   //Upon data gotten from db, given to callback function reqListner()
   xmlReq.addEventListener("load", reqListener => {
 
-    //Sends back a string, can parse it with json.parse()
+    //xmlReq.responseText sends back a string, can parse it with json.parse()
     const db_results = JSON.parse(xmlReq.responseText);
     console.log('reqData reqListener fired');
 
@@ -47,6 +49,7 @@ function reqData(editType) {
     }
   });
 
+  //Lets get the first 25 results of each database so the admin has something to look at upon switching tabs
   switch(editType) {
     case 'USERS':
       xmlReq.open("GET", "http://localhost:5000/api/db/login-limit");
@@ -72,9 +75,16 @@ function reqData(editType) {
 }
 
 function populateTable(db_res, editType) {
- // let tables = ['table-user', 'table-games', 'table-processor', 'table-graphics'];
   let table = '';
   let search_txtbox = document.getElementById("input_searchDb");
+
+  //Reset the list of database elements being edited
+  reset_edit_doc_list();
+
+  //Push all database elements to currently editing elements
+  db_res.forEach(i => {
+    curr_edit_docs.push(i._id);
+  });
 
   switch (editType) {
 
@@ -153,6 +163,9 @@ function populateTable(db_res, editType) {
 function searchDatabase(evt) {
   let search_input = document.getElementById("input_searchDb").value;
 
+  //Reset list of currently editing database documents
+  reset_edit_doc_list();
+
   switch(cur_db_tab) {
     case 'USERS':
 
@@ -172,6 +185,7 @@ function searchDatabase(evt) {
           //Since email is primary key, each user must have unique email so
           //We only need to display 1 row on the table
           display_data('USERS', db_results);
+          curr_edit_docs.push(db_results._id);
         } 
       });
       userReq.open("GET", `http://localhost:5000/api/db/login/${search_input}`);
@@ -191,6 +205,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('STEAM', db_results);
+          curr_edit_docs.push(db_results._id);
         }
       });
       steamReq.open("GET", `http://localhost:5000/api/db/games/steam/${search_input}`);
@@ -210,6 +225,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('LOCAL', db_results);
+          curr_edit_docs.push(db_results._id);
         }
       });
       localReq.open("GET", `http://localhost:5000/api/db/games/local/${search_input}`);
@@ -229,6 +245,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('PROCESSOR', db_results);
+          curr_edit_docs.push(db_results._id);
         }
       });
       cpuReq.open("GET", `http://localhost:5000/api/db/hardware/processor/${search_input}`);
@@ -248,6 +265,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('GRAPHICS', db_results);
+          curr_edit_docs.push(db_results._id);
         }
       });
       gpuReq.open("GET", `http://localhost:5000/api/db/hardware/graphics/${search_input}`);
@@ -256,6 +274,11 @@ function searchDatabase(evt) {
   }
 }
 
+function updateDatabase() {
+  console.log(curr_edit_docs);
+}
+
+//~~~~~~~~~~ HELPER METHODS ~~~~~~~~~~//
 function reset_table(table) {
   switch (table) {
     case 'USERS':
@@ -301,9 +324,14 @@ function reset_table(table) {
   }
 }
 
+function reset_edit_doc_list() {
+  while (curr_edit_docs.length != 0) { curr_edit_docs.pop(); }
+}
+
 function display_data(table, data) {
   let new_element = document.createElement("tr");
   new_element.setAttribute("id", `${data._id}`);
+  new_element.setAttribute("class", "row_dbData");
 
   switch (table) {
     case 'USERS':
