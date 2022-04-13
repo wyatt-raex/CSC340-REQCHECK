@@ -260,13 +260,33 @@ router.delete('/games/local/:appID', async (req, res) => {
     else res.send("Game deleted");
 });
 
-//Update local game
-router.post('/games/local/update/:appID', async (req, res) => {
-    if (await updateLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
-        return res.status(400).send("No local game with ID.");
+//Update local game title
+router.put('/games/local/update/:appID/:newTitle', async (req, res) => {
+    if (await updateLocalTitle(conn.getDb(), req.params.appID, req.params.newTitle) == false) {
+        return res.status(400).send(`No Local Game under appID: ${req.params.appID} found`);
     }
-    else res.send(req.body);
+    else {
+        res.send(`Local Game AppID: ${req.params.appID} title changed to ${req.params.newTitle}`);
+    }
 });
+
+// router.post('/games/local/update/:appID/:title', async (req, res) => {
+//     if (await updateLocalGame(conn.getDb(), req.params.appID, req.body) == false) {
+//         return res.status(400).send("No local game with ID.");
+//     }
+//     else res.send(req.body);
+// });
+
+//Update local game appID
+router.put('/games/local/update/:appID/:newAppID', async (req, res) => {
+    if (await updateLocalAppID(conn.getDb(), req.params.appID, req.params.newAppID) == false) {
+        return res.status(400).send(`No Local Game under appID: ${req.params.appID} found`);
+    }
+    else {
+        res.send(`Local Game AppID: ${req.params.appID} changed to ${req.params.newAppID}`);
+    }
+});
+
 
 //Add Hardware Impression to Game
 router.get('/games/:type/:appID/:hardwareName/', async (req, res) => {
@@ -616,6 +636,33 @@ async function updateLocalGame(client, appID, data) {
     }
 }
 
+//Update Local game title
+async function updateLocalTitle(client, appID, title) {
+    const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
+    if (check) {
+        await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$set: {name: title}});
+        console.log(`Local Game: ${appID} name changed from ${check.name} to ${title}`);
+        return true;
+    }
+    else {
+        console.log(`No Local Game found under appid: ${appID}`);
+        return false;
+    }
+}
+
+//Update Local game appid
+async function updateLocalAppID(client, appID, newID) {
+    const check = await client.db('gameList').collection('localGameList').findOne({appid: appID});
+    if (check) {
+        await client.db('gameList').collection('localGameList').updateOne({appid: appID}, {$set: {appid: newID}});
+        console.log(`Local Game: ${check.appid} appid changed from ${check.appid} to ${newID}`);
+        return true;
+    }
+    else {
+        console.log(`No Local Game found under appid: ${appID}`);
+        return false;
+    }
+}
 
 //Make Requirements right format 
 async function formatRequirement(min, cpu, memory, gpu, storage, extra) {

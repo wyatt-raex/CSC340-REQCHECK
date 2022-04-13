@@ -15,20 +15,20 @@ function load(evt, editType){
 
 //Switch between tabs
 function openType(evt, editType) {
-  let i, tabcontent, tablinks;
+  // let i, tabcontent, tablinks;
 
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
+  // tabcontent = document.getElementsByClassName("tabcontent");
+  // for (i = 0; i < tabcontent.length; i++) {
+  //   tabcontent[i].style.display = "none";
+  // }
 
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
+  // tablinks = document.getElementsByClassName("tablinks");
+  // for (i = 0; i < tablinks.length; i++) {
+  //   tablinks[i].className = tablinks[i].className.replace(" active", "");
+  // }
 
-  document.getElementById(editType).style.display = "block";
-  if (evt != null) evt.currentTarget.className += " active";
+  // document.getElementById(editType).style.display = "block";
+  // if (evt != null) evt.currentTarget.className += " active";
 
   cur_db_tab = editType;
 
@@ -42,7 +42,6 @@ function reqData(editType) {
 
     //xmlReq.responseText sends back a string, can parse it with json.parse()
     const db_results = JSON.parse(xmlReq.responseText);
-    console.log('reqData reqListener fired');
 
     if (db_results != null) {
       populateTable(db_results, editType);
@@ -83,7 +82,7 @@ function populateTable(db_res, editType) {
 
   //Push all database elements to currently editing elements
   db_res.forEach(i => {
-    curr_edit_docs.push(i._id);
+    curr_edit_docs.push(i);
   });
 
   switch (editType) {
@@ -185,7 +184,9 @@ function searchDatabase(evt) {
           //Since email is primary key, each user must have unique email so
           //We only need to display 1 row on the table
           display_data('USERS', db_results);
-          curr_edit_docs.push(db_results._id);
+
+          //Push currently editing database documents to a list for when we update the database
+          curr_edit_docs.push(db_results);
         } 
       });
       userReq.open("GET", `http://localhost:5000/api/db/login/${search_input}`);
@@ -205,7 +206,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('STEAM', db_results);
-          curr_edit_docs.push(db_results._id);
+          curr_edit_docs.push(db_results);
         }
       });
       steamReq.open("GET", `http://localhost:5000/api/db/games/steam/${search_input}`);
@@ -225,7 +226,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('LOCAL', db_results);
-          curr_edit_docs.push(db_results._id);
+          curr_edit_docs.push(db_results);
         }
       });
       localReq.open("GET", `http://localhost:5000/api/db/games/local/${search_input}`);
@@ -245,7 +246,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('PROCESSOR', db_results);
-          curr_edit_docs.push(db_results._id);
+          curr_edit_docs.push(db_results);
         }
       });
       cpuReq.open("GET", `http://localhost:5000/api/db/hardware/processor/${search_input}`);
@@ -265,7 +266,7 @@ function searchDatabase(evt) {
 
           //Display result
           display_data('GRAPHICS', db_results);
-          curr_edit_docs.push(db_results._id);
+          curr_edit_docs.push(db_results);
         }
       });
       gpuReq.open("GET", `http://localhost:5000/api/db/hardware/graphics/${search_input}`);
@@ -275,14 +276,68 @@ function searchDatabase(evt) {
 }
 
 function updateDatabase() {
-  console.log(curr_edit_docs);
+  //console.log(curr_edit_docs);
+
+  //Pre-declare variable to store the current element being worked on from DOM
+  let curr_elem;
+  //Different parts of database needs to be updated based on what tab the admin is on
+  switch (cur_db_tab) {
+    case 'USERS':
+      //Loop for every document currently being edited and push changes to database
+      curr_edit_docs.forEach(i => {
+        curr_elem = document.getElementById(i._id).children;
+        // console.log(curr_elem);
+        // console.log(curr_elem[0].textContent);
+        // console.log(curr_elem[1].textContent);
+        // console.log(curr_elem[2].childNodes[1].value);
+
+        //Update password for current document
+        //Remember to use the new email, it should be updated by now
+        let update_password = new XMLHttpRequest();
+        update_password.open("PUT", `http://localhost:5000/api/db/login/password/${i.email}/${curr_elem[1].textContent}`, false);
+        update_password.send();
+
+        //Update role for current document
+        let update_role = new XMLHttpRequest();
+        update_role.open("PUT", `http://localhost:5000/api/db/login/role/${i.email}/${curr_elem[2].childNodes[1].value}`, false);
+        update_role.send();
+        
+        //Update email for current document
+        let update_email = new XMLHttpRequest();
+        update_email.open("PUT", `http://localhost:5000/api/db/login/email/${i.email}/${curr_elem[0].textContent}`, false);
+        update_email.send();
+      });
+      break;
+
+    case 'STEAM':
+      alert('Can not modify games pulled from Steam API');
+      break;
+    
+    case 'LOCAL':
+      curr_edit_docs.forEach(i => {
+        curr_elem = document.getElementById(i._id).children;
+        // console.log(curr_elem);
+
+        console.log(JSON.stringify({appid: i.appid, name: i.name}));
+        let update_local_title = new XMLHttpRequest();
+        update_local_title.open("POST", `http://localhost:5000/api/db/games/local/update/${i.appid}`);
+        update_local_title.send(JSON.stringify({appid: i.appid, name: i.name}));
+      });
+      break;
+
+    case 'PROCESSOR':
+      break;
+
+    case 'GRAPHICS':
+      break;
+  }
 }
 
 //~~~~~~~~~~ HELPER METHODS ~~~~~~~~~~//
 function reset_table(table) {
   switch (table) {
     case 'USERS':
-      table = document.getElementById("table-user");
+      table = document.getElementById("table");
       table.innerHTML = `<tr>
                             <th>Email</th>
                             <th>Password</th>
@@ -291,7 +346,7 @@ function reset_table(table) {
       break;
     
     case 'STEAM':
-      table = document.getElementById("table-steam");
+      table = document.getElementById("table");
       table.innerHTML = `<tr>
                             <th>Game Title</th>
                             <th>App ID</th>
@@ -299,7 +354,7 @@ function reset_table(table) {
       break;
 
     case 'LOCAL':
-      table = document.getElementById("table-local");
+      table = document.getElementById("table");
       table.innerHTML = `<tr>
                             <th>Game Title</th>
                             <th>App ID</th>
@@ -307,7 +362,7 @@ function reset_table(table) {
       break;
 
     case 'PROCESSOR':
-      table = document.getElementById("table-processor");
+      table = document.getElementById("table");
       table.innerHTML = `<tr>
                             <th>Processor Name</th>
                             <th>Performance Value</th>
@@ -315,7 +370,7 @@ function reset_table(table) {
       break;
 
     case 'GRAPHICS':
-      table = document.getElementById("table-graphics");
+      table = document.getElementById("table");
       table.innerHTML = `<tr>
                             <th>Graphics Card Name</th>
                             <th>Performance Value</th>
@@ -342,9 +397,9 @@ function display_data(table, data) {
           case 'user':
             html_usr_role = `<td contenteditable="false">
                               <select>
-                                <option selected>User</option>
-                                <option>Game Developer</option>
-                                <option>Admin</option>
+                                <option selected>user</option>
+                                <option>dev</option>
+                                <option>admin</option>
                               </select>
                             </td>`;
             break;
@@ -352,9 +407,9 @@ function display_data(table, data) {
           case 'dev':
             html_usr_role = `<td contenteditable="false">
                               <select>
-                                <option>User</option>
-                                <option selected>Game Developer</option>
-                                <option>Admin</option>
+                                <option>user</option>
+                                <option selected>dev</option>
+                                <option>admin</option>
                               </select>
                             </td>`;
             break;
@@ -362,9 +417,9 @@ function display_data(table, data) {
           case 'admin':
             html_usr_role = `<td contenteditable="false">
                               <select>
-                                <option>User</option>
-                                <option>Game Developer</option>
-                                <option selected>Admin</option>
+                                <option>user</option>
+                                <option>dev</option>
+                                <option selected>admin</option>
                               </select>
                             </td>`;
             break;
@@ -372,33 +427,33 @@ function display_data(table, data) {
 
         new_element.innerHTML = `<td contenteditable="true">${data.email}</td>
                                 <td contenteditable="true">${data.password}</td>` + html_usr_role;
-        document.getElementById("table-user").appendChild(new_element);
+        document.getElementById("table").appendChild(new_element);
       break;
 
     case 'STEAM':
         new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
                                 <td contenteditable="true">${data.appid}</td>`;
-        document.getElementById("table-steam").appendChild(new_element);
+        document.getElementById("table").appendChild(new_element);
       break;
 
     case 'LOCAL':
         new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
                                 <td contenteditable="true">${data.appid}</td>`;
-        document.getElementById("table-local").appendChild(new_element);
+        document.getElementById("table").appendChild(new_element);
       break;
 
     case 'PROCESSOR':
         new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
                                 <td contentediatble="true">${data.value}</td>`;
 
-        document.getElementById("table-processor").appendChild(new_element);
+        document.getElementById("table").appendChild(new_element);
       break;
 
     case 'GRAPHICS':
         new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
                                 <td contenteditable="true">${data.value}</td>`;
 
-        document.getElementById("table-graphics").appendChild(new_element);
+        document.getElementById("table").appendChild(new_element);
       break;
   }
 }
