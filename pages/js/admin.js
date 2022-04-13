@@ -1,6 +1,7 @@
 const xmlReq = new XMLHttpRequest();
 const userReq = new XMLHttpRequest();
-const gameReq = new XMLHttpRequest();
+const steamReq = new XMLHttpRequest();
+const localReq = new XMLHttpRequest();
 const cpuReq = new XMLHttpRequest();
 const gpuReq = new XMLHttpRequest();
 let cur_db_tab = 'USERS';
@@ -50,14 +51,22 @@ function reqData(editType) {
     case 'USERS':
       xmlReq.open("GET", "http://localhost:5000/api/db/login-limit");
       break;
-    case 'GAMES':
+
+    case 'STEAM':
       xmlReq.open("GET", "http://localhost:5000/api/db/games/steam-limit");
       break;
+
+    case 'LOCAL':
+      xmlReq.open("GET", "http://localhost:5000/api/db/games/local-limit");
+      break;
+
     case 'PROCESSOR':
       xmlReq.open("GET", "http://localhost:5000/api/db/hardware/limit/processor");
       break;
+
     case 'GRAPHICS':
       xmlReq.open("GET", "http://localhost:5000/api/db/hardware/limit/graphics");
+      break;
   }
   xmlReq.send();
 }
@@ -83,20 +92,34 @@ function populateTable(db_res, editType) {
       });
       break;
 
-    //GAMES//
-    case 'GAMES':
+    //STEAM//
+    case 'STEAM':
       //Replace the placeholder text in search textbox with appropriate text
       search_txtbox.setAttribute("placeholder", 'Search game via title...')
 
       //Reset the table so we don't get duplicate entries shown
-      reset_table('GAMES');
+      reset_table('STEAM');
 
       //Display first 25 entires in database
       db_res.forEach(i => {
-        display_data('GAMES', i);
+        display_data('STEAM', i);
       });
       break;
     
+    //LOCAL GAMES//
+    case 'LOCAL':
+      //Replace the placeholder text in search textbox with appropriate text
+      search_txtbox.setAttribute("placeholder", 'Search game via title...')
+
+      //Reset the table so we don't get duplicate entries shown
+      reset_table('LOCAL');
+
+      //Display first 25 entires in database
+      db_res.forEach(i => {
+        display_data('LOCAL', i);
+      });
+      break;
+
     //PROCESSOR//
     case 'PROCESSOR':
       //Replace the placeholder text in search textbox with appropriate text
@@ -155,32 +178,80 @@ function searchDatabase(evt) {
       userReq.send();
       break;
 
-    case 'GAMES':
-      console.log(search_input);
-      gameReq.addEventListener("load", gameListener => {
-        console.log(gameReq.responseText);
-        const db_results = JSON.parse(gameReq.responseText);
-        console.log('searchDatabase() gameListener fired');
+    case 'STEAM':
+      steamReq.addEventListener("load", steamListener => {
+        const db_results = JSON.parse(steamReq.responseText);
+        console.log('searchDatabase() steamListener fired');
 
         if (db_results != null) {
           console.log(db_results);
 
           //Reset games table
-          reset_table('GAMES');
+          reset_table('STEAM');
 
           //Display result
-          display_data('GAMES', db_results);
+          display_data('STEAM', db_results);
         }
       });
-      gameReq.open("GET", `http://localhost:5000/api/db/games/steam/${search_input}`);
-      gameReq.send();
+      steamReq.open("GET", `http://localhost:5000/api/db/games/steam/${search_input}`);
+      steamReq.send();
+      break;
+
+    case 'LOCAL':
+      localReq.addEventListener("load", localListener => {
+        const db_results = JSON.parse(localReq.responseText);
+        console.log('searchDatabase() localListener fired');
+
+        if (db_results != null) {
+          console.log(db_results);
+
+          //Reset games table
+          reset_table('LOCAL');
+
+          //Display result
+          display_data('LOCAL', db_results);
+        }
+      });
+      localReq.open("GET", `http://localhost:5000/api/db/games/local/${search_input}`);
+      localReq.send();
       break;
 
     case 'PROCESSOR':
+      cpuReq.addEventListener("load", cpuListener => {
+        const db_results = JSON.parse(cpuReq.responseText);
+        console.log('searchDatabase() cpuListener fired');
 
+        if (db_results != null) {
+          console.log(db_results);
+          
+          //Reset processor table
+          reset_table('PROCESSOR');
+
+          //Display result
+          display_data('PROCESSOR', db_results);
+        }
+      });
+      cpuReq.open("GET", `http://localhost:5000/api/db/hardware/processor/${search_input}`);
+      cpuReq.send();
       break;
 
     case 'GRAPHICS':
+      gpuReq.addEventListener("load", gpuListener => {
+        const db_results = JSON.parse(gpuReq.responseText);
+        console.log('searchDatabase() gpuListener fired');
+
+        if (db_results != null) {
+          console.log(db_results);
+
+          //Reset graphics table
+          reset_table('GRAPHICS');
+
+          //Display result
+          display_data('GRAPHICS', db_results);
+        }
+      });
+      gpuReq.open("GET", `http://localhost:5000/api/db/hardware/graphics/${search_input}`);
+      gpuReq.send();
       break;
   }
 }
@@ -196,8 +267,16 @@ function reset_table(table) {
                           </tr>`;
       break;
     
-    case 'GAMES':
-      table = document.getElementById("table-games");
+    case 'STEAM':
+      table = document.getElementById("table-steam");
+      table.innerHTML = `<tr>
+                            <th>Game Title</th>
+                            <th>App ID</th>
+                          </tr>`;
+      break;
+
+    case 'LOCAL':
+      table = document.getElementById("table-local");
       table.innerHTML = `<tr>
                             <th>Game Title</th>
                             <th>App ID</th>
@@ -268,10 +347,16 @@ function display_data(table, data) {
         document.getElementById("table-user").appendChild(new_element);
       break;
 
-    case 'GAMES':
+    case 'STEAM':
         new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
                                 <td contenteditable="true">${data.appid}</td>`;
-        document.getElementById("table-games").appendChild(new_element);
+        document.getElementById("table-steam").appendChild(new_element);
+      break;
+
+    case 'LOCAL':
+        new_element.innerHTML = `<td contenteditable="true">${data.name}</td>
+                                <td contenteditable="true">${data.appid}</td>`;
+        document.getElementById("table-local").appendChild(new_element);
       break;
 
     case 'PROCESSOR':

@@ -47,7 +47,8 @@
 				<!-- Switch between build tabs -->
 					<div class="tab">
 						<button class="tablinks" onclick="openType(event, 'USERS')">USERS</button>
-						<button class="tablinks" onclick="openType(event, 'GAMES')">GAMES</button>
+						<button class="tablinks" onclick="openType(event, 'STEAM')">STEAM GAMES</button>
+						<button class="tablinks" onclick="openType(event, 'LOCAL')">LOCAL GAMES</button>
 						<button class="tablinks" onclick="openType(event, 'PROCESSOR')">PROCESSORS</button>
 						<button class="tablinks" onclick="openType(event, 'GRAPHICS')">GRAPHICS</button>
 						<button onclick="alert('Not Yet!')" style="float: right"> CONFIRM CHANGES </button>
@@ -76,11 +77,33 @@
 					</div>
 
 					<!-- Games Tab content -->
-					<div id="GAMES" class="tabcontent">
+					<div id="STEAM" class="tabcontent">
 						<hr>
 						<!-- Games -->
-						<h3>Games</h3>
-						<table id="table-games" style="width:100%">
+						<h3>Steam Games</h3>
+						<table id="table-steam" style="width:100%">
+						<!-- Table Headers -->
+						<tr>
+							<th>Game Title</th>
+							<th>App Id</th>
+						</tr>
+						<!-- Game Values -->
+						<tr>
+							<td contenteditable="true">3133701</td>
+							<td contenteditable="true">Elden Ring</td>
+						</tr>
+						<tr>
+							<td contenteditable="true">3133702</td>
+							<td contenteditable="true">Minecraft</td>
+						</tr>
+						</table>
+					</div>
+
+					<div id="LOCAL" class="tabcontent">
+						<hr>
+						<!-- Games -->
+						<h3>Local Games</h3>
+						<table id="table-local" style="width:100%">
 						<!-- Table Headers -->
 						<tr>
 							<th>Game Title</th>
