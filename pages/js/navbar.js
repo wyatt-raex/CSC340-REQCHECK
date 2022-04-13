@@ -22,6 +22,7 @@ function gotoHardware(){
 //Add Buttons for respective Dashboards
 const adminButton = document.getElementById("adminButton");
 const devButton = document.getElementById("devButton");
+const hardwareButton = document.getElementById("hardwareButton");
 
 //Search (Code based on system by Traversy Media)
 const searchBar = document.getElementById("searchBar");
@@ -34,6 +35,7 @@ if (localStorage.getItem("userEmail") == 'null') {
   loginButton.innerHTML = "LOGIN/SIGN-UP";
   adminButton.remove(); 
   devButton.remove();
+  hardwareButton.remove();
 } 
 else {
   loginButton.innerHTML = "LOGOUT";

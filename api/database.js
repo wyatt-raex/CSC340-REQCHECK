@@ -97,8 +97,8 @@ router.post('/login/build/:email', async (req, res) => {
 
 ////* DEVEOPER *////
 //Update Dev Games
-router.post('/dev/:email', async (req, res) => {
-    if (await addDeveloperGames(conn.getDb(), req.params.email, req.body) == false) {
+router.put('/dev/:email/:appID', async (req, res) => {
+    if (await addDeveloperGames(conn.getDb(), req.params.email, req.params.appID) == false) {
         return res.status(400).send("No user under that email found");
     }
     else {
@@ -447,10 +447,12 @@ async function updateUserBuilds(client, userEmail, data) {
 
 //Add associated games to Game Developers
 async function addDeveloperGames(client, userEmail, data){
+    //Get data
+    if (data.substring(0, 1) != "0") data = parseInt(data);
     const user = await client.db('loginData').collection('user').findOne({email: userEmail});
     if (user) {
         //user.games.push(appID);
-        await client.db('loginData').collection('user').updateOne({email: userEmail}, {$set: {games: data}});
+        await client.db('loginData').collection('user').updateOne({email: userEmail}, {$push: {games: data}});
         console.log("Games for developer " + userEmail + " has been updated.");
         return true;
     }

@@ -10,19 +10,38 @@ function load() {
 }
 
 //Get games
+const dataArray = [];
 async function getGames(email) {
   //Get data of user
   fetch("http://localhost:5000/api/db/login/"+email)
   .then(function(res){ return res.json(); })
   .then(function(data){
+    //Get data
+    data.games.forEach(element => {
+      console.log(element);
+      if (typeof element == "string") {
+        fetch("http://localhost:5000/api/db/games/local/list/"+element)
+        .then(function(res){ return res.json(); })
+        .then(function(data){ dataArray.push(data)});
+      }
+      else {
+        fetch("http://localhost:5000/api/db/games/steam/list/"+element)
+        .then(function(res){ return res.json(); })
+        .then(function(data){ dataArray.push(data)});
+      }
+    
+      
+    });
+    
+    
+
     //USE http://localhost:5000/api/db/games/local/list/01
     //to loop through all associated games get all data in a json
   
   });
-  console.log(userData);
-
+  //console.log(userData);
 }
-
+console.log(dataArray);
 
 
 //Games

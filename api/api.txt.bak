@@ -2,6 +2,7 @@
 
 GET /api/steam/appID
 -Returns JSON of steam app data of the provided key.
+-If send local ID, returns JSON of provided key.
 
 --General Database--
 
@@ -57,6 +58,7 @@ Format:
 	"memory": "8GB RAM",
 	"graphics": "RTX 2060",
 	"storage": "1TB",
+	"os": "windows"
 	},
 	{	
 	"name": "Build2",
@@ -64,6 +66,7 @@ Format:
 	"memory": "16GB RAM",
 	"graphics": "RTX 3070",
 	"storage": "2TB",
+	"os": "windows"
 	},
 ]
 
@@ -79,6 +82,10 @@ Format:
 --Hardware--
 
 GET /api/db/hardware/:type (#x. /api/db/hardware/processor)
+-Returns JSON of all hardware of specified type (processor or graphics)
+-Returns 400 code if there is no hardware
+
+GET /api/db/hardware/:type/:name (#x. /api/db/hardware/processor/Intel Core i5 12600K)
 -Returns JSON of all hardware of specified type (processor or graphics)
 -Returns 400 code if there is no hardware
 
@@ -99,6 +106,27 @@ PUT /api/db/hardware/:type/:name/:newValue (Ex. /api/db/hardware/processor/Intel
 -Updates the comparator value for hardware of specified type (processor or graphics) and name to newValue.
 -Returns 400 if there is no hardware of given name
 
+POST /api/db/hardware/prebuilt 
+-Adds prebuilt of data from POST body
+-Returns 400 if prebuilt of same name already exists
+Format:
+{
+    "id": 1,
+    "name": "The Fast Potato",
+    "processor": "Intel Core i3-10100",
+    "memory": "8GB RAM",
+    "graphics": "GeForce GTX 1050 Ti",
+    "storage": "500 GB",
+	"os": "windows"
+}
+
+GET /api/db/hardware/prebuilt 
+-Returns JSON of all prebuilts
+-Returns 400 if no prebuilts
+
+GET /api/db/hardware/prebuilt/:id
+-Returns JSON of prebuilt of speicifed ID
+-Returns 400 if no prebuilt of that id
 
 --Games--
 
@@ -117,18 +145,21 @@ POST /api/db/games/local/:appID (Ex. /api/db/games/local/01)
 -NOTE: Since steam appIDs never start with 0, our local ids can start with 01, 02 etc.
 Format (there is a method in the database.js called formatRequirement that can take all the info and return a JSON):
 {
-	appid: appID
-	appID: 
+	"appid": "appID",
+	"appID": 
 	{
-		name: gameName,
-		appid: appID,
-		about_the_game: gameDesc,
-		header_image: gameImage,
-		platforms: {windows: windows, mac: mac, linux: linux},
-		pc_requirements: {minimum: windowsMin, recommended: windowsRec},
-		mac_requirements: {minimum: macMin, recommended: macRec},
-		linux_requirements: {minimum: linuxMin, recommended: linuxRec}
-	}
+		"data": 
+		{
+			"name": "gameName",
+			"appid": "appID",
+			"about_the_game": "gameDesc",
+			"header_image": "gameImage",
+			"platforms": {"windows": "windows", "mac": "mac", "linux": "linux"},
+			"pc_requirements": {"minimum": "windowsMin", "recommended": "windowsRec"},
+			"mac_requirements": {"minimum": "macMin", "recommended": "macRec"},
+			"linux_requirements": {"minimum": "linuxMin", "recommended": "linuxRec"}
+		}
+    }
 }
 
 DELETE /api/db/games/local/:appID (Ex. /api/db/games/local/rc1)
@@ -154,7 +185,7 @@ Format (there is a method in the database.js called formatRequirement that can t
 	}
 }
 
-PUT /api/db/games/:hardwareType/:hardwareName/:newValue (Ex. /api/db/games/processor/Intel Core i5/15);
+PUT /api/db/games/:type/:appID/:hardwareName/' (Ex. /api/db/games/processor/Intel Core i5/15);
 -Sets hardware impression value for game
 -Returns 400 if there is no game with that ID
 
