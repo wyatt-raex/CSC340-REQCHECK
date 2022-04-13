@@ -29,14 +29,35 @@ function gotoHardware(){
 const searchBar = document.getElementById("searchBar");
 const matchList = document.getElementById("matchList");
 matchList.innerHTML = '';
+
+//Get User Builds
+let steamJSON;
+let xmlSteam = new XMLHttpRequest();
+xmlSteam.addEventListener("load", reqListener => {
+  steamJSON = JSON.parse(xmlSteam.responseText);
+});
+xmlSteam.open("GET", "http://localhost:5000/api/db/games/steam", true);
+xmlSteam.send();
+
+//Get Prebuilts
+let localJSON;
+const xmlLocal = new XMLHttpRequest();
+xmlLocal.addEventListener("load", reqListener => {
+  localJSON = JSON.parse(xmlLocal.responseText);
+});
+xmlLocal.open("GET", "http://localhost:5000/api/db/games/local");
+xmlLocal.send();
 //matchList.display = false;
 
 //Search Games
 const searchGames = async function(searchText) {
   //Get Data
   const res = await fetch('../data/gameList4-9-22.json');
+  //console.log(steamJSON);
+  //const res = steamJSON;
   const games = await res.json();
-  const gameArray = games;
+  const gameArray = games.concat(localJSON);
+  console.log(gameArray);
   //matchList.display = true;
   
   //console.log(games.apps[4].name);

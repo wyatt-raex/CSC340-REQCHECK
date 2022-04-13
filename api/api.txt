@@ -58,6 +58,7 @@ Format:
 	"memory": "8GB RAM",
 	"graphics": "RTX 2060",
 	"storage": "1TB",
+	"os": "windows"
 	},
 	{	
 	"name": "Build2",
@@ -65,6 +66,7 @@ Format:
 	"memory": "16GB RAM",
 	"graphics": "RTX 3070",
 	"storage": "2TB",
+	"os": "windows"
 	},
 ]
 
@@ -80,6 +82,10 @@ Format:
 --Hardware--
 
 GET /api/db/hardware/:type (#x. /api/db/hardware/processor)
+-Returns JSON of all hardware of specified type (processor or graphics)
+-Returns 400 code if there is no hardware
+
+GET /api/db/hardware/:type/:name (#x. /api/db/hardware/processor/Intel Core i5 12600K)
 -Returns JSON of all hardware of specified type (processor or graphics)
 -Returns 400 code if there is no hardware
 
@@ -179,7 +185,7 @@ Format (there is a method in the database.js called formatRequirement that can t
 	}
 }
 
-PUT /api/db/games/:hardwareType/:hardwareName/:newValue (Ex. /api/db/games/processor/Intel Core i5/15);
+PUT /api/db/games/:type/:appID/:hardwareName/' (Ex. /api/db/games/processor/Intel Core i5/15);
 -Sets hardware impression value for game
 -Returns 400 if there is no game with that ID
 

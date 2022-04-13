@@ -8,8 +8,9 @@ const recommendedResults = document.getElementById("recResults");
 const userEmail = 'testEmail' //Change to some sort of login thing later
 let userBuilds;
 
-window.onload = function(){
+window.onload = async function(){
   results.style.display = "none";
+  await fetch("http://localhost:5000/api/db/games/"+getID());
   getJSON();
 }
 
@@ -57,13 +58,13 @@ xmlReq4.send();
 
 
 //Get JSON
-function getJSON(){
+async function getJSON(){
   //Vars
   let id = getID();
   let url = 'http://localhost:5000/api/steam/'+id;
 
   //Get JSON
-  $.getJSON(url, function(data)
+  $.getJSON(url, await function(data)
   {
     //Combined Builds
     let combinedBuilds = userBuilds.concat(prebuiltBuilds);
@@ -117,6 +118,16 @@ function checkOS() {
   let minRequirement = '';
   let recRequirement = '';
 
+  //Display loading
+  document.getElementById("recResults0").innerHTML = "Processor: Loading...";
+  document.getElementById("recResults1").innerHTML = "Memory: Loading...";
+  document.getElementById("recResults2").innerHTML = "Graphics: Loading...";
+  document.getElementById("recResults3").innerHTML = "Storage: Loading...";
+  document.getElementById("minResults0").innerHTML = "Processor: Loading...";
+  document.getElementById("minResults1").innerHTML = "Memory: Loading...";
+  document.getElementById("minResults2").innerHTML = "Graphics: Loading...";
+  document.getElementById("minResults3").innerHTML = "Storage: Loading...";
+
   //Select based on current system
   systemType = combinedBuilds[build.value].os;
 
@@ -166,7 +177,7 @@ function checkOS() {
 }
 
 //Compare
-function compareOption() {
+async function compareOption() {
     //Get Requirements
     let requirement = checkOS().toUpperCase();
     const minimum = ['', '', '', ''] //CPU, RAM, GPU, STORAGE
@@ -205,12 +216,10 @@ function compareOption() {
         
         //Processor
         sIndex = minString.indexOf("<STRONG>PROCESSOR:</STRONG>");
-        console.log(minString);
         if (sIndex != -1) {
           sLength = ("<STRONG>PROCESSOR:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[0] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          //console.log(minimum[0]);
         }
 
         //Memory
@@ -219,7 +228,6 @@ function compareOption() {
           sLength = ("<STRONG>MEMORY:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[1] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          //console.log(minimum[1]);
         }
 
         //Graphics
@@ -228,7 +236,6 @@ function compareOption() {
           sLength = ("<STRONG>GRAPHICS:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[2] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          //console.log(minimum[2]);
         }
 
         //Storage
@@ -237,7 +244,6 @@ function compareOption() {
           sLength = ("<STRONG>STORAGE:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           minimum[3] = minString.substring(sIndex, sIndex+(minString.substring(sIndex+1)).indexOf("<")+1);
-          //console.log(minimum[3]);
         }
 
         //Set display
@@ -247,7 +253,6 @@ function compareOption() {
 
       //RECOMMENDED//
       //If there are recommended requirements
-      console.log("REC" + recString);
       if (hasRec != -1) { 
         //Processor
         sIndex = recString.indexOf("<STRONG>PROCESSOR:</STRONG>");
@@ -256,7 +261,6 @@ function compareOption() {
           sLength = ("<STRONG>PROCESSOR:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           recommended[0] = recString.substring(sIndex, sIndex+(recString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(recommended[0]);
         }
 
         //Memory
@@ -265,7 +269,6 @@ function compareOption() {
           sLength = ("<STRONG>MEMORY:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           recommended[1] = recString.substring(sIndex, sIndex+(recString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(recommended[1]);
         }
 
         //Graphics
@@ -274,7 +277,6 @@ function compareOption() {
           sLength = ("<STRONG>GRAPHICS:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           recommended[2] = recString.substring(sIndex, sIndex+(recString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(recommended[2]);
         }
 
         //Storage
@@ -283,7 +285,6 @@ function compareOption() {
           sLength = ("<STRONG>STORAGE:</STRONG>").length;
           sIndex = sIndex+sLength+1;
           recommended[3] = recString.substring(sIndex, sIndex+(recString.substring(sIndex+1)).indexOf("<")+1);
-          console.log(recommended[3]);
         }
 
         //Set display
@@ -293,10 +294,9 @@ function compareOption() {
     else results.style.display = "none";
 
   //Get Hardware
-  const hardwareValues = getHardwareValues();
-  //console.log("THis" + recommended[0]);
-  const minValues = getRequirementValues(minimum);
-  const recValues = getRequirementValues(recommended);
+  const hardwareValues = await getHardwareValues();
+  const minValues = await getRequirementValues(minimum);
+  const recValues = await getRequirementValues(recommended);
   let text = "";
   let minText = "";
   let recText = "";
@@ -319,13 +319,13 @@ function compareOption() {
 
       //Minimum
       if (hasMin != -1) {
-        if (minValues[i] == -1 || minValues[i] == 1.3 || minValues[i] == 1.5 || minValues[i] == 1.7) minText += "<span style='color: orange'>N/A</span><br>The minimum requirements do not have enough information to make an accurate estimate.";
+        if (minValues[i] == -1 || minValues[i] == 1.3 || minValues[i] == 1.5 || minValues[i] == 1.7) { minText += "<span style='color: orange'>N/A</span><br>The minimum requirements do not have enough information to make an accurate estimate."; }
         else
         {
           if (hardwareValues[i] < minValues[i]) minText += "<span style='color: red'>FAIL</span><br>Component does not meet minimum requirement.";
           if (hardwareValues[i] == minValues[i]) minText += "<span style='color: yellow'>MEET</span><br>Component meets minimum requirement.";
           if (hardwareValues[i] > minValues[i]) minText += "<span style='color: green'>PASS</span><br>Component exceeds minimum requirement.";
-        }minTotal
+        }
         minTotal[i] = hardwareValues[i]-minValues[i];
       }
       else minimumResults.style.display = "none";
@@ -356,10 +356,14 @@ function compareOption() {
 
 
 //Get array of values for current hardware
-function getHardwareValues() {
+async function getHardwareValues() {
   let values = [0, 0, 0, 0];
   let combinedBuilds = userBuilds.concat(prebuiltBuilds);
   const currentBuild = combinedBuilds[build.value];
+
+  //Set impressions
+  await fetch(`http://localhost:5000/api/db/games/processor/${getID()}/${currentBuild.processor}`);
+  await fetch(`http://localhost:5000/api/db/games/graphics/${getID()}/${currentBuild.graphics}`);
 
   //Fetch Data (CPU & GPU)
   for (let i = 0; i < Math.max(graphicsJSON.length, processorJSON.length); i++) {
@@ -407,13 +411,12 @@ function getHardwareValues() {
 }
 
 //Get array of values for game hardware
-function getRequirementValues(array) {
+async function getRequirementValues(array) {
   let values = [-1, -1, -1, -1];
   array[0] = array[0].replaceAll("  ", " ");
   array[1] = array[1].replaceAll("  ", " ");
   array[2] = array[2].replaceAll("  ", " ");
   array[3] = array[3].replaceAll("  ", " ");
-  //console.log(array[0]);
 
   //Processor
   if (array[0] != "") {
@@ -448,7 +451,7 @@ function getRequirementValues(array) {
   }
   
   //Graphics
-  if (array[1] != "") {
+  if (array[2] != "") {
     matches = graphicsJSON.filter(element => {
       let name = element.name.toUpperCase();
       if (name.indexOf("NVIDIA ") != -1) name = name.replaceAll("NVIDIA ", "");
@@ -464,7 +467,6 @@ function getRequirementValues(array) {
         if (name.indexOf("RADEON ") != -1) name = name.replaceAll("RADEON ", "");
         if (name.indexOf("GEFORCE ") != -1) name = name.replaceAll("GEFORCE ", "");
         regex = new RegExp(`${name}`, 'gi');
-        console.log(name);
         return array[2].match(regex);
       }
       
@@ -482,7 +484,7 @@ function getRequirementValues(array) {
   }
   
   //RAM
-  if (array[2] != "") {
+  if (array[1] != "") {
     let unit = 1;
     let amount = 0;
     if (array[1].indexOf("MB") != -1) unit = .1;
@@ -501,6 +503,6 @@ function getRequirementValues(array) {
     values[3] = amount*unit;
     console.log("Storage: " + values[3]);
   }
-  
+  console.log(values);
   return values;
 }

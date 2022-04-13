@@ -246,21 +246,23 @@ router.post('/games/local/update/:appID', async (req, res) => {
 });
 
 //Add Hardware Impression to Game
-router.put('/games/:type/:appID/:hardwareName/:newValue', async (req, res) => {
-    if (await updateHardwareImpressions(conn.getDb(), req.params.type, req.params.appID, req.params.hardwareName, req.params.newValue) == false) {
+router.get('/games/:type/:appID/:hardwareName/', async (req, res) => {
+    if (await updateHardwareImpressions(conn.getDb(), req.params.type, req.params.appID, req.params.hardwareName) == false) {
         return res.status(400).send("No games under that appID found");
     }
     else {
+        console.log("Hardware impressions updated");
         res.send("Updated Impressions")
     }
 });
 
 //Add Webiste Impression to Game
-router.put('/games/:appID/:newValue', async (req, res) => {
-    if (await updateGameImpressions(conn.getDb(), req.params.appID, req.params.newValue) == false) {
+router.get('/games/:appID/', async (req, res) => {
+    if (await updateGameImpressions(conn.getDb(), req.params.appID) == false) {
         return res.status(400).send("No games under that appID found");
     }
     else {
+        console.log("Game impressions updated");
         res.send("Updated Impressions")
     }
 });
@@ -480,7 +482,6 @@ async function addPrebuilt(client, data) {
 //Add Hardware Impressions
 async function updateHardwareImpressions(client, collection, appID, hardwareName, newValue) {
     let col = 'localGameList';
-
     //Get right list
     if (await client.db('gameList').collection(col).findOne({appid: appID}) == undefined) {
         if (await client.db('gameList').collection('steamGameList').findOne({appid: parseInt(appID)}) == undefined)
@@ -492,13 +493,14 @@ async function updateHardwareImpressions(client, collection, appID, hardwareName
     }
 
     //Set Values
-    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$set: {[collection]: {[hardwareName]: newValue}}});
+    const str = collection+"."+hardwareName;
+    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$inc: {[str]: 1}});
     console.log("Value of hardware " + hardwareName + " set to " + newValue);
     return true;
 }
 
 //Add Game Impressions
-async function updateGameImpressions(client, appID, newValue) {
+async function updateGameImpressions(client, appID) {
     let col = 'localGameList';
 
     //Get right list
@@ -512,8 +514,8 @@ async function updateGameImpressions(client, appID, newValue) {
     }
 
     //Set Values
-    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$set: {impressions: newValue}});
-    console.log("Value of gamme impressions set to " + newValue);
+    await client.db('gameList').collection(col).updateOne({appid: parseInt(appID)}, {$inc: {impressions: 1}});
+    console.log("Game Impression Incremented");
     return true;
 }
 
