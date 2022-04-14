@@ -9,6 +9,10 @@ const submitSignUp = document.getElementById("submitSignUp");
 const userEmail = localStorage.getItem("userEmail");
 const userRole = localStorage.getItem("userRole");
 
+//Check Local Storage (initial)
+if (localStorage.getItem("userEmail") == undefined) localStorage.setItem("userEmail", "null");
+if (localStorage.getItem("userRole") == undefined) localStorage.setItem("userRole", "null");
+
 //Make sure you don't get sent here
 if (sessionStorage.getItem("logout") == 'true') {
   localStorage.setItem("userEmail", null);
@@ -101,7 +105,11 @@ async function signUpClick(){
         }
         await fetch("http://localhost:5000/api/db/login", {method: 'POST', body: JSON.stringify(data), headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}})
         .then(function(res){ return res.json(); })
-        .then(function(data){location.assign('index.html')});
+        .then(function(data){
+          location.assign('index.html')
+          localStorage.setItem("userEmail", data.email);
+          localStorage.setItem("userRole", data.role)
+        });
       }
       else alert("Account under email already exists.");
     }
