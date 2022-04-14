@@ -12,7 +12,6 @@ const app = express();
 //Server
 console.log(path.join(__dirname, 'css'));
 app.use(express.static(path.join(__dirname, 'pages')));
-app.use(express.static(path.join(__dirname, './data')));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log('Server running on port ' + PORT))
 

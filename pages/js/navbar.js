@@ -31,6 +31,9 @@ matchList.innerHTML = '';
 
 //Change Login based on login status
 const loginButton = document.getElementById("loginButton");
+//Check Local Storage (initial)
+if (localStorage.getItem("userEmail") == undefined) localStorage.setItem("userEmail", "null");
+if (localStorage.getItem("userRole") == undefined) localStorage.setItem("userRole", "null");
 if (localStorage.getItem("userEmail") == 'null') {
   loginButton.innerHTML = "LOGIN/SIGN-UP";
   adminButton.remove(); 
