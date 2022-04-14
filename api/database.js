@@ -260,7 +260,7 @@ router.get('/games/local-limit', async (req, res) => {
 
 //Find one steam game via name
 router.get('/games/steam/:name', async (req, res) => {
-    const result = await conn.getDb().db('gameList').collection('steamGameList').z({name: req.params.name});
+    const result = await conn.getDb().db('gameList').collection('steamGameList').findOne({name: req.params.name});
     if (result == undefined) return res.status(400).send(`No steam game found with name ${req.params.name}`);
     else res.json(result);
 });
