@@ -1,24 +1,118 @@
+//DOM
+const nameHTML = document.getElementById('name');
+const cpuHTML = document.getElementById('cpu');
+const gpuHTML = document.getElementById('gpu');
+const ramHTML = document.getElementById('ram');
+const storageHTML = document.getElementById('storage');
+const osHTML = document.getElementById("os");
+const myBuilds = document.getElementById("MYBUILDS");
+const prebuilts = document.getElementById("PREBUILTS")
+openType('MYBUILDS');
+
+//Get Data
+const processorArray = [];
+const graphicsArray = [];
+const memoryArray = ["512 MB", "1 GB", "2 GB", "4 GB", "8 GB", "12 GB", "16 GB", "32 GB", "64 GB", "128 GB"];
+const storageArray = ["32 GB", "64 GB", "128 GB", "256 GB", "512 GB", "1 TB", "2 TB", "3 TB", "4 TB", "5 TB"];
+
+//Prebuilts
+let prebuiltData;
+fetch("http://localhost:5000/api/db/hardware/prebuilt")
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    //Your builds
+    prebuiltData = data; 
+    prebuiltData.forEach((element, index) => {
+      prebuilts.innerHTML += `<h3  ">${element.name}</h3>
+      <ul>
+        <li>Processor: ${element.processor}</li>
+        <li>Memory: ${element.memory}</li>
+        <li>Graphics: ${element.graphics}</li>
+        <li>Storage: ${element.storage}</li>
+      </ul>
+      <br>
+      `
+    });
+  });
+
+//User Data
+let userData;
+fetch("http://localhost:5000/api/db/login/"+localStorage.getItem("userEmail"))
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    //Your builds
+    userData = data; 
+    userData.builds.forEach((element, index) => {
+      setBuildHTML(element, index);
+    });
+  });
+
+//Processor
+cpuHTML.innerHTML = "<option value=Loading>Loading</option>"
+fetch("http://localhost:5000/api/db/hardware/processor")
+.then(function(res){ return res.json(); })
+.then(function(data){ 
+  data.forEach(element => {
+    processorArray.push(element.name);
+  });
+  cpuHTML.innerHTML = "";
+  processorArray.sort();
+  processorArray.forEach(element => {
+    cpuHTML.innerHTML += `<option value="${element}">${element}</option>`
+  });
+});
+
+//Graphics
+gpuHTML.innerHTML = "<option value=Loading>Loading</option>"
+fetch("http://localhost:5000/api/db/hardware/graphics")
+.then(function(res){ return res.json(); })
+.then(function(data){ 
+  data.forEach(element => {
+    graphicsArray.push(element.name);
+  });
+  gpuHTML.innerHTML = "";
+  graphicsArray.sort();
+  graphicsArray.forEach(element => {
+    gpuHTML.innerHTML += `<option value="${element}">${element}</option>`
+  });
+});
+
+//Memory
+memoryArray.forEach(element => {
+  ramHTML.innerHTML += `<option value="${element}">${element}</option>`
+});
+
+//Storage
+storageArray.forEach(element => {
+  storageHTML.innerHTML += `<option value="${element}">${element}</option>`
+});
+
 //Save Option Display
-function saveOption() {
-  const name = document.querySelector('#name');
-  const cpu = document.querySelector('#cpu');
-  const gpu = document.querySelector('#gpu');
-  const ram = document.querySelector('#ram');
-  const storage = document.querySelector('#storage');
-  //output = selectElement.value;
-  //document.querySelector('.output').textContent = output;
+async function saveOption() {
+  //Data
+  data = userData.builds;
+  newBuild = {
+    name: nameHTML.value,
+    processor: cpuHTML.value,
+    memory: ramHTML.value,
+    graphics: gpuHTML.value,
+    storage: storageHTML.value,
+    os: osHTML.value
+  }
+  data.push(newBuild);
 
-  //Update MyBuild
-  document.querySelector('#myNAME').innerHTML = name.value;
-  document.querySelector('#myCPU').innerHTML = "CPU: " + cpu.value;
-  document.querySelector('#myGPU').innerHTML = "GPU: " + gpu.value;
-  document.querySelector('#myRAM').innerHTML = "RAM: " + ram.value;
-  document.querySelector('#mySTORAGE').innerHTML = "Storage: " + storage.value;
+  //Update Database
+  await fetch(`http://localhost:5000/api/db/login/build/${userData.email}`, {method: 'POST', body: JSON.stringify(data), headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}})
 
+  //Update My Builds
+  myBuilds.innerHTML = "";
+  data.forEach((element, index) => {
+    setBuildHTML(element, index);
+  });
 }
 
 //JS Switch Between Tabs
-function openType(evt, buildType) {
+function openType(buildType) {
   let i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
@@ -29,5 +123,29 @@ function openType(evt, buildType) {
   tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
   document.getElementById(buildType).style.display = "block";
-  evt.currentTarget.className += " active";
+  //evt.currentTarget.className += " active";
+}
+
+//Load Build
+function loadBuild(i) {
+  nameHTML.value = userData.builds[i].name;
+  cpuHTML.value = userData.builds[i].cpu;
+  gpuHTML.value = userData.builds[i].gpu;
+  ramHTML.value = userData.builds[i].ram;
+  storageHTML.value = userData.builds[i].storage;
+  osHTML.value = userData.builds[i].os;
+}
+
+//Set builds
+function setBuildHTML(element, index) {
+  myBuilds.innerHTML += `
+      <h3 id="myNAME${index}"; onclick="loadBuild(${index})">${element.name}</h3>
+      <ul>
+        <li id="myCPU${index}">Processor: ${element.processor}</li>
+        <li id="myRAM${index}">Memory: ${element.memory}</li>
+        <li id="myGPU${index}">Graphics: ${element.graphics}</li>
+        <li id="mySTORAGE${index}">Storage: ${element.storage}</li>
+      </ul>
+      <br>
+      `
 }

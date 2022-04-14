@@ -49,193 +49,40 @@
         <nav id="leftSide">
           <!-- Switch between build tabs -->
             <div class="tab">
-              <select id="hardwareSelect"; onchange="openHardware(event)";>
-    						<option class="hardwareLinks">Intel Core i5 12600K</option>
-    						<option class="hardwareLinks">AMD Ryzen 5 5600X</option>
-								<option class="hardwareLinks">Nvidia RTX 3090</option>
-    						<option class="hardwareLinks">Nvidia RTX 2060</option>
-              </select>
+				<select id="gameSelect"; onchange="openGame(value)";>
+					<option class="gameLinks"; value="Loading">Loading...</option>
+				</select>
+				<hr>
             </div>
-
+					
   					<!-- Users Tab content -->
 						<!-- Intel Core i5 12600K -->
-  					<div id="Intel Core i5 12600K" class="hardwareContent">
-  						<hr>
+  						<div class="hardwareContent">
   						<!-- Users -->
-  						<h3>Intel Core i5 12600K</h3>
-							<table style="width: 100%">
-  						<!-- Table Headers -->
-  						<tr>
-  							<th>Date</th>
-  							<th># of Requirement Checks</th>
-  						</tr>
-  						<!-- User Values -->
-  						<tr>
-  							<td contenteditable="true">3/22/22</td>
-  							<td contenteditable="true">45</td>
-  						</tr>
-  						<tr>
-  							<td contenteditable="true">3/21/22</td>
-  							<td contenteditable="true">25</td>
-  						</tr>
-  						<tr>
-								<td contenteditable="true">3/20/22</td>
-  							<td contenteditable="true">76</td>
-  						</tr>
+  						<h3>Processors</h3>
+						<table style="width: 100%" id="processorsTable">
+							<!-- Table Headers -->
+							<tr>
+								<th>Name</th>
+								<th>Impressions</th>
+							</tr>
   						</table>
   					</div>
-
-						<!-- AMD Ryzen 5 5600X -->
-  					<div id="AMD Ryzen 5 5600X" class="hardwareContent">
-  						<hr>
-  						<!-- Users -->
-  						<h3>AMD Ryzen 5 5600X</h3>
-							<table style="width: 100%">
-  						<!-- Table Headers -->
-  						<tr>
-  							<th>Date</th>
-  							<th># of Requirement Checks</th>
-  						</tr>
-  						<!-- User Values -->
-  						<tr>
-  							<td contenteditable="true">3/22/22</td>
-  							<td contenteditable="true">34</td>
-  						</tr>
-  						<tr>
-  							<td contenteditable="true">3/21/22</td>
-  							<td contenteditable="true">86</td>
-  						</tr>
-  						<tr>
-								<td contenteditable="true">3/20/22</td>
-  							<td contenteditable="true">967</td>
-  						</tr>
-  						</table>
-  					</div>
-
-						<!-- Nvidia RTX 3090 -->
-  					<div id="Nvidia RTX 3090" class="hardwareContent">
-  						<hr>
-  						<!-- Users -->
-  						<h3>Nvidia RTX 3090</h3>
-							<table style="width: 100%">
-  						<!-- Table Headers -->
-  						<tr>
-  							<th>Date</th>
-  							<th># of Requirement Checks</th>
-  						</tr>
-  						<!-- User Values -->
-  						<tr>
-  							<td contenteditable="true">3/22/22</td>
-  							<td contenteditable="true">0</td>
-  						</tr>
-  						<tr>
-  							<td contenteditable="true">3/21/22</td>
-  							<td contenteditable="true">0</td>
-  						</tr>
-  						<tr>
-								<td contenteditable="true">3/20/22</td>
-  							<td contenteditable="true">0</td>
-  						</tr>
-  						</table>
-  					</div>
-
-						<!-- Nvidia RTX 2060 -->
-  					<div id="Nvidia RTX 2060" class="hardwareContent">
-  						<hr>
-  						<!-- Users -->
-  						<h3>Nvidia RTX 2060</h3>
-							<table style="width: 100%">
-  						<!-- Table Headers -->
-  						<tr>
-  							<th>Date</th>
-  							<th># of Requirement Checks</th>
-  						</tr>
-  						<!-- User Values -->
-  						<tr>
-  							<td contenteditable="true">3/22/22</td>
-  							<td contenteditable="true">364</td>
-  						</tr>
-  						<tr>
-  							<td contenteditable="true">3/21/22</td>
-  							<td contenteditable="true">362</td>
-  						</tr>
-  						<tr>
-								<td contenteditable="true">3/20/22</td>
-  							<td contenteditable="true">152</td>
-  						</tr>
-  						</table>
-  					</div>
-
         </nav>
 
         <!-- Game Interaction -->
         <nav id="rightSide">
   					<!-- Users Tab content -->
-						<select id="gameSelect"; onchange="openGame(event)";>
-							<option class="gameLinks"; value="Minecraft">Minecraft</option>
-							<option class="gameLinks"; value="Elden Ring">Elden Ring</option>
-						</select>
-						<!-- Minecraft -->
-  					<div id="Minecraft" class="gameContent">
-  						<hr>
-  						<!-- Users -->
-  						<h3>Minecraft</h3>
-							<table style="width: 100%">
-  						<!-- Table Headers -->
-  						<tr>
-  							<th>Date</th>
-  							<th># of Impressions</th>
-  							<th># of Requirement Checks</th>
-  						</tr>
-  						<!-- User Values -->
-  						<tr>
-  							<td contenteditable="true">3/22/22</td>
-  							<td contenteditable="true">5</td>
-  							<td contenteditable="false">2</td>
-  						</tr>
-  						<tr>
-  							<td contenteditable="true">3/21/22</td>
-  							<td contenteditable="true">10</td>
-  							<td contenteditable="false">4</td>
-  						</tr>
-  						<tr>
-								<td contenteditable="true">3/20/22</td>
-  							<td contenteditable="true">8</td>
-  							<td contenteditable="false">0</td>
-  						</tr>
+						<h3 id="impressions" style="text-align: left">Impressions:</h3>	
+						<hr>
+						<h3>Graphics</h3>
+						<table style="width: 100%" id="graphicsTable">
+							<!-- Table Headers -->
+							<tr>
+								<th>Name</th>
+								<th>Impressions</th>
+							</tr>
   						</table>
-  					</div>
-
-						<!-- Elden Ring -->
-  					<div id="Elden Ring" class="gameContent">
-  						<hr>
-  						<!-- Users -->
-  						<h3>Elden Ring</h3>
-							<table style="width: 100%">
-  						<!-- Table Headers -->
-  						<tr>
-  							<th>Date</th>
-  							<th># of Impressions</th>
-  							<th># of Requirement Checks</th>
-  						</tr>
-  						<!-- User Values -->
-  						<tr>
-  							<td contenteditable="true">3/22/22</td>
-  							<td contenteditable="true">200</td>
-  							<td contenteditable="false">143</td>
-  						</tr>
-  						<tr>
-  							<td contenteditable="true">3/21/22</td>
-  							<td contenteditable="true">264</td>
-  							<td contenteditable="false">146</td>
-  						</tr>
-  						<tr>
-								<td contenteditable="true">3/20/22</td>
-  							<td contenteditable="true">504</td>
-  							<td contenteditable="false">376</td>
-  						</tr>
-  						</table>
-  					</div>
 
         </nav>
       </p>

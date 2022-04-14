@@ -73,7 +73,7 @@ Format:
 
 --Developers--
 
-POST /api/db/dev/:email (Ex. /api/db/dev/dev@reqcheck.com)
+PUT /api/db/dev/:email/:appID (Ex. /api/db/dev/dev@reqcheck.com/220)
 -Updates the games array within the user with the body of the POST request.
 -Returns 400 code if there is no user with email
 Format:

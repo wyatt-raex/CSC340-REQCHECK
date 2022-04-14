@@ -1,3 +1,9 @@
+//DOM
+const gameSelect = document.getElementById("gameSelect");
+const impressions = document.getElementById("impressions");
+const processorsTable = document.getElementById("processorsTable");
+const graphicsTable = document.getElementById("graphicsTable");
+
 //Load
 function load() {
   if (localStorage.getItem("userRole") != "dev") {
@@ -13,64 +19,75 @@ function load() {
 const dataArray = [];
 async function getGames(email) {
   //Get data of user
-  fetch("http://localhost:5000/api/db/login/"+email)
+  await fetch("http://localhost:5000/api/db/login/"+email)
   .then(function(res){ return res.json(); })
-  .then(function(data){
+  .then(async function(data){
     //Get data
-    data.games.forEach(element => {
-      console.log(element);
+    let endIndex = 0;
+    data.games.forEach((element, index) => {
+      let dataArray = [];
       if (typeof element == "string") {
         fetch("http://localhost:5000/api/db/games/local/list/"+element)
         .then(function(res){ return res.json(); })
-        .then(function(data){ dataArray.push(data)});
+        .then(function(data){sessionStorage.setItem(`game${index}`, JSON.stringify(data))});
       }
       else {
         fetch("http://localhost:5000/api/db/games/steam/list/"+element)
         .then(function(res){ return res.json(); })
-        .then(function(data){ dataArray.push(data)});
+        .then(function(data){sessionStorage.setItem(`game${index}`, JSON.stringify(data))});
       }
+      endIndex = index;
     });
+
+    //Get Games
+    for (let i = 0; i < endIndex; i++) {
+      dataArray[i] = sessionStorage.getItem(`game${i}`);
+      dataArray[i] = JSON.parse(dataArray[i]);
+    }
+
+    //Set Games
+    gameSelect.innerHTML = "";
+    dataArray.forEach((element, index) => {
+      gameSelect.innerHTML += `<option class="gameLinks"; value="${index}">${element.name}</option>`
+    });
+    
+    //Run Open Game
+    openGame(0);
   });
 }
-console.log(dataArray);
+
 
 
 //Games
-function openGame(evt) {
-  let i, tabcontent, tablinks;
-  let selectElement = document.querySelector('#gameSelect');
-  let output = selectElement.value;
-
-  tabcontent = document.getElementsByClassName("gameContent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
+function openGame(i) {
+  const data = dataArray[i];
+  //Processor
+  processorsTable.innerHTML = `<tr><th>Name</th><th>Impressions</th></tr>`
+  if (data.hasOwnProperty('processor') == true) {
+    const keys = Object.keys(data.processor);
+    keys.forEach((element, index) => {
+      processorsTable.innerHTML += `
+      <tr>
+      <th>${element}</th>
+      <th>${data.processor[element]}</th>
+      </tr>`
+    });
   }
 
-  tablinks = document.getElementsByClassName("gameLinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  //Graphics
+  graphicsTable.innerHTML = `<tr><th>Name</th><th>Impressions</th></tr>`
+  if (data.hasOwnProperty('graphics') == true) {
+    const keys = Object.keys(data.graphics);
+    keys.forEach((element, index) => {
+      graphicsTable.innerHTML += `
+      <tr>
+      <th>${element}</th>
+      <th>${data.graphics[element]}</th>
+      </tr>`
+    });
   }
 
-  document.getElementById(output).style.display = "block";
-  if (evt != null) evt.currentTarget.className += " active";
-}
-
-//Hardware
-function openHardware(evt) {
-  let i, tabcontent, tablinks;
-  let selectElement = document.querySelector('#hardwareSelect');
-  let output = selectElement.value;
-
-  tabcontent = document.getElementsByClassName("hardwareContent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-
-  tablinks = document.getElementsByClassName("hardwareLinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-
-  document.getElementById(output).style.display = "block";
-  if (evt != null) evt.currentTarget.className += " active";
+  //Impressions
+  if (data.hasOwnProperty('impressions') == true) impressions.innerHTML = "Impressions: " + data.impressions;
+  else impressions.innerHTML = "Impressions: No Views"
 }

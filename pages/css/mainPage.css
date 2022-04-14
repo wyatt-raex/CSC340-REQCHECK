@@ -38,6 +38,12 @@ img {
 	width: 100%;
 }
 
+option {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;	
+}
+
 button {
 	text-align: center;
 	font-size: 16px;

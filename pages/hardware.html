@@ -52,32 +52,30 @@
   			<form>
     			<label for="cpu">CPU:</label>
     			<br>
-    			<select name="cpu" id="cpu">
-      			<option value="Intel i5-12600K">Intel i5-12600K</option>
-      			<option value="AMD Ryzen 5 5600X">AMD Ryzen 5 5600X</option>
-    			</select>
+    			<select name="cpu" id="cpu"></select>
+				<br>
+
+    			<label for="RAM">RAM:</label>
     			<br>
-    			   <label for="gpu">GPU:</label>
+      			<select name="ram" id="ram"></select>
     			<br>
-    			<select name="gpu" id="gpu">
-      			<option value="RTX 3090">RTX 3090</option>
-      			<option value="RTX 2060">RTX 2060</option>
-    			</select>
+
+				<label for="gpu">GPU:</label>
     			<br>
-    			   <label for="RAM">RAM:</label>
+    			<select name="gpu" id="gpu"></select>
     			<br>
-      			<select name="ram" id="ram">
-      			<option value="8GB">8GB</option>
-      			<option value="16GB">16GB</option>
-      			<option value="32GB">32GB</option>
-    			</select>
+
+    			<label for="storage">Storage:</label>
     			<br>
-    			   <label for="storage">Storage:</label>
+    			<select name="storage" id="storage"></select>
     			<br>
-    			<select name="storage" id="storage">
-            <option value="500GB">500GB</option>
-      			<option value="1TB">1TB</option>
-      			<option value="2TB">2TB</option>
+
+				<label for="cpu">OS:</label>
+				<br>
+				<select name="os" id="os">
+					<option value="windows">Windows</option>
+					<option value="mac">Mac</option>
+					<option value="linux">Linux</option>
     			</select>
     			<br>
   			</form>
@@ -90,39 +88,24 @@
 
 			<!-- Switch between build tabs -->
 			<div class="tab">
-				<button class="tablinks" onclick="openType(event, 'PREBUILTS')">PREBUILTS</button>
-				<button class="tablinks" onclick="openType(event, 'MYBUILDS')">MY BUILDS</button>
+				<button class="tablinks" onclick="openType('MYBUILDS')">MY BUILDS</button>
+				<button class="tablinks" onclick="openType('PREBUILTS')">PREBUILTS</button>
 			</div>
 
 			<!-- Prebuilt Tab content -->
-      <nav id="builds">
-  			<div id="PREBUILTS" class="tabcontent">
-  				<hr>
-  				<!-- Build 1 -->
-  				<h3><a href="">Build 1</a></h3>
-  				<ul>
-  				  <li>CPU: AMD Ryzen 5 5600X</li>
-  				  <li>GPU: RTX 2060</li>
-  				  <li>RAM: 16GB</li>
-  				  <li>Storage: 1TB</li>
-  			</div>
-      </nav>
+			<nav id="builds">
+				<div id="PREBUILTS" class="tabcontent">
+					<hr>
+				</div>
+			</nav>
 
 			<!-- Personal Build Tab content -->
-			<div id="MYBUILDS" class="tabcontent">
+			<nav id="builds">
 				<hr>
-				<!-- Personal Build -->
-        <nav id="builds">
-          <h3><a href=""; id="myNAME">MyBuild</a></h3>
-  				<ul>
-  				  <li id="myCPU">CPU: Intel i3 1210u</li>
-  				  <li id="myGPU">GPU: GTX 1060 Ti</li>
-  				  <li id="myRAM">RAM: 8GB</li>
-  				  <li id="mySTORAGE">Storage: 500GB</li>
-          </ul>
-        </nav>
-
-			</div>
+				<div id="MYBUILDS" class="tabcontent">
+					
+				</div>
+			</nav>
 
         </nav>
       </p>

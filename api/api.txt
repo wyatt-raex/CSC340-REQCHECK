@@ -55,7 +55,7 @@ Format:
 	{	
 	"name": "Build1",
 	"processor" "Intel Core i5 6500",
-	"memory": "8GB RAM",
+	"memory": "8GB",
 	"graphics": "RTX 2060",
 	"storage": "1TB",
 	"os": "windows"
@@ -63,7 +63,7 @@ Format:
 	{	
 	"name": "Build2",
 	"processor" "Intel Core i7 11700K",
-	"memory": "16GB RAM",
+	"memory": "16GB",
 	"graphics": "RTX 3070",
 	"storage": "2TB",
 	"os": "windows"
