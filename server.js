@@ -66,6 +66,4 @@ app.get('/api/steam/:appID', async (req, res) => {
         console.log(result);
         res.json(result);
     }
-
-    
 });
