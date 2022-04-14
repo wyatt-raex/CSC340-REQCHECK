@@ -89,18 +89,50 @@ storageArray.forEach(element => {
 
 //Save Option Display
 async function saveOption() {
-  //Data
-  data = userData.builds;
-  newBuild = {
-    name: nameHTML.value,
-    processor: cpuHTML.value,
-    memory: ramHTML.value,
-    graphics: gpuHTML.value,
-    storage: storageHTML.value,
-    os: osHTML.value
+  //Check for same name 
+  let nameCheck = true;
+  for (let i = 0; i < userData.builds.length; i++) {
+    if (userData.builds[i].name == nameHTML.value) {
+      nameCheck = false;
+      break; 
+    }
   }
-  data.push(newBuild);
 
+  if (nameCheck == true) {
+    //Data
+    let data = userData.builds;
+    newBuild = {
+      name: nameHTML.value,
+      processor: cpuHTML.value,
+      memory: ramHTML.value,
+      graphics: gpuHTML.value,
+      storage: storageHTML.value,
+      os: osHTML.value
+    }
+    data.push(newBuild);
+
+    //Update Database
+    await fetch(`http://localhost:5000/api/db/login/build/${userData.email}`, {method: 'POST', body: JSON.stringify(data), headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}})
+
+    //Update My Builds
+    myBuilds.innerHTML = "";
+    data.forEach((element, index) => {
+      setBuildHTML(element, index);
+    });
+    userData.builds = data;
+  }
+  else alert("Another build with the same name already exists");
+}
+
+//Delete Build
+async function deleteBuild(index) {
+  userData.builds[index] = "";
+  const data = userData.builds;
+  for (let i = index+1; i < data.length; i++) {
+    data[i-1] = data[i];
+  }
+  data.pop();
+  
   //Update Database
   await fetch(`http://localhost:5000/api/db/login/build/${userData.email}`, {method: 'POST', body: JSON.stringify(data), headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}})
 
@@ -109,6 +141,7 @@ async function saveOption() {
   data.forEach((element, index) => {
     setBuildHTML(element, index);
   });
+  userData.builds = data;
 }
 
 //JS Switch Between Tabs
@@ -139,13 +172,15 @@ function loadBuild(i) {
 //Set builds
 function setBuildHTML(element, index) {
   myBuilds.innerHTML += `
-      <h3 id="myNAME${index}"; onclick="loadBuild(${index})">${element.name}</h3>
+      <h3 id="myNAME${index}"; onclick="">${element.name}</h3>
       <ul>
         <li id="myCPU${index}">Processor: ${element.processor}</li>
         <li id="myRAM${index}">Memory: ${element.memory}</li>
         <li id="myGPU${index}">Graphics: ${element.graphics}</li>
         <li id="mySTORAGE${index}">Storage: ${element.storage}</li>
       </ul>
+      <button onclick="deleteBuild(${index})">DELETE</button;
       <br>
       `
 }
+

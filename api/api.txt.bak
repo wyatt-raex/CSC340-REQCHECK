@@ -54,18 +54,18 @@ Format:
 [
 	{	
 	"name": "Build1",
-	"processor": "Intel Core i5 6500",
-	"memory": "8 GB",
+	"processor" "Intel Core i5 6500",
+	"memory": "8GB",
 	"graphics": "RTX 2060",
-	"storage": "1 TB",
+	"storage": "1TB",
 	"os": "windows"
 	},
 	{	
 	"name": "Build2",
-	"processor": "Intel Core i7 11700K",
-	"memory": "16 GB",
+	"processor" "Intel Core i7 11700K",
+	"memory": "16GB",
 	"graphics": "RTX 3070",
-	"storage": "2 TB",
+	"storage": "2TB",
 	"os": "windows"
 	},
 ]
@@ -174,7 +174,6 @@ Format (there is a method in the database.js called formatRequirement that can t
 	appid: appID
 	appID: 
 	{
-		data: {
 		name: gameName,
 		appid: appID,
 		about_the_game: gameDesc,
@@ -183,7 +182,6 @@ Format (there is a method in the database.js called formatRequirement that can t
 		pc_requirements: {minimum: windowsMin, recommended: windowsRec},
 		mac_requirements: {minimum: macMin, recommended: macRec},
 		linux_requirements: {minimum: linuxMin, recommended: linuxRec}
-		}
 	}
 }
 
