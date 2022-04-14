@@ -635,6 +635,7 @@ async function addLocalGame(client, appID, data) {
     }
     */
     
+    // console.log(data);
     if (await addGameList(client, data[appID].data.name, data[appID].data.appid) == true) {
         await client.db('gameList').collection('localGames').insertOne(data);
         console.log("Added requirement page data for " + data[appID].name);

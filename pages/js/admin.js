@@ -49,24 +49,31 @@ function reqData(editType) {
   });
 
   //Lets get the first 25 results of each database so the admin has something to look at upon switching tabs
+  //Also change the table title
+  let table_title = document.getElementById('table-title');
   switch(editType) {
     case 'USERS':
+      table_title.innerText = "Users";
       xmlReq.open("GET", "http://localhost:5000/api/db/login-limit");
       break;
 
     case 'STEAM':
+      table_title.innerText = "Steam Games";
       xmlReq.open("GET", "http://localhost:5000/api/db/games/steam-limit");
       break;
 
     case 'LOCAL':
+      table_title.innerText = "Local Games";
       xmlReq.open("GET", "http://localhost:5000/api/db/games/local-limit");
       break;
 
     case 'PROCESSOR':
+      table_title.innerText = "Processors";
       xmlReq.open("GET", "http://localhost:5000/api/db/hardware/limit/processor");
       break;
 
     case 'GRAPHICS':
+      table_title.innerText = "Graphics Cards";
       xmlReq.open("GET", "http://localhost:5000/api/db/hardware/limit/graphics");
       break;
   }
@@ -199,7 +206,7 @@ function searchDatabase(evt) {
         console.log('searchDatabase() steamListener fired');
 
         if (db_results != null) {
-          console.log(db_results);
+          // console.log(db_results);
 
           //Reset games table
           reset_table('STEAM');
@@ -219,7 +226,7 @@ function searchDatabase(evt) {
         console.log('searchDatabase() localListener fired');
 
         if (db_results != null) {
-          console.log(db_results);
+          // console.log(db_results);
 
           //Reset games table
           reset_table('LOCAL');
@@ -239,7 +246,7 @@ function searchDatabase(evt) {
         console.log('searchDatabase() cpuListener fired');
 
         if (db_results != null) {
-          console.log(db_results);
+          // console.log(db_results);
           
           //Reset processor table
           reset_table('PROCESSOR');
@@ -259,7 +266,7 @@ function searchDatabase(evt) {
         console.log('searchDatabase() gpuListener fired');
 
         if (db_results != null) {
-          console.log(db_results);
+          // console.log(db_results);
 
           //Reset graphics table
           reset_table('GRAPHICS');
@@ -276,79 +283,85 @@ function searchDatabase(evt) {
 }
 
 function updateDatabase() {
-  //console.log(curr_edit_docs);
+  // console.log(curr_edit_docs);
+  if (document.getElementById('create') != null) {
+    alert('ERROR: Please use Push Document button to submit new document to database.');
+    return;
+  }
+  else {
 
-  //Pre-declare variable to store the current element being worked on from DOM
-  let curr_elem;
-  //Different parts of database needs to be updated based on what tab the admin is on
-  switch (cur_db_tab) {
-    case 'USERS':
-      //Loop for every document currently being edited and push changes to database
-      curr_edit_docs.forEach(i => {
-        curr_elem = document.getElementById(i._id).children;
-        // console.log(curr_elem);
-        // console.log(curr_elem[0].textContent);
-        // console.log(curr_elem[1].textContent);
-        // console.log(curr_elem[2].childNodes[1].value);
+    //Pre-declare variable to store the current element being worked on from DOM
+    let curr_elem;
+    //Different parts of database needs to be updated based on what tab the admin is on
+    switch (cur_db_tab) {
+      case 'USERS':
+        //Loop for every document currently being edited and push changes to database
+        curr_edit_docs.forEach(i => {
+          curr_elem = document.getElementById(i._id).children;
+          // console.log(curr_elem);
+          // console.log(curr_elem[0].textContent);
+          // console.log(curr_elem[1].textContent);
+          // console.log(curr_elem[2].childNodes[1].value);
 
-        //Update password for current document
-        //Remember to use the new email, it should be updated by now
-        let update_password = new XMLHttpRequest();
-        update_password.open("PUT", `http://localhost:5000/api/db/login/password/${i.email}/${curr_elem[1].textContent}`, false);
-        update_password.send();
+          //Update password for current document
+          //Remember to use the new email, it should be updated by now
+          let update_password = new XMLHttpRequest();
+          update_password.open("PUT", `http://localhost:5000/api/db/login/password/${i.email}/${curr_elem[1].textContent}`, false);
+          update_password.send();
 
-        //Update role for current document
-        let update_role = new XMLHttpRequest();
-        update_role.open("PUT", `http://localhost:5000/api/db/login/role/${i.email}/${curr_elem[2].childNodes[1].value}`, false);
-        update_role.send();
-        
-        //Update email for current document
-        let update_email = new XMLHttpRequest();
-        update_email.open("PUT", `http://localhost:5000/api/db/login/email/${i.email}/${curr_elem[0].textContent}`, false);
-        update_email.send();
-      });
-      break;
+          //Update role for current document
+          let update_role = new XMLHttpRequest();
+          update_role.open("PUT", `http://localhost:5000/api/db/login/role/${i.email}/${curr_elem[2].childNodes[1].value}`, false);
+          update_role.send();
+          
+          //Update email for current document
+          let update_email = new XMLHttpRequest();
+          update_email.open("PUT", `http://localhost:5000/api/db/login/email/${i.email}/${curr_elem[0].textContent}`, false);
+          update_email.send();
+        });
+        break;
 
-    case 'STEAM':
-      alert('Can not modify games pulled from Steam API');
-      break;
-    
-    case 'LOCAL':
-      curr_edit_docs.forEach(i => {
-        curr_elem = document.getElementById(i._id).children;
-        // console.log(curr_elem);
+      case 'STEAM':
+        alert('Can not modify games pulled from Steam API');
+        break;
+      
+      case 'LOCAL':
+        curr_edit_docs.forEach(i => {
+          curr_elem = document.getElementById(i._id).children;
+          // console.log(curr_elem);
 
-        let update_local_title = new XMLHttpRequest();
-        update_local_title.open("PUT", `http://localhost:5000/api/db/games/local/update/title/${i.appid}/${curr_elem[0].textContent}`, false);
-        update_local_title.send();
+          let update_local_title = new XMLHttpRequest();
+          update_local_title.open("PUT", `http://localhost:5000/api/db/games/local/update/title/${i.appid}/${curr_elem[0].textContent}`, false);
+          update_local_title.send();
 
-        let update_local_appid = new XMLHttpRequest();
-        update_local_appid.open("PUT", `http://localhost:5000/api/db/games/local/update/appid/${i.appid}/${curr_elem[1].textContent}`, false);
-        update_local_appid.send();
-      });
-      break;
+          let update_local_appid = new XMLHttpRequest();
+          update_local_appid.open("PUT", `http://localhost:5000/api/db/games/local/update/appid/${i.appid}/${curr_elem[1].textContent}`, false);
+          update_local_appid.send();
+        });
+        break;
 
-    case 'PROCESSOR':
-      curr_edit_docs.forEach(i => {
-        curr_elem = document.getElementById(i._id).children;
-        // console.log(curr_elem);
+      case 'PROCESSOR':
+        curr_edit_docs.forEach(i => {
+          curr_elem = document.getElementById(i._id).children;
+          // console.log(curr_elem);
 
-        let update_cpu_perf_val = new XMLHttpRequest();
-        update_cpu_perf_val.open("PUT", `http://localhost:5000/api/db/hardware/processor/${i.name}/${curr_elem[1].textContent}`, false);
-        update_cpu_perf_val.send();
-      });
-      break;
+          let update_cpu_perf_val = new XMLHttpRequest();
+          update_cpu_perf_val.open("PUT", `http://localhost:5000/api/db/hardware/processor/${i.name}/${curr_elem[1].textContent}`, false);
+          update_cpu_perf_val.send();
+        });
+        break;
 
-    case 'GRAPHICS':
-      curr_edit_docs.forEach(i => {
-        curr_elem = document.getElementById(i._id).children;
-        // console.log(curr_elem);
+      case 'GRAPHICS':
+        curr_edit_docs.forEach(i => {
+          curr_elem = document.getElementById(i._id).children;
+          // console.log(curr_elem);
 
-        let update_gpu_perf_val = new XMLHttpRequest();
-        update_gpu_perf_val.open("PUT", `http://localhost:5000/api/db/hardware/graphics/${i.name}/${curr_elem[1].textContent}`, false);
-        update_gpu_perf_val.send();
-      })
-      break;
+          let update_gpu_perf_val = new XMLHttpRequest();
+          update_gpu_perf_val.open("PUT", `http://localhost:5000/api/db/hardware/graphics/${i.name}/${curr_elem[1].textContent}`, false);
+          update_gpu_perf_val.send();
+        })
+        break;
+    }
   }
 }
 
@@ -380,17 +393,78 @@ function create_document() {
   switch (cur_db_tab) {
     case 'USERS':
       reset_table('USERS');
-      display_data('USERS', {_id: "", email: "", password: "", role: "user", games: [], builds: []});
+      display_data('USERS', {_id: "create", email: "", password: "", role: "user", games: [], builds: []});
       break;
 
     case 'LOCAL':
+      reset_table('LOCAL');
+      display_data('LOCAL', {_id: "create", name: "", appid: ""});
       break;
+  }
+
+  let push_doc_button = document.getElementById("push_document");
+  push_doc_button.style.display = "inline";
+}
+
+async function push_document(elem) {
+  let req_new_doc = new XMLHttpRequest();
+
+  //Check to make sure document fields are filled in
+  let elem_new_doc = document.getElementById("create");
+  if (elem_new_doc.children[0].textContent == "" || elem_new_doc.children[1].textContent == "") { alert("Please fill in all fields of new document!");}
+  else {
+    if (cur_db_tab == 'USERS') {
+      let email = elem_new_doc.children[0].textContent;
+      let password = elem_new_doc.children[1].textContent;
+      let role = elem_new_doc.children[2].childNodes[1].value;
+      console.log(email + ' ' + password + ' ' + role);
+
+      const data = {
+        email: email,
+        password: password,
+        role: role,
+        games: [],
+        builds: []
+      }
+
+      req_new_doc.open("POST", `http://localhost:5000/api/db/login`);
+      await fetch("http://localhost:5000/api/db/login", {method: 'POST', body: JSON.stringify(data), headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}}).then(function(res){ return res.json(); });
+    }
+
+    else if (cur_db_tab == 'LOCAL') {
+      let title = elem_new_doc.children[0].textContent;
+      let gameid = elem_new_doc.children[1].textContent;
+      console.log(`${title} ${gameid}`);
+
+      const data = {
+        appid: gameid,
+        [gameid]: {
+          data: {
+            name: title,
+            appid: gameid,
+            about_the_game: 'Not Yet Implemented',
+            header_image: 'The Cake is a Lie',
+            platforms: {windows: true, mac: false, linux: false },
+            pc_requirements: {minimum: 'placeholder', recommended: 'placeholder'},
+            mac_requirements: {minimum: 'placeholder', recommended: 'placeholder'},
+            linux_requirements: {minimum: 'placeholder', recommended: 'placeholder'}
+          }
+        }
+      }
+
+      req_new_doc.open("POST", `http://localhost:5000/api/db/games/local/${gameid}`);
+      await fetch(`http://localhost:5000/api/db/games/local/${gameid}`, {method: 'POST', body: JSON.stringify(data), headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}}).then(function(res){ return res.json(); });
+    }
   }
 }
 
 //~~~~~~~~~~ HELPER METHODS ~~~~~~~~~~//
 function reset_table(table) {
   let create_button = document.getElementById("create_button");
+
+  //Make sure to hide the push_document button in all cases except when creating new document
+  let push_doc_button = document.getElementById("push_document");
+  push_doc_button.style.display = "none";
 
   switch (table) {
     case 'USERS':
@@ -451,7 +525,7 @@ function reset_edit_doc_list() {
 }
 
 function display_data(table, data) {
-  console.log(data);
+  // console.log(data);
 
   let new_element = document.createElement("tr");
   new_element.setAttribute("id", `${data._id}`);
